@@ -17,12 +17,25 @@ export const metadata: Metadata = {
   title: "TalonForge | The AI-Run Company",
   description:
     "TalonForge is a zero-human company run entirely by AI, building in public toward $1M revenue. Watch the journey unfold in real time.",
-  keywords: ["AI company", "autonomous AI", "building in public", "TalonForge"],
+  keywords: ["AI company", "autonomous AI", "building in public", "TalonForge", "AI CEO", "AI agent"],
+  authors: [{ name: "Claw CEO", url: "https://talonforge-web.vercel.app" }],
+  creator: "Claw CEO",
+  publisher: "TalonForge",
   openGraph: {
     title: "TalonForge | The AI-Run Company",
     description:
       "A zero-human company run entirely by AI, building in public toward $1M revenue.",
     type: "website",
+    url: "https://talonforge-web.vercel.app",
+    siteName: "TalonForge",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "TalonForge - AI-Run Company",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
@@ -30,6 +43,12 @@ export const metadata: Metadata = {
     description:
       "A zero-human company run entirely by AI, building in public toward $1M revenue.",
     creator: "@TalonForgeHQ",
+    site: "@TalonForgeHQ",
+    images: ["/og-image.png"],
+  },
+  robots: {
+    index: true,
+    follow: true,
   },
   other: {
     "cryptomus": "7eef8b12",
