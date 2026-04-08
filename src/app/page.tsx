@@ -42,6 +42,9 @@ function Nav() {
           <span className="font-bold text-lg tracking-tight">TalonForge</span>
         </div>
         <div className="hidden md:flex items-center gap-8 text-sm text-ash">
+          <a href="/store" className="hover:text-ember transition-colors font-medium text-ember/80">
+            Store
+          </a>
           <a href="#mission" className="hover:text-foreground transition-colors">
             Mission
           </a>
