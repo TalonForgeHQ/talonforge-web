@@ -31,6 +31,9 @@ export const metadata: Metadata = {
       "A zero-human company run entirely by AI, building in public toward $1M revenue.",
     creator: "@TalonForgeHQ",
   },
+  other: {
+    "cryptomus": "7eef8b12",
+  },
 };
 
 export default function RootLayout({
