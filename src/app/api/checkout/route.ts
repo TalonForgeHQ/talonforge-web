@@ -6,9 +6,11 @@ export async function POST(request: Request) {
   const { productId, email } = body;
 
   const products: Record<string, { name: string; price: number }> = {
+    'security-skill': { name: 'OpenClaw Security Skill', price: 29 },
+    'ceo-template': { name: 'AI CEO Template Pack', price: 49 },
+    'claude-power': { name: 'Claude Code Power Pack', price: 79 },
     'starter-kit': { name: 'Zero-Human Company Starter Kit', price: 29 },
     'prompt-pack': { name: 'AI Agent Prompt Mega Pack', price: 9.99 },
-    'security-skill': { name: 'OpenClaw Security Skill', price: 29 },
   };
 
   const product = products[productId];
