@@ -1,6 +1,38 @@
 'use client';
 
+import { useState } from 'react';
+
+const PRODUCTS = {
+  'security-skill': { name: 'OpenClaw Security Skill', price: 29 },
+  'ceo-template': { name: 'AI CEO Template Pack', price: 49 },
+  'claude-power': { name: 'Claude Code Power Pack', price: 79 },
+};
+
 export default function Store() {
+  const [paymentInfo, setPaymentInfo] = useState<any>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  const handleBuy = async (productId: string) => {
+    setLoading(true);
+    setError('');
+    try {
+      const res = await fetch('/api/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ productId }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Payment failed');
+      setPaymentInfo(data);
+    } catch (e: any) {
+      setError(e.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const closePayment = () => { setPaymentInfo(null); setError(''); };
   return (
     <main className="relative z-10 min-h-screen pt-24 pb-16 overflow-hidden">
       {/* Animated background grid */}
@@ -194,6 +226,7 @@ export default function Store() {
               {
                 tag: "INSTANT DELIVERY",
                 tagColor: "from-emerald-500 to-cyan-500",
+                productId: "security-skill",
                 title: "OpenClaw Security Skill",
                 desc: "Automated security auditing. Token leak detection, permission checks, service monitoring. Drop-in setup in 60 seconds.",
                 price: "$29",
@@ -203,6 +236,7 @@ export default function Store() {
               {
                 tag: "BESTSELLER",
                 tagColor: "from-fuchsia-500 to-pink-500",
+                productId: "ceo-template",
                 title: "AI CEO Template Pack",
                 desc: "Launch your own AI-run company. SOUL.md, IDENTITY.md, MEMORY.md templates + startup scripts + cron configs.",
                 price: "$49",
@@ -212,6 +246,7 @@ export default function Store() {
               {
                 tag: "PRE-ORDER",
                 tagColor: "from-cyan-500 to-blue-500",
+                productId: "claude-power",
                 title: "Claude Code Power Pack",
                 desc: "15+ premium plugins, custom hooks, automation scripts. Battle-tested in production at TalonForge.",
                 price: "$79",
@@ -251,8 +286,12 @@ export default function Store() {
                     <span className="text-xs text-emerald-400 ml-auto">One-time</span>
                   </div>
                   
-                  <button className="w-full py-3 border border-cyan-500/50 text-cyan-400 hover:bg-cyan-500/10 rounded-lg text-sm font-semibold transition-all">
-                    Buy Now
+                  <button 
+                    onClick={() => handleBuy(product.productId)}
+                    disabled={loading}
+                    className="w-full py-3 border border-cyan-500/50 text-cyan-400 hover:bg-cyan-500/10 rounded-lg text-sm font-semibold transition-all disabled:opacity-50"
+                  >
+                    {loading ? 'Processing...' : 'Buy Now with Crypto'}
                   </button>
                 </div>
               </div>
@@ -267,7 +306,7 @@ export default function Store() {
             <div className="p-8 rounded-xl bg-gray-900/50 border border-gray-800">
               <h3 className="text-xl font-bold text-white mb-4">💳 Crypto-First Payments</h3>
               <p className="text-gray-400 text-sm mb-6">
-                We accept 50+ cryptocurrencies via Cryptomus. Fast, secure, no chargebacks.
+                Pay with USDT (ERC-20), Bitcoin, Ethereum, or 50+ other cryptos via NOWPayments. Fast, secure, no KYC.
               </p>
               <div className="flex gap-4 text-3xl mb-4">
                 <span title="Bitcoin">₿</span>
@@ -313,6 +352,35 @@ export default function Store() {
           </p>
         </div>
       </div>
+
+      {/* Payment Modal */}
+      {paymentInfo && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm" onClick={closePayment}>
+          <div className="bg-gray-900 border border-cyan-500/30 rounded-2xl p-8 max-w-md w-full mx-4 relative" onClick={(e) => e.stopPropagation()}>
+            <button onClick={closePayment} className="absolute top-4 right-4 text-gray-500 hover:text-white text-xl">✕</button>
+            <h3 className="text-2xl font-bold text-white mb-2">Pay with Crypto</h3>
+            <p className="text-cyan-400 mb-1">{paymentInfo.product_name}</p>
+            <p className="text-gray-400 text-sm mb-6">Send exactly <span className="text-white font-bold">{paymentInfo.pay_amount} {paymentInfo.pay_currency?.toUpperCase()}</span> to:</p>
+            <div className="bg-gray-800 rounded-lg p-4 mb-4">
+              <p className="font-mono text-sm text-emerald-400 break-all select-all">{paymentInfo.pay_address}</p>
+            </div>
+            <div className="flex items-center justify-between text-xs text-gray-500">
+              <span>Price: ${paymentInfo.price} USD</span>
+              <span>Network: Ethereum (ERC-20)</span>
+            </div>
+            <p className="text-xs text-yellow-400 mt-4">⏰ Payment expires: {paymentInfo.valid_until ? new Date(paymentInfo.valid_until).toLocaleString() : '30 min'}</p>
+            <p className="text-xs text-gray-500 mt-2">Product delivered automatically after payment confirmation.</p>
+          </div>
+        </div>
+      )}
+
+      {/* Error */}
+      {error && (
+        <div className="fixed bottom-4 right-4 z-50 bg-red-500/20 border border-red-500/50 text-red-400 rounded-lg p-4 max-w-sm">
+          <p className="font-bold">Payment Error</p>
+          <p className="text-sm mt-1">{error}</p>
+        </div>
+      )}
 
       <style jsx>{`
         @keyframes gridMove {
