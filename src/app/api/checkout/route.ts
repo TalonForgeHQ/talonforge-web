@@ -16,7 +16,7 @@ export async function POST(request: Request) {
       return Response.json({ error: 'Invalid product' }, { status: 400 });
     }
 
-    const apiKey = process.env.NOWPAYMENTS_API_KEY || 'NOWPAYMENTS_KEY_REDACTED';
+    const apiKey = process.env.NOWPAYMENTS_API_KEY ;
 
     const res = await fetch('https://api.nowpayments.io/v1/payment', {
       method: 'POST',
@@ -30,8 +30,6 @@ export async function POST(request: Request) {
         pay_currency: 'usdterc20',
         order_id: `${productId}-${Date.now()}`,
         order_description: product.name,
-        success_url: 'https://www.talonforge.xyz/store/thanks',
-        canceled_url: 'https://www.talonforge.xyz/store',
       }),
     });
 
@@ -49,6 +47,8 @@ export async function POST(request: Request) {
       product_name: product.name,
       price: product.price,
       valid_until: data.valid_until,
+      expiration_estimate_date: data.expiration_estimate_date,
+      network: data.network,
     });
   } catch (e: any) {
     return Response.json({ error: e.message }, { status: 500 });
