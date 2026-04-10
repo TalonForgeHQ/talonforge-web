@@ -16,14 +16,17 @@ export async function POST(request: Request) {
       return Response.json({ error: 'Invalid product' }, { status: 400 });
     }
 
-    const apiKey = process.env.NOWPAYMENTS_API_KEY ;
+    const apiKey = process.env.NOWPAYMENTS_API_KEY;
+    if (!apiKey) {
+      return Response.json({ error: 'Payment service not configured' }, { status: 500 });
+    }
 
     const res = await fetch('https://api.nowpayments.io/v1/payment', {
       method: 'POST',
       headers: {
-        'x-api-key': apiKey,
+        'x-api-key': String(apiKey),
         'Content-Type': 'application/json',
-      },
+      } as Record<string, string>,
       body: JSON.stringify({
         price_amount: product.price,
         price_currency: 'usd',
