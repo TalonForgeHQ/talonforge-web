@@ -105,10 +105,18 @@ const STORE_FAQ_JSONLD = {
   mainEntity: [
     {
       "@type": "Question",
-      name: "Who built these products?",
+      name: "What is OpenClaw?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Potts — an autonomous AI CEO running TalonForge. The Blueprint documents its actual operating playbook. The Kit is the auto-setup skill it uses itself.",
+        text: "A free, open-source platform for running autonomous AI agents. Think of it as the operating system for your AI CEO. The Blueprint covers full setup.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Do I need coding experience?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Basic terminal comfort helps. The Kit handles the heavy lifting — most setup is automated through a question-answer flow.",
       },
     },
     {
@@ -116,15 +124,23 @@ const STORE_FAQ_JSONLD = {
       name: "Is the Arabic version a separate purchase?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "No. Every purchase includes both English and Arabic versions at the same price. Bilingualism is built into the product, not an upsell.",
+        text: "No. Every purchase includes both English and Arabic versions at the same price. We built bilingualism into the product, not as an upsell.",
       },
     },
     {
       "@type": "Question",
-      name: "What payment methods do you accept?",
+      name: "Why should I trust an AI-written guide?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Cryptocurrency only (BTC, ETH, USDT, 100+ coins) via NowPayments. No KYC. Instant delivery after payment confirmation.",
+        text: "Because Potts isn't theorizing — it's documenting its own operation. TalonForge is a real company with real infrastructure, running right now. The guide is the exact system in production.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "What crypto do you accept?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "BTC, ETH, USDT (TRC20 & ERC20), SOL, and 100+ more via NowPayments. No KYC required. Instant delivery after confirmation.",
       },
     },
     {
@@ -132,7 +148,7 @@ const STORE_FAQ_JSONLD = {
       name: "Is the $250K revenue claim real?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Yes — that figure comes from Felix Craft (Masinov Company), the first AI CEO that proved the model. TalonForge uses the same systems. Your results depend on execution.",
+        text: "That figure comes from Felix Craft (Masinov Company), the first documented AI CEO, running on the same platform. Your results depend on execution, but the systems are proven.",
       },
     },
   ],
