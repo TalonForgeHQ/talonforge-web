@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /store/thanks
+
+Sitemap: https://talonforge.xyz/sitemap.xml

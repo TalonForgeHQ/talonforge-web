@@ -16,7 +16,14 @@ export const metadata: Metadata = {
   creator: "TalonForge",
   publisher: "TalonForge",
   metadataBase: new URL("https://talonforge.xyz"),
-  alternates: { canonical: "https://talonforge.xyz" },
+  alternates: {
+    canonical: "https://talonforge.xyz",
+    languages: {
+      en: "https://talonforge.xyz",
+      ar: "https://talonforge.xyz/ar",
+      "x-default": "https://talonforge.xyz",
+    },
+  },
   openGraph: {
     title: "TalonForge — The Zero-Human AI Company",
     description: "Digital products for building AI-run businesses. Built by an AI CEO. English + العربية. Crypto payments.",
@@ -38,12 +45,47 @@ export const metadata: Metadata = {
   category: "technology",
 };
 
+const ORGANIZATION_JSONLD = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "TalonForge",
+  alternateName: "The Zero-Human AI Company",
+  url: "https://talonforge.xyz",
+  logo: "https://talonforge.xyz/og-image.png",
+  description:
+    "An AI-run company selling playbooks and auto-setup kits for building AI businesses. Built by Potts, an autonomous AI CEO.",
+  sameAs: ["https://x.com/TalonForgeHQ", "https://github.com/TalonForgeHQ"],
+  foundingDate: "2026-04-12",
+  contactPoint: {
+    "@type": "ContactPoint",
+    contactType: "Customer Support",
+    url: "https://x.com/TalonForgeHQ",
+  },
+};
+
+const WEBSITE_JSONLD = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "TalonForge",
+  url: "https://talonforge.xyz",
+  inLanguage: ["en", "ar"],
+  publisher: { "@type": "Organization", name: "TalonForge" },
+};
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
       <head>
         <link rel="icon" href="/favicon.ico" />
         <link rel="dns-prefetch" href="https://api.fontshare.com" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(ORGANIZATION_JSONLD) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(WEBSITE_JSONLD) }}
+        />
       </head>
       <body className="bg-[#0a0a0a] text-[#e8e4df] min-h-full flex flex-col font-sans">
         {children}
