@@ -186,29 +186,30 @@ export default function StoreView({ defaultLang = 'en' }: { defaultLang?: Lang }
 
         {/* Hero */}
         <header className="relative text-center mb-24">
-          {/* Faint logo watermark behind hero — brand echo through everything */}
+          {/* Massive faint logo watermark behind hero */}
           <div
             aria-hidden
-            className="pointer-events-none absolute inset-x-0 -top-8 flex justify-center opacity-[0.08]"
+            className="pointer-events-none absolute inset-x-0 -top-16 flex justify-center opacity-[0.11]"
             style={{
-              maskImage: 'radial-gradient(circle at center, black 45%, transparent 85%)',
-              WebkitMaskImage: 'radial-gradient(circle at center, black 45%, transparent 85%)',
+              maskImage: 'radial-gradient(circle at center, black 40%, transparent 85%)',
+              WebkitMaskImage: 'radial-gradient(circle at center, black 40%, transparent 85%)',
             }}
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/logo.jpg" alt="" className="w-[720px] max-w-none object-contain select-none" />
+            <img src="/logo.jpg" alt="" className="w-[900px] max-w-none object-contain select-none" />
           </div>
 
-          {/* Foreground logo mark with ember glow halo */}
-          <div className="relative mb-8 flex justify-center">
-            <div aria-hidden className="absolute inset-0 flex justify-center">
-              <div className="w-48 h-48 rounded-full bg-gradient-to-br from-ember/30 via-ember/5 to-transparent blur-3xl" />
+          {/* Foreground logo — bigger, floating, dual-color glow halo */}
+          <div className="relative mb-10 flex justify-center">
+            <div aria-hidden className="absolute inset-0 flex justify-center items-center">
+              <div className="glow-pulse w-72 h-72 md:w-96 md:h-96 rounded-full blur-3xl"
+                   style={{background: 'radial-gradient(circle at 30% 40%, rgba(232,98,44,0.45), transparent 55%), radial-gradient(circle at 70% 60%, rgba(60,199,255,0.30), transparent 60%)'}} />
             </div>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/logo.jpg"
               alt="TalonForge — three diagonal claw slashes glowing cyan and orange on a dark digital backdrop"
-              className="relative w-28 h-28 md:w-32 md:h-32 object-contain rounded-2xl shadow-[0_0_60px_-8px_rgba(232,98,44,0.55)] ring-1 ring-white/5"
+              className="logo-float relative w-56 h-56 md:w-64 md:h-64 object-contain rounded-2xl shadow-[0_0_80px_-6px_rgba(232,98,44,0.55),0_0_120px_-20px_rgba(60,199,255,0.35)] ring-1 ring-white/10"
             />
           </div>
 
@@ -220,7 +221,7 @@ export default function StoreView({ defaultLang = 'en' }: { defaultLang?: Lang }
           </div>
           <h1 className="relative text-5xl md:text-7xl font-bold tracking-tight leading-[0.95] mb-6">
             <span className="text-white">{c.heroLine1} </span>
-            <span className="bg-gradient-to-br from-ember-light via-ember to-ember-glow bg-clip-text text-transparent">{c.heroLine2}</span>
+            <span className="italic bg-gradient-to-br from-ember-light via-ember to-ember-glow bg-clip-text text-transparent" style={{textShadow: '0 0 30px rgba(232,98,44,0.3)'}}>{c.heroLine2}</span>
           </h1>
           <p className="relative text-lg text-gray-400 max-w-2xl mx-auto leading-relaxed">{c.heroSub}</p>
           <div className="relative mt-6 flex flex-col items-center justify-center gap-3 text-xs text-gray-500">
@@ -230,11 +231,17 @@ export default function StoreView({ defaultLang = 'en' }: { defaultLang?: Lang }
               {lang === 'en' ? 'Meet Potts — live on @TalonForgeHQ' : 'تعرّف على Potts — مباشر على @TalonForgeHQ'}
             </a>
             <RevenueTicker lang={lang} />
+            {/* Crypto-rail chip — felix-inspired "network" signal */}
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/10 bg-steel/50 text-[11px] font-mono tracking-wider text-gray-400">
+              <span className="chip-dot w-1.5 h-1.5 rounded-full bg-cyan-glow" />
+              <span>⬡ NOWPAYMENTS</span>
+              <span className="text-white/20">·</span>
+              <span>BTC · ETH · USDT · 100+</span>
+            </div>
           </div>
 
-          {/* Twin claw-slash dividers — orange + cyan, echo the logo motif */}
-          <div aria-hidden className="relative mt-14 h-px w-full max-w-xl mx-auto bg-gradient-to-r from-transparent via-ember/60 to-transparent" />
-          <div aria-hidden className="relative h-px w-full max-w-md mx-auto mt-0.5 bg-gradient-to-r from-transparent via-[#3cc7ff]/50 to-transparent" />
+          {/* Animated claw-slash divider — diagonal ember + cyan lines, echo the logo motif */}
+          <div aria-hidden className="claw-slash mt-14" />
         </header>
 
         {/* Products */}
@@ -246,7 +253,7 @@ export default function StoreView({ defaultLang = 'en' }: { defaultLang?: Lang }
 
           <div className="grid md:grid-cols-2 gap-6">
             {/* Blueprint */}
-            <div className="group relative p-8 rounded-2xl bg-gradient-to-b from-white/[0.04] to-transparent border border-white/[0.06] hover:border-white/10 transition-all duration-500">
+            <div className="tilt-card group relative p-8 rounded-2xl bg-gradient-to-b from-ember/[0.05] via-white/[0.02] to-transparent border border-ember/20 hover:border-ember/50 hover:shadow-[0_20px_60px_-15px_rgba(232,98,44,0.35)] transition-all duration-500">
               <h3 className="text-2xl font-bold text-white mb-1">{c.blueprint.name}</h3>
               <p className="text-sm text-gray-500 mb-4">{c.blueprint.tagline}</p>
               <p className="text-sm text-gray-400 leading-relaxed mb-6">{c.blueprint.desc}</p>
@@ -272,7 +279,7 @@ export default function StoreView({ defaultLang = 'en' }: { defaultLang?: Lang }
             </div>
 
             {/* Kit */}
-            <div className="group relative p-8 rounded-2xl bg-gradient-to-b from-white/[0.08] to-white/[0.02] border border-white/10 hover:border-white/20 transition-all duration-500">
+            <div className="tilt-card tilt-right group relative p-8 rounded-2xl bg-gradient-to-b from-[#3cc7ff]/[0.08] via-white/[0.04] to-transparent border border-[#3cc7ff]/20 hover:border-[#3cc7ff]/50 hover:shadow-[0_20px_60px_-15px_rgba(60,199,255,0.35)] transition-all duration-500">
               <div className="absolute -top-px left-8 right-8 h-px bg-gradient-to-r from-transparent via-white/40 to-transparent" />
               <div className="inline-flex items-center gap-2 mb-3">
                 <span className="text-[10px] font-bold tracking-widest text-gray-400 uppercase">{c.kit.badge}</span>

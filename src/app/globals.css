@@ -6,6 +6,8 @@
   --ember: #e8622c;
   --ember-light: #f09c5a;
   --ember-glow: #ff6b2b;
+  --cyan: #3cc7ff;
+  --cyan-glow: #5de3ff;
   --steel: #1a1a1e;
   --steel-light: #2a2a30;
   --ash: #6b6560;
@@ -18,6 +20,8 @@
   --color-ember: var(--ember);
   --color-ember-light: var(--ember-light);
   --color-ember-glow: var(--ember-glow);
+  --color-cyan-brand: var(--cyan);
+  --color-cyan-glow: var(--cyan-glow);
   --color-steel: var(--steel);
   --color-steel-light: var(--steel-light);
   --color-ash: var(--ash);
@@ -36,6 +40,24 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Ambient page background — subtle digital grid that echoes the logo's
+   code-rain texture without competing with foreground content. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image:
+    radial-gradient(circle at 20% 30%, rgba(232, 98, 44, 0.08), transparent 60%),
+    radial-gradient(circle at 80% 70%, rgba(60, 199, 255, 0.06), transparent 55%),
+    linear-gradient(to bottom, rgba(255,255,255,0.02) 1px, transparent 1px),
+    linear-gradient(to right,  rgba(255,255,255,0.02) 1px, transparent 1px);
+  background-size: 100% 100%, 100% 100%, 56px 56px, 56px 56px;
+  mask-image: radial-gradient(circle at 50% 20%, black 20%, transparent 80%);
+  -webkit-mask-image: radial-gradient(circle at 50% 20%, black 20%, transparent 80%);
+}
+
 /* RTL support */
 [dir="rtl"] { font-family: var(--font-sans), 'Segoe UI', Tahoma, 'Noto Sans Arabic', system-ui, sans-serif; }
 
@@ -48,3 +70,62 @@ body {
 /* Details/summary reset */
 details summary::-webkit-details-marker { display: none; }
 details summary { list-style: none; }
+
+/* --- Logo float + glow --- */
+@keyframes logoFloat {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-6px); }
+}
+@keyframes glowPulse {
+  0%, 100% { opacity: 0.55; transform: scale(1); }
+  50%      { opacity: 0.85; transform: scale(1.08); }
+}
+.logo-float { animation: logoFloat 6s ease-in-out infinite; }
+.glow-pulse { animation: glowPulse 4s ease-in-out infinite; }
+
+/* --- Claw slash divider, SVG-free: double diagonal gradient lines --- */
+.claw-slash {
+  position: relative;
+  height: 2rem;
+}
+.claw-slash::before,
+.claw-slash::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-18deg);
+  height: 1px;
+  width: 65%;
+  background: linear-gradient(90deg, transparent 0%, var(--ember) 50%, transparent 100%);
+  box-shadow: 0 0 8px var(--ember-glow);
+  opacity: 0.7;
+}
+.claw-slash::after {
+  top: calc(50% + 10px);
+  width: 50%;
+  background: linear-gradient(90deg, transparent 0%, var(--cyan) 50%, transparent 100%);
+  box-shadow: 0 0 8px var(--cyan-glow);
+  opacity: 0.6;
+}
+
+/* --- 3D card perspective tilt on hover --- */
+.tilt-card {
+  transform-style: preserve-3d;
+  transition: transform 500ms cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 500ms ease;
+  will-change: transform;
+}
+.tilt-card:hover {
+  transform: perspective(1200px) rotateY(-4deg) rotateX(2deg) translateY(-4px);
+}
+.tilt-card.tilt-right:hover {
+  transform: perspective(1200px) rotateY(4deg) rotateX(2deg) translateY(-4px);
+}
+
+/* --- Animated crypto chip ticker --- */
+@keyframes chipPulse {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.55; }
+}
+.chip-dot { animation: chipPulse 2.4s ease-in-out infinite; }
