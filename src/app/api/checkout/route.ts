@@ -84,8 +84,17 @@ export async function POST(request: Request) {
   if (!apiKey) {
     return Response.json({ error: "Payment service not configured" }, { status: 500 });
   }
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
-  if (!baseUrl) {
+  // Prefer the request's own host so apex↔www redirects don't break the
+  // success/cancel round-trip. Fall back to env var if header missing.
+  const requestHost = request.headers.get("host");
+  const envBase = process.env.NEXT_PUBLIC_BASE_URL;
+  let baseUrl: string;
+  if (requestHost) {
+    const proto = request.headers.get("x-forwarded-proto") || "https";
+    baseUrl = `${proto}://${requestHost}`;
+  } else if (envBase) {
+    baseUrl = envBase;
+  } else {
     return Response.json({ error: "Service not configured (NEXT_PUBLIC_BASE_URL)" }, { status: 500 });
   }
 

@@ -284,16 +284,16 @@ export default function StoreView({ defaultLang = 'en' }: { defaultLang?: Lang }
                       </li>
                     ))}
                   </ul>
-                  <div className="flex items-center justify-between gap-4">
-                    <div>
-                      <div className="flex items-baseline gap-2">
+                  <div className="flex flex-col items-center gap-4 pt-4">
+                    <div className="text-center">
+                      <div className="flex items-baseline justify-center gap-2">
                         <span className="text-4xl font-bold text-white">{c.blueprint.price}</span>
                         <span className="text-sm text-gray-600 line-through">{c.blueprint.oldPrice}</span>
                       </div>
                       <div className="text-[11px] text-gray-600 mt-0.5">{lang === 'en' ? 'One-time · lifetime access' : 'دفعة واحدة · وصول دائم'}</div>
                     </div>
                     <button onClick={() => handleBuy('blueprint')} disabled={loading === 'blueprint'}
-                      className="px-5 py-3 text-sm font-semibold text-white border border-ember/50 rounded-xl hover:bg-ember/10 hover:border-ember transition-all disabled:opacity-50 whitespace-nowrap">
+                      className="w-full px-5 py-3 text-sm font-semibold text-white border border-ember/50 rounded-xl hover:bg-ember/10 hover:border-ember transition-all disabled:opacity-50">
                       {loading === 'blueprint' ? c.loading : c.blueprint.cta}
                     </button>
                   </div>
@@ -325,16 +325,16 @@ export default function StoreView({ defaultLang = 'en' }: { defaultLang?: Lang }
                       </li>
                     ))}
                   </ul>
-                  <div className="flex items-center justify-between gap-4">
-                    <div>
-                      <div className="flex items-baseline gap-2">
+                  <div className="flex flex-col items-center gap-4 pt-4">
+                    <div className="text-center">
+                      <div className="flex items-baseline justify-center gap-2">
                         <span className="text-4xl font-bold text-white">{c.kit.price}</span>
                         <span className="text-sm text-gray-600 line-through">{c.kit.oldPrice}</span>
                       </div>
                       <div className="text-[11px] text-gray-600 mt-0.5">{lang === 'en' ? 'One-time · lifetime access' : 'دفعة واحدة · وصول دائم'}</div>
                     </div>
                     <button onClick={() => handleBuy('kit')} disabled={loading === 'kit'}
-                      className="px-5 py-3 text-sm font-bold text-black bg-gradient-to-b from-white to-gray-200 rounded-xl hover:from-gray-50 hover:to-gray-100 transition-all disabled:opacity-50 whitespace-nowrap shadow-[0_8px_20px_-6px_rgba(255,255,255,0.3)]">
+                      className="w-full px-5 py-3 text-sm font-bold text-black bg-gradient-to-b from-white to-gray-200 rounded-xl hover:from-gray-50 hover:to-gray-100 transition-all disabled:opacity-50 shadow-[0_8px_20px_-6px_rgba(255,255,255,0.3)]">
                       {loading === 'kit' ? c.loading : c.kit.cta}
                     </button>
                   </div>
