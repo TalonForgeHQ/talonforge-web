@@ -7,6 +7,7 @@ import { NextRequest } from "next/server";
 import { readFile } from "fs/promises";
 import path from "path";
 import { verifyDownloadToken } from "@/lib/signed-token";
+import { rateLimit, getClientIp } from "@/lib/rate-limit";
 
 export const dynamic = "force-dynamic";
 
@@ -18,6 +19,15 @@ const VALID_FILES = new Set([
 ]);
 
 export async function GET(request: NextRequest) {
+  const ip = getClientIp(request);
+  const rl = rateLimit({ key: `download:${ip}`, limit: 30, windowSec: 60 });
+  if (!rl.allowed) {
+    return new Response("Too many requests", {
+      status: 429,
+      headers: { "Retry-After": String(rl.retryAfter) },
+    });
+  }
+
   const { searchParams } = new URL(request.url);
   const file = searchParams.get("file");
   const token = searchParams.get("token");

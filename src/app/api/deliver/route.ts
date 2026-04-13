@@ -4,6 +4,7 @@
 // instead of re-checking NowPayments on every file fetch.
 import { NextRequest } from "next/server";
 import { signDownloadToken, DEFAULT_TTL_SECONDS } from "@/lib/signed-token";
+import { rateLimit, getClientIp, tooManyRequests } from "@/lib/rate-limit";
 
 export const dynamic = "force-dynamic";
 
@@ -25,6 +26,10 @@ function isProductId(x: string): x is ProductId {
 }
 
 export async function GET(request: NextRequest) {
+  const ip = getClientIp(request);
+  const rl = rateLimit({ key: `deliver:${ip}`, limit: 20, windowSec: 60 });
+  if (!rl.allowed) return tooManyRequests(rl);
+
   const { searchParams } = new URL(request.url);
   const orderId = searchParams.get("order");
   const paymentId = searchParams.get("payment");
