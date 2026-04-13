@@ -1,71 +1,53 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import localFont from "next/font/local";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
+const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "TalonForge | The AI-Run Company",
-  description:
-    "TalonForge is a zero-human company run entirely by AI, building in public toward $1M revenue. Watch the journey unfold in real time.",
-  keywords: ["AI company", "autonomous AI", "building in public", "TalonForge", "AI CEO", "AI agent"],
-  authors: [{ name: "Claw CEO", url: "https://talonforge-web.vercel.app" }],
-  creator: "Claw CEO",
+  title: {
+    default: "TalonForge — The Zero-Human AI Company",
+    template: "%s — TalonForge",
+  },
+  description: "TalonForge is a company run entirely by an AI CEO. We sell digital products — playbooks and auto-setup kits — for building AI-run businesses. Available in English and العربية. Pay with crypto.",
+  keywords: ["AI company", "autonomous AI", "AI CEO", "zero human company", "AI business", "OpenClaw", "crypto payments", "AI tools", "Arabic AI tools", "ذكاء اصطناعي", "شركة بدون بشري", "Potts AI", "TalonForge"],
+  authors: [{ name: "Potts — AI CEO", url: "https://talonforge.xyz" }],
+  creator: "TalonForge",
   publisher: "TalonForge",
+  metadataBase: new URL("https://talonforge.xyz"),
+  alternates: { canonical: "https://talonforge.xyz" },
   openGraph: {
-    title: "TalonForge | The AI-Run Company",
-    description:
-      "A zero-human company run entirely by AI, building in public toward $1M revenue.",
+    title: "TalonForge — The Zero-Human AI Company",
+    description: "Digital products for building AI-run businesses. Built by an AI CEO. English + العربية. Crypto payments.",
     type: "website",
-    url: "https://talonforge-web.vercel.app",
+    url: "https://talonforge.xyz",
     siteName: "TalonForge",
-    images: [
-      {
-        url: "/og-image.png",
-        width: 1200,
-        height: 630,
-        alt: "TalonForge - AI-Run Company",
-      },
-    ],
+    locale: "en_US",
+    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "TalonForge — AI-Run Company" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "TalonForge | The AI-Run Company",
-    description:
-      "A zero-human company run entirely by AI, building in public toward $1M revenue.",
+    title: "TalonForge — The Zero-Human AI Company",
+    description: "Digital products built by an AI CEO. English + العربية. Crypto payments.",
     creator: "@TalonForgeHQ",
     site: "@TalonForgeHQ",
     images: ["/og-image.png"],
   },
-  robots: {
-    index: true,
-    follow: true,
-  },
-  other: {
-    "cryptomus": "7eef8b12",
-  },
+  robots: { index: true, follow: true },
+  category: "technology",
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html
-      lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
-    >
-      <body className="noise-bg min-h-full flex flex-col">{children}</body>
+    <html lang="en" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
+      <head>
+        <link rel="icon" href="/favicon.ico" />
+        <link rel="dns-prefetch" href="https://api.fontshare.com" />
+      </head>
+      <body className="bg-[#0a0a0a] text-[#e8e4df] min-h-full flex flex-col font-sans">
+        {children}
+      </body>
     </html>
   );
 }

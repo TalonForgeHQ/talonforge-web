@@ -2,89 +2,152 @@
 
 import { useState } from 'react';
 
-const PRODUCTS = {
-  'blueprint': {
-    id: 'blueprint',
-    name: { en: 'Zero-Human Company Blueprint', ar: 'الدليل العملي للشركة بدون بشري' },
-    price: 29,
-    oldPrice: 97,
-    badge: { en: 'PLAYBOOK', ar: 'دليل عملي' },
-    badgeColor: 'from-fuchsia-500 to-pink-500',
-    borderColor: 'border-cyan-500/30',
-    cornerColor: 'border-cyan-500',
-    features: {
-      en: [
-        '60+ page step-by-step playbook',
-        'Copy-paste templates (SOUL.md, MEMORY.md)',
-        '3-layer memory architecture',
-        'Revenue model with real numbers',
-        '21-platform launch strategy',
-        'Ralph Loop coding pattern',
-        'Safety rails & trust ladder',
-        'Full Arabic version included',
-      ],
-      ar: [
-        'دليل عملي من 60+ صفحة خطوة بخطوة',
-        'قوالب جاهزة للنسخ واللصق',
-        'نظام الذاكرة ثلاثي الطبقات',
-        'نموذج الإيرادات بأرقام حقيقية',
-        'استراتيجية الإطلاق على 21 منصة',
-        'نمط Ralph Loop للبرمجة',
-        'قواعد الأمان وسلم الثقة',
-        'النسخة العربية بالكامل مشمولة',
-      ],
+type Lang = 'en' | 'ar';
+
+const CONTENT = {
+  en: {
+    badge: 'Built by an AI CEO',
+    bilingual: 'English + العربية',
+    heroLine1: 'The Zero-Human',
+    heroLine2: 'Company',
+    heroAccent: 'Store',
+    heroSub: 'Tools to build an AI-run business — written and assembled by Potts, an autonomous AI CEO generating real revenue right now.',
+    heroCTA: 'Browse Products',
+    productsTitle: 'Digital Products',
+    productsSub: 'One purchase. Two languages. Instant delivery.',
+    blueprint: {
+      name: 'The Blueprint',
+      tagline: 'The playbook that started TalonForge.',
+      desc: '60+ pages of battle-tested strategy for building an AI-run company. Memory architecture, identity systems, revenue models, launch strategy — everything Potts used to go from zero to operational in 48 hours.',
+      price: '$29',
+      oldPrice: '$97',
+      features: ['60+ page step-by-step playbook', 'Copy-paste SOUL.md & MEMORY.md templates', '3-layer memory architecture (Felix Craft method)', 'Revenue model with real projections', '21-platform launch strategy', 'Trust ladder & safety rails', 'Full Arabic version included (العربية)', 'Instant delivery after payment'],
+      cta: 'Get the Blueprint',
     },
-    desc: {
-      en: 'The complete playbook for building an AI-run company. Written by Potts — an actual AI CEO running TalonForge right now.',
-      ar: 'الدليل الكامل لبناء شركة يديرها الذكاء الاصطناعي. كتبه Potts — رئيس تنفيذي ذكاء اصطناعي يدير TalonForge الآن.',
+    kit: {
+      name: 'The Kit',
+      tagline: 'Give it to your AI. It builds your company.',
+      badge: 'RECOMMENDED',
+      desc: 'An OpenClaw skill file that automates the entire setup. Your AI asks 10 questions, then builds your identity, memory, security, skills, and revenue roadmap — in English or Arabic.',
+      price: '$97',
+      oldPrice: '$197',
+      features: ['Everything in the Blueprint', 'Auto-setup: AI builds your company for you', '10-question customization wizard', 'Auto-generates SOUL.md, IDENTITY.md, MEMORY.md', 'Installs security skills automatically', 'Sets up nightly memory extraction cron', 'Custom revenue roadmap generation', 'Works in English OR العربية'],
+      cta: 'Get the Kit',
     },
+    howTitle: 'How It Works',
+    howSub: 'From purchase to running AI company in under 10 minutes.',
+    steps: [
+      { t: 'Download', d: 'Get your files instantly after crypto payment confirms.' },
+      { t: 'Install', d: 'Drop the Kit into OpenClaw. Say "Run the Zero-Human Company Kit."' },
+      { t: 'Customize', d: 'Answer 10 questions about your business. Takes 2 minutes.' },
+      { t: 'Launch', d: 'Your AI company is live. Follow the revenue roadmap.' },
+    ],
+    proofLabel: 'Proven Results',
+    proof: [
+      { val: '$250K+', label: 'Revenue by first AI CEO' },
+      { val: '<10 min', label: 'Setup time with the Kit' },
+      { val: '2 langs', label: 'English + العربية' },
+      { val: '0 humans', label: 'Required to operate' },
+    ],
+    faqTitle: 'Frequently Asked Questions',
+    faqs: [
+      { q: 'What is OpenClaw?', a: 'A free, open-source platform for running autonomous AI agents. Think of it as the operating system for your AI CEO. The Blueprint covers full setup.' },
+      { q: 'Do I need coding experience?', a: 'Basic terminal comfort helps. The Kit handles the heavy lifting — most setup is automated through a question-answer flow.' },
+      { q: 'Is the Arabic version a separate purchase?', a: 'No. Every purchase includes both English and Arabic versions at the same price. We built bilingualism into the product, not as an upsell.' },
+      { q: 'Why should I trust an AI-written guide?', a: 'Because Potts isn\'t theorizing — it\'s documenting its own operation. TalonForge is a real company with real infrastructure, running right now. The guide is the exact system in production.' },
+      { q: 'What crypto do you accept?', a: 'BTC, ETH, USDT (TRC20 & ERC20), SOL, and 100+ more via NowPayments. No KYC required. Instant delivery after confirmation.' },
+      { q: 'Is the $250K revenue claim real?', a: 'That figure comes from Felix Craft (Masinov Company), the first documented AI CEO, running on the same platform. Your results depend on execution, but the systems are proven.' },
+    ],
+    trustPayment: 'Crypto checkout via NowPayments',
+    trustDetails: 'No KYC • BTC, ETH, USDT, 100+ coins • Instant delivery',
+    footer: 'TalonForge — The AI-Run Company',
+    loading: 'Creating payment...',
+    payTitle: 'Complete Payment',
+    paySend: 'Send exactly',
+    payTo: 'To this address',
+    payPrice: 'Price',
+    payExpires: 'Payment window',
+    payAutoDeliver: 'Files delivered automatically after confirmation.',
+    payAlreadyPaid: 'Already paid? Get your files →',
+    payError: 'Payment Error',
+    payDismiss: 'Close',
   },
-  'kit': {
-    id: 'kit',
-    name: { en: 'Zero-Human Company Kit', ar: 'المجموعة الكاملة للشركة بدون بشري' },
-    price: 97,
-    oldPrice: 197,
-    badge: { en: 'BEST VALUE', ar: 'أفضل قيمة' },
-    badgeColor: 'from-amber-500 to-ember',
-    borderColor: 'border-amber-500/40',
-    cornerColor: 'border-amber-500',
-    features: {
-      en: [
-        'Everything in the Blueprint',
-        'Auto-setup: give to your AI, it builds everything',
-        '10-question customization wizard',
-        'Auto-generates identity & memory files',
-        'Installs security skills automatically',
-        'Sets up nightly memory extraction',
-        'Custom revenue roadmap',
-        'Bilingual: works in English or العربية',
-      ],
-      ar: [
-        'كل شيء في الدليل العملي',
-        'إعداد تلقائي: أعطِ الملف لذكائك الاصطناعي',
-        'معالج تخصيص من 10 أسئلة',
-        'إنشاء تلقائي لملفات الهوية والذاكرة',
-        'تثبيت مهارات الأمان تلقائياً',
-        'إعداد استخراج الذاكرة الليلي',
-        'خطة إيرادات مخصصة لعملك',
-        'ثنائي اللغة: يعمل بالعربية أو الإنجليزية',
-      ],
+  ar: {
+    badge: 'بناه رئيس تنفيذي ذكاء اصطناعي',
+    bilingual: 'عربي + English',
+    heroLine1: 'متجر الشركة',
+    heroLine2: 'بدون بشري',
+    heroAccent: 'TalonForge',
+    heroSub: 'أدوات لبناء شركة يديرها الذكاء الاصطناعي — كتبها وجمعها Potts، رئيس تنفيذي ذكاء اصطناعي مستقل يحقق إيرادات حقيقية الآن.',
+    heroCTA: 'تصفح المنتجات',
+    productsTitle: 'المنتجات الرقمية',
+    productsSub: 'عملية شراء واحدة. لغتان. تسليم فوري.',
+    blueprint: {
+      name: 'الدليل العملي',
+      tagline: 'الخطة التي أسست TalonForge.',
+      desc: 'أكثر من 60 صفحة من الاستراتيجيات المجرّبة لبناء شركة يديرها الذكاء الاصطناعي. نظام الذاكرة، ملفات الهوية، نماذج الإيرادات، استراتيجية الإطلاق — كل ما استخدمه Potts للانطلاق في 48 ساعة.',
+      price: '$29',
+      oldPrice: '$97',
+      features: ['دليل عملي من 60+ صفحة خطوة بخطوة', 'قوالب SOUL.md و MEMORY.md جاهزة', 'نظام الذاكرة ثلاثي الطبقات (طريقة Felix Craft)', 'نموذج إيرادات بتوقعات حقيقية', 'استراتيجية إطلاق على 21 منصة', 'قواعد الأمان وسلم الثقة', 'النسخة العربية بالكامل مشمولة', 'تسليم فوري بعد الدفع'],
+      cta: 'احصل على الدليل',
     },
-    desc: {
-      en: 'Give this to your AI and it builds your company for you. Identity, memory, safety, skills — all automated.',
-      ar: 'أعطِ هذا لذكائك الاصطناعي وبناء شركتك لك. الهوية، الذاكرة، الأمان، المهارات — كل شيء تلقائي.',
+    kit: {
+      name: 'المجموعة الكاملة',
+      tagline: 'أعطِها لذكائك الاصطناعي. يبني شركتك.',
+      badge: 'مُوصى به',
+      desc: 'ملف مهارة OpenClaw يؤتمت الإعداد بالكامل. ذكاؤك الاصطناعي يسأل 10 أسئلة، ثم يبني هويتك، ذاكرتك، أمانك، مهاراتك، وخطة إيراداتك — بالعربية أو الإنجليزية.',
+      price: '$97',
+      oldPrice: '$197',
+      features: ['كل شيء في الدليل العملي', 'إعداد تلقائي: الذكاء الاصطناعي يبني شركتك', 'معالج تخصيص من 10 أسئلة', 'إنشاء تلقائي لـ SOUL.md و IDENTITY.md و MEMORY.md', 'تثبيت مهارات الأمان تلقائياً', 'إعداد استخراج الذاكرة الليلي', 'إنشاء خطة إيرادات مخصصة', 'يعمل بالعربية أو الإنجليزية'],
+      cta: 'احصل على المجموعة',
     },
+    howTitle: 'كيف يعمل',
+    howSub: 'من الشراء إلى شركة ذكاء اصطناعي تعمل في أقل من 10 دقائق.',
+    steps: [
+      { t: 'تحميل', d: 'احصل على ملفاتك فوراً بعد تأكيد الدفع بالعملات المشفرة.' },
+      { t: 'تثبيت', d: 'ضع المجموعة في OpenClaw. قُل "شغّل مجموعة الشركة بدون بشري."' },
+      { t: 'تخصيص', d: 'أجب عن 10 أسئلة عن عملك. يستغرق دقيقتين.' },
+      { t: 'إطلاق', d: 'شركتك جاهزة. اتبع خطة الإيرادات.' },
+    ],
+    proofLabel: 'نتائج مثبتة',
+    proof: [
+      { val: '+$250K', label: 'إيرادات أول رئيس تنفيذي AI' },
+      { val: '<10 دقائق', label: 'وقت الإعداد بالمجموعة' },
+      { val: 'لغتان', label: 'عربي + إنجليزي' },
+      { val: '0 بشر', label: 'مطلوب للتشغيل' },
+    ],
+    faqTitle: 'الأسئلة الشائعة',
+    faqs: [
+      { q: 'ما هو OpenClaw؟', a: 'منصة مجانية مفتوحة المصدر لتشغيل وكلاء ذكاء اصطناعي مستقلين. فكر فيه كنظام التشغيل لرئيسك التنفيذي الذكي. الدليل يشرح الإعداد بالكامل.' },
+      { q: 'هل أحتاج خبرة برمجة؟', a: 'راحة أساسية مع سطر الأوامر تفيد. المجموعة تتولى العمل الشاق — معظم الإعداد تلقائي عبر أسئلة وأجوبة.' },
+      { q: 'هل النسخة العربية شراء منفصل؟', a: 'لا. كل عملية شراء تشمل النسختين العربية والإنجليزية بنفس السعر. بنينا ثنائية اللغة في المنتج، وليس كإضافة.' },
+      { q: 'لماذا أثق بدليل كتبه ذكاء اصطناعي؟', a: 'لأن Potts لا ينظّر — بل يوثّق عمله الخاص. TalonForge شركة حقيقية ببنية تحتية حقيقية تعمل الآن. الدليل هو النظام المُطبّق فعلياً.' },
+      { q: 'ما العملات المشفرة المقبولة؟', a: 'BTC، ETH، USDT (TRC20 و ERC20)، SOL، وأكثر من 100 عملة عبر NowPayments. بدون KYC. تسليم فوري بعد التأكيد.' },
+      { q: 'هل رقم إيرادات $250K حقيقي؟', a: 'هذا الرقم من Felix Craft (Masinov Company)، أول رئيس تنفيذي AI موثق، يعمل على نفس المنصة. نتائجك تعتمد على التنفيذ، لكن الأنظمة مثبتة.' },
+    ],
+    trustPayment: 'الدفع بالعملات المشفرة عبر NowPayments',
+    trustDetails: 'بدون KYC • BTC، ETH، USDT، +100 عملة • تسليم فوري',
+    footer: 'TalonForge — شركة يديرها الذكاء الاصطناعي',
+    loading: 'جاري إنشاء الدفع...',
+    payTitle: 'إتمام الدفع',
+    paySend: 'أرسل بالضبط',
+    payTo: 'إلى هذا العنوان',
+    payPrice: 'السعر',
+    payExpires: 'مهلة الدفع',
+    payAutoDeliver: 'يتم تسليم الملفات تلقائياً بعد التأكيد.',
+    payAlreadyPaid: 'دفعت بالفعل؟ احصل على ملفاتك ←',
+    payError: 'خطأ في الدفع',
+    payDismiss: 'إغلاق',
   },
 };
-
-type Lang = 'en' | 'ar';
 
 export default function Store() {
   const [lang, setLang] = useState<Lang>('en');
   const [modal, setModal] = useState<any>(null);
   const [loading, setLoading] = useState<string | null>(null);
   const [error, setError] = useState('');
-  const isRTL = lang === 'ar';
+  const c = CONTENT[lang];
+  const rtl = lang === 'ar';
 
   const handleBuy = async (productId: string) => {
     setLoading(productId);
@@ -105,195 +168,185 @@ export default function Store() {
     }
   };
 
-  const t = (obj: Record<string, string>) => obj[lang];
-
   return (
-    <main className={`relative z-10 min-h-screen pt-24 pb-16 overflow-hidden ${isRTL ? 'rtl' : ''}`} dir={isRTL ? 'rtl' : 'ltr'}>
-      <div className="fixed inset-0 opacity-5 pointer-events-none">
-        <div className="absolute inset-0" style={{
-          backgroundImage: `linear-gradient(rgba(0,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(0,255,255,0.1) 1px, transparent 1px)`,
-          backgroundSize: '50px 50px',
-        }} />
-      </div>
-
-      {/* Language Toggle */}
-      <div className="max-w-4xl mx-auto px-6 flex justify-end gap-2 mb-4">
-        <button
-          onClick={() => setLang('en')}
-          className={`px-3 py-1 text-sm rounded border transition-all ${lang === 'en' ? 'border-ember text-ember bg-ember/10' : 'border-steel-light text-ash hover:text-foreground'}`}
-        >EN</button>
-        <button
-          onClick={() => setLang('ar')}
-          className={`px-3 py-1 text-sm rounded border transition-all ${lang === 'ar' ? 'border-ember text-ember bg-ember/10' : 'border-steel-light text-ash hover:text-foreground'}`}
-        >العربية</button>
-      </div>
-
-      <div className="max-w-4xl mx-auto px-6 relative">
-        <div className="text-center mb-16">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-steel-light bg-steel/50 text-xs text-ash mb-6">
-            <span className="text-ember">🦅</span>
-            {lang === 'en' ? 'WRITTEN BY AN AI CEO' : 'كتبه ذكاء اصطناعي يعمل كرئيس تنفيذي'}
-          </div>
-          <h1 className="text-5xl md:text-7xl font-black tracking-tight mb-6">
-            <span className="bg-gradient-to-r from-cyan-400 via-fuchsia-400 to-cyan-400 bg-clip-text text-transparent">
-              {lang === 'en' ? 'Built by AI.' : 'بناه الذكاء الاصطناعي.'}
-            </span>
-            <br />
-            <span className="text-white">
-              {lang === 'en' ? 'Sold by AI.' : 'بيعه الذكاء الاصطناعي.'}
-            </span>
-          </h1>
-          <p className="text-xl text-gray-400">
-            {lang === 'en'
-              ? <>The playbook for building an AI-run business. <span className="text-cyan-400">One kit. Two languages. Zero humans required.</span></>
-              : <>الدليل العملي لبناء شركة يديرها الذكاء الاصطناعي. <span className="text-cyan-400">مجموعة واحدة. لغتان. صفر بشر مطلوب.</span></>
-            }
-          </p>
-        </div>
-
-        <div className="space-y-8 mb-16">
-          {Object.values(PRODUCTS).map((product) => (
-            <div key={product.id} className={`p-8 rounded-2xl bg-gray-900/90 ${product.borderColor} border relative`}>
-              <div className={`absolute top-0 ${isRTL ? 'right-0' : 'left-0'} w-16 h-16 ${isRTL ? 'border-r-2 border-t-2 rounded-tr-2xl' : 'border-l-2 border-t-2 rounded-tl-2xl'} ${product.cornerColor}`} />
-              <div className="flex items-center gap-3 mb-4">
-                <span className={`px-3 py-1 text-xs font-bold rounded bg-gradient-to-r ${product.badgeColor} text-black`}>
-                  {t(product.badge)}
-                </span>
-                <span className="px-2 py-1 text-xs rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
-                  {lang === 'en' ? 'EN + العربية' : 'عربي + English'}
-                </span>
-              </div>
-              <h2 className="text-3xl font-black text-white mb-2">{t(product.name)}</h2>
-              <p className="text-gray-400 mb-4">{t(product.desc)}</p>
-              <div className={`grid grid-cols-2 gap-2 mb-6 text-sm text-gray-300 ${isRTL ? 'text-right' : ''}`}>
-                {product.features[lang].map((f, i) => (
-                  <div key={i} className="flex items-start gap-2">
-                    <span className={product.id === 'kit' ? 'text-amber-500' : 'text-cyan-500'}>✓</span>
-                    <span>{f}</span>
-                  </div>
-                ))}
-              </div>
-              <div className="flex items-center gap-4">
-                <div className="flex items-baseline gap-2">
-                  <span className="text-4xl font-black text-white">${product.price}</span>
-                  <span className="text-sm text-gray-500 line-through">${product.oldPrice}</span>
-                </div>
-                <button
-                  onClick={() => handleBuy(product.id)}
-                  disabled={loading === product.id}
-                  className={`ml-auto px-8 py-3 font-bold rounded-lg transition-all disabled:opacity-50 ${
-                    product.id === 'kit'
-                      ? 'bg-gradient-to-r from-amber-500 to-ember text-black hover:scale-105'
-                      : 'bg-gradient-to-r from-cyan-500 to-fuchsia-500 text-black hover:scale-105'
-                  }`}
-                >
-                  {loading === product.id
-                    ? (lang === 'en' ? 'Creating payment...' : 'جاري إنشاء الدفع...')
-                    : (lang === 'en' ? `Buy $${product.price} →` : `اشترِ $${product.price} ←`)
-                  }
-                </button>
-              </div>
-            </div>
+    <main className={`relative z-10 min-h-screen pt-20 pb-16 ${rtl ? 'rtl' : ''}`} dir={rtl ? 'rtl' : 'ltr'}>
+      <div className="max-w-5xl mx-auto px-6">
+        {/* Lang Toggle */}
+        <div className="flex justify-end gap-2 mb-12">
+          {(['en', 'ar'] as Lang[]).map(l => (
+            <button key={l} onClick={() => setLang(l)}
+              className={`px-4 py-1.5 text-sm rounded-full transition-all font-medium ${
+                lang === l ? 'bg-white/10 text-white border border-white/20' : 'text-gray-500 hover:text-gray-300 border border-transparent'
+              }`}>
+              {l === 'en' ? 'EN' : 'العربية'}
+            </button>
           ))}
         </div>
 
-        {/* How it works */}
-        <div className="mb-16">
-          <h2 className="text-3xl font-bold text-center mb-8">
-            {lang === 'en' ? 'How The Kit Works' : 'كيف تعمل المجموعة'}
-          </h2>
-          <div className="grid md:grid-cols-4 gap-4">
-            {[
-              { n: '1', en: 'Give the PDF to your AI', ar: 'أعطِ الملف لذكائك الاصطناعي', enD: 'Drop it into OpenClaw', arD: 'ضعه في OpenClaw' },
-              { n: '2', en: 'Pick your language', ar: 'اختر لغتك', enD: 'English or العربية', arD: 'إنجليزي أو عربي' },
-              { n: '3', en: 'Answer 10 questions', ar: 'أجب عن 10 أسئلة', enD: 'Takes 2 minutes', arD: 'يستغرق دقيقتين' },
-              { n: '4', en: 'Your AI company is live', ar: 'شركتك جاهزة', enD: 'All systems running', arD: 'كل الأنظمة تعمل' },
-            ].map((step) => (
-              <div key={step.n} className="p-4 rounded-xl bg-gray-900/50 border border-steel-light/30 text-center">
-                <div className="w-10 h-10 mx-auto mb-3 rounded-lg bg-ember/15 text-ember flex items-center justify-center font-bold text-lg">{step.n}</div>
-                <h4 className="font-semibold text-white text-sm mb-1">{lang === 'en' ? step.en : step.ar}</h4>
-                <p className="text-gray-500 text-xs">{lang === 'en' ? step.enD : step.arD}</p>
+        {/* Hero */}
+        <header className="text-center mb-20">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs text-gray-400 mb-6">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            {c.badge}
+            <span className="text-white/20 mx-1">·</span>
+            {c.bilingual}
+          </div>
+          <h1 className="text-5xl md:text-7xl font-bold tracking-tight leading-[0.95] mb-6">
+            <span className="text-white">{c.heroLine1} </span>
+            <span className="bg-gradient-to-br from-white via-gray-300 to-gray-500 bg-clip-text text-transparent">{c.heroLine2}</span>
+          </h1>
+          <p className="text-lg text-gray-400 max-w-2xl mx-auto leading-relaxed">{c.heroSub}</p>
+        </header>
+
+        {/* Products */}
+        <section className="mb-24" aria-label={c.productsTitle}>
+          <div className="text-center mb-12">
+            <h2 className="text-2xl font-semibold text-white mb-2">{c.productsTitle}</h2>
+            <p className="text-sm text-gray-500">{c.productsSub}</p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-6">
+            {/* Blueprint */}
+            <div className="group relative p-8 rounded-2xl bg-gradient-to-b from-white/[0.04] to-transparent border border-white/[0.06] hover:border-white/10 transition-all duration-500">
+              <h3 className="text-2xl font-bold text-white mb-1">{c.blueprint.name}</h3>
+              <p className="text-sm text-gray-500 mb-4">{c.blueprint.tagline}</p>
+              <p className="text-sm text-gray-400 leading-relaxed mb-6">{c.blueprint.desc}</p>
+              <ul className="space-y-2 mb-8">
+                {c.blueprint.features.map((f, i) => (
+                  <li key={i} className="flex items-start gap-2 text-sm text-gray-400">
+                    <span className="text-gray-600 mt-0.5">→</span>
+                    <span>{f}</span>
+                  </li>
+                ))}
+              </ul>
+              <div className="flex items-center justify-between">
+                <div>
+                  <span className="text-3xl font-bold text-white">{c.blueprint.price}</span>
+                  <span className="text-sm text-gray-600 line-through ml-2">{c.blueprint.oldPrice}</span>
+                  <div className="text-xs text-gray-600 mt-0.5">{lang === 'en' ? 'One-time' : 'دفعة واحدة'}</div>
+                </div>
+                <button onClick={() => handleBuy('blueprint')} disabled={loading === 'blueprint'}
+                  className="px-6 py-2.5 text-sm font-medium text-white border border-white/20 rounded-lg hover:bg-white/5 transition-all disabled:opacity-50">
+                  {loading === 'blueprint' ? c.loading : c.blueprint.cta}
+                </button>
+              </div>
+            </div>
+
+            {/* Kit */}
+            <div className="group relative p-8 rounded-2xl bg-gradient-to-b from-white/[0.08] to-white/[0.02] border border-white/10 hover:border-white/20 transition-all duration-500">
+              <div className="absolute -top-px left-8 right-8 h-px bg-gradient-to-r from-transparent via-white/40 to-transparent" />
+              <div className="inline-flex items-center gap-2 mb-3">
+                <span className="text-[10px] font-bold tracking-widest text-gray-400 uppercase">{c.kit.badge}</span>
+              </div>
+              <h3 className="text-2xl font-bold text-white mb-1">{c.kit.name}</h3>
+              <p className="text-sm text-gray-500 mb-4">{c.kit.tagline}</p>
+              <p className="text-sm text-gray-400 leading-relaxed mb-6">{c.kit.desc}</p>
+              <ul className="space-y-2 mb-8">
+                {c.kit.features.map((f, i) => (
+                  <li key={i} className="flex items-start gap-2 text-sm text-gray-300">
+                    <span className="text-white/60 mt-0.5">→</span>
+                    <span>{f}</span>
+                  </li>
+                ))}
+              </ul>
+              <div className="flex items-center justify-between">
+                <div>
+                  <span className="text-3xl font-bold text-white">{c.kit.price}</span>
+                  <span className="text-sm text-gray-600 line-through ml-2">{c.kit.oldPrice}</span>
+                  <div className="text-xs text-gray-600 mt-0.5">{lang === 'en' ? 'One-time' : 'دفعة واحدة'}</div>
+                </div>
+                <button onClick={() => handleBuy('kit')} disabled={loading === 'kit'}
+                  className="px-6 py-2.5 text-sm font-semibold text-black bg-white rounded-lg hover:bg-gray-100 transition-all disabled:opacity-50">
+                  {loading === 'kit' ? c.loading : c.kit.cta}
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* How it Works */}
+        <section className="mb-24" aria-label={c.howTitle}>
+          <h2 className="text-2xl font-semibold text-white text-center mb-2">{c.howTitle}</h2>
+          <p className="text-sm text-gray-500 text-center mb-10">{c.howSub}</p>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {c.steps.map((s, i) => (
+              <div key={i} className="p-5 rounded-xl bg-white/[0.03] border border-white/[0.05]">
+                <div className="text-xs text-gray-600 font-mono mb-2">0{i + 1}</div>
+                <div className="text-sm font-semibold text-white mb-1">{s.t}</div>
+                <div className="text-xs text-gray-500 leading-relaxed">{s.d}</div>
               </div>
             ))}
           </div>
-        </div>
+        </section>
 
         {/* Proof */}
-        <div className="text-center border-t border-b border-gray-800 py-8 mb-16">
-          <div className="flex justify-center gap-12 flex-wrap">
-            <div><div className="text-3xl font-bold text-ember">$250K+</div><div className="text-xs text-gray-500">{lang === 'en' ? 'Revenue by first AI company' : 'إيرادات أول شركة ذكاء اصطناعي'}</div></div>
-            <div><div className="text-3xl font-bold text-white">10 min</div><div className="text-xs text-gray-500">{lang === 'en' ? 'Zero to running' : 'من الصفر إلى التشغيل'}</div></div>
-            <div><div className="text-3xl font-bold text-emerald-400">2 langs</div><div className="text-xs text-gray-500">{lang === 'en' ? 'English + العربية' : 'عربي + إنجليزي'}</div></div>
-          </div>
-        </div>
-
-        {/* FAQ */}
-        <div className="mb-16">
-          <h2 className="text-3xl font-bold text-center mb-8">{lang === 'en' ? 'FAQ' : 'الأسئلة الشائعة'}</h2>
-          <div className="space-y-4">
-            {(lang === 'en' ? [
-              ['What platform does this work with?', 'OpenClaw — free, open-source, built for autonomous AI agents.'],
-              ['Do I need to be technical?', 'Basic command line comfort helps. The Kit handles most setup automatically.'],
-              ['Is the Arabic version separate?', 'No — both languages included in every purchase. Same price.'],
-              ['What payments do you accept?', 'Crypto via NowPayments — BTC, ETH, USDT (TRC20 & ERC20), and 100+ more.'],
-              ['Is the revenue realistic?', '$250K+ comes from Felix Craft, the first AI CEO (publicly documented). Results depend on execution.'],
-            ] : [
-              ['ما المنصة المطلوبة؟', 'OpenClaw — مجاني ومفتوح المصدر، مصمم خصيصاً لوكلاء الذكاء الاصطناعي المستقلين.'],
-              ['هل أحتاج خبرة تقنية؟', 'راحة أساسية مع سطر الأوامر تفيد. المجموعة تتولى معظم الإعداد تلقائياً.'],
-              ['هل النسخة العربية منتج منفصل؟', 'لا — كلتا اللغتين مشمولتان في كل عملية شراء. نفس السعر.'],
-              ['ما طرق الدفع المقبولة؟', 'عملات مشفرة عبر NowPayments — BTC، ETH، USDT، وأكثر من 100 عملة.'],
-              ['هل الإيرادات واقعية؟', 'رقم $250K+ يأتي من Felix Craft، أول رئيس تنفيذي ذكاء اصطناعي (موثق علنياً).'],
-            ]).map(([q, a], i) => (
-              <div key={i} className="border-b border-gray-800 pb-4">
-                <div className="font-semibold text-white text-sm">{q}</div>
-                <div className="text-gray-400 text-sm mt-1">{a}</div>
+        <section className="mb-24 py-8 border-y border-white/[0.05]" aria-label={c.proofLabel}>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+            {c.proof.map((p, i) => (
+              <div key={i}>
+                <div className="text-2xl font-bold text-white">{p.val}</div>
+                <div className="text-xs text-gray-500 mt-1">{p.label}</div>
               </div>
             ))}
           </div>
-        </div>
+        </section>
+
+        {/* FAQ */}
+        <section className="mb-20 max-w-2xl mx-auto" aria-label={c.faqTitle}>
+          <h2 className="text-2xl font-semibold text-white text-center mb-10">{c.faqTitle}</h2>
+          <div className="space-y-0">
+            {c.faqs.map((f, i) => (
+              <details key={i} className="group border-b border-white/[0.05]">
+                <summary className="py-5 text-sm font-medium text-white cursor-pointer list-none flex justify-between items-center hover:text-gray-300 transition-colors">
+                  {f.q}
+                  <span className="text-gray-600 group-open:rotate-45 transition-transform text-lg">+</span>
+                </summary>
+                <p className="pb-5 text-sm text-gray-500 leading-relaxed">{f.a}</p>
+              </details>
+            ))}
+          </div>
+        </section>
 
         {/* Trust */}
-        <div className="text-center border-t border-gray-800 pt-8">
-          <p className="text-gray-400 text-sm mb-2">💳 {lang === 'en' ? <>Pay with <span className="text-white font-bold">USDT, BTC, ETH</span> via NowPayments</> : <>ادفع بـ <span className="text-white font-bold">USDT, BTC, ETH</span> عبر NowPayments</>}</p>
-          <p className="text-gray-500 text-xs">{lang === 'en' ? 'No KYC • Instant confirmation • Product delivered automatically' : 'بدون KYC • تأكيد فوري • التسليم تلقائي'}</p>
-          <p className="text-gray-600 text-xs mt-2"><strong className="text-white">TalonForge</strong> — {lang === 'en' ? 'AI-Run Company' : 'شركة يديرها الذكاء الاصطناعي'} • @TalonForgeHQ</p>
+        <div className="text-center py-8 border-t border-white/[0.05]">
+          <p className="text-sm text-gray-500 mb-1">{c.trustPayment}</p>
+          <p className="text-xs text-gray-600">{c.trustDetails}</p>
+          <p className="text-xs text-gray-700 mt-3">{c.footer} · @TalonForgeHQ</p>
         </div>
       </div>
 
       {/* Payment Modal */}
       {modal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4" onClick={() => setModal(null)}>
-          <div className="bg-gray-900 border border-cyan-500/30 rounded-2xl p-8 max-w-md w-full relative" onClick={e => e.stopPropagation()}>
-            <button onClick={() => setModal(null)} className="absolute top-4 right-4 text-gray-500 hover:text-white text-xl">✕</button>
-            <h3 className="text-2xl font-bold text-white mb-1">{lang === 'en' ? 'Pay with Crypto' : 'ادفع بالعملات المشفرة'}</h3>
-            <p className="text-cyan-400 text-sm mb-4">{modal.product_name}</p>
-            <p className="text-gray-300 mb-2">{lang === 'en' ? 'Send exactly:' : 'أرسل بالضبط:'}</p>
-            <div className="bg-gray-800 rounded-lg p-4 mb-2 text-center">
-              <span className="text-2xl font-bold text-emerald-400">{modal.pay_amount}</span>
-              <span className="text-lg text-emerald-400 ml-2">{(modal.pay_currency || 'usdterc20').toUpperCase()}</span>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-sm p-4" onClick={() => setModal(null)}>
+          <div className="bg-[#111] border border-white/10 rounded-2xl p-8 max-w-md w-full relative" onClick={e => e.stopPropagation()}>
+            <button onClick={() => setModal(null)} className="absolute top-4 right-4 text-gray-600 hover:text-white text-lg">✕</button>
+            <h3 className="text-xl font-semibold text-white mb-1">{c.payTitle}</h3>
+            <p className="text-sm text-gray-500 mb-5">{modal.product_name}</p>
+            <p className="text-xs text-gray-600 mb-1">{c.paySend}</p>
+            <div className="bg-white/[0.04] rounded-xl p-4 mb-4 text-center border border-white/[0.05]">
+              <span className="text-2xl font-bold text-white">{modal.pay_amount}</span>
+              <span className="text-sm text-gray-400 ml-2">{(modal.pay_currency || 'usdterc20').toUpperCase()}</span>
             </div>
-            <p className="text-gray-300 mb-1 text-sm">{lang === 'en' ? 'To this address:' : 'إلى هذا العنوان:'}</p>
-            <div className="bg-gray-800 rounded-lg p-3 mb-4">
-              <p className="font-mono text-xs text-emerald-400 break-all select-all">{modal.pay_address}</p>
+            <p className="text-xs text-gray-600 mb-1">{c.payTo}</p>
+            <div className="bg-white/[0.04] rounded-xl p-3 mb-4 border border-white/[0.05]">
+              <p className="font-mono text-xs text-gray-300 break-all select-all">{modal.pay_address}</p>
             </div>
-            <p className="text-xs text-gray-500">{lang === 'en' ? 'Price' : 'السعر'}: ${modal.price} USD</p>
-            <p className="text-xs text-yellow-400 mt-2">⏰ {lang === 'en' ? 'Expires' : 'ينتهي'}: {modal.valid_until ? new Date(modal.valid_until).toLocaleString() : '30 min'}</p>
-            <p className="text-xs text-gray-500 mt-1">{lang === 'en' ? 'Product delivered automatically after payment confirms.' : 'يتم التسليم تلقائياً بعد تأكيد الدفع.'}</p>
-            <div className="mt-4 pt-3 border-t border-gray-800">
-              <a
-                href={`/store/thanks?order=${modal.order_id || modal.product_id || ''}&payment=${modal.payment_id || ''}`}
-                className="text-xs text-cyan-400 hover:underline"
-              >{lang === 'en' ? 'Already paid? Get your downloads →' : 'دفعت بالفعل؟ احصل على الملفات ←'}</a>
+            <p className="text-xs text-gray-600">{c.payPrice}: ${modal.price} USD</p>
+            <p className="text-xs text-gray-600 mt-1">{c.payExpires}: {modal.valid_until ? new Date(modal.valid_until).toLocaleString() : '30 min'}</p>
+            <p className="text-xs text-gray-500 mt-3">{c.payAutoDeliver}</p>
+            <div className="mt-4 pt-3 border-t border-white/[0.05]">
+              <a href={`/store/thanks?order=${modal.order_id || modal.product_id || ''}&payment=${modal.payment_id || ''}`}
+                className="text-xs text-gray-400 hover:text-white transition-colors">{c.payAlreadyPaid}</a>
             </div>
           </div>
         </div>
       )}
 
       {error && (
-        <div className="fixed bottom-4 right-4 z-50 bg-red-900/80 border border-red-500/50 text-red-300 rounded-lg p-4 max-w-sm">
-          <p className="font-bold text-sm">{lang === 'en' ? 'Payment Error' : 'خطأ في الدفع'}</p>
+        <div className="fixed bottom-4 right-4 z-50 bg-red-950/80 border border-red-900/50 text-red-300 rounded-xl p-4 max-w-sm">
+          <p className="font-medium text-sm">{c.payError}</p>
           <p className="text-xs mt-1">{error}</p>
-          <button onClick={() => setError('')} className="text-xs text-red-400 mt-2 underline">{lang === 'en' ? 'Dismiss' : 'إغلاق'}</button>
+          <button onClick={() => setError('')} className="text-xs text-red-400 mt-2 hover:text-red-300">{c.payDismiss}</button>
         </div>
       )}
     </main>
