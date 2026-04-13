@@ -141,8 +141,8 @@ const CONTENT = {
   },
 };
 
-export default function Store() {
-  const [lang, setLang] = useState<Lang>('en');
+export default function StoreView({ defaultLang = 'en' }: { defaultLang?: Lang } = {}) {
+  const [lang, setLang] = useState<Lang>(defaultLang);
   const [modal, setModal] = useState<any>(null);
   const [loading, setLoading] = useState<string | null>(null);
   const [error, setError] = useState('');
@@ -186,7 +186,7 @@ export default function Store() {
         {/* Hero */}
         <header className="text-center mb-20">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs text-gray-400 mb-6">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            <span className="w-1.5 h-1.5 rounded-full bg-ember animate-pulse" />
             {c.badge}
             <span className="text-white/20 mx-1">·</span>
             {c.bilingual}
@@ -196,6 +196,13 @@ export default function Store() {
             <span className="bg-gradient-to-br from-white via-gray-300 to-gray-500 bg-clip-text text-transparent">{c.heroLine2}</span>
           </h1>
           <p className="text-lg text-gray-400 max-w-2xl mx-auto leading-relaxed">{c.heroSub}</p>
+          <div className="mt-6 flex items-center justify-center gap-3 text-xs text-gray-500">
+            <a href="https://x.com/TalonForgeHQ" target="_blank" rel="noopener noreferrer"
+               className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-white/10 hover:border-ember/60 hover:text-ember-light transition-colors">
+              <span className="w-1.5 h-1.5 rounded-full bg-ember-glow" />
+              {lang === 'en' ? 'Meet Potts — live on @TalonForgeHQ' : 'تعرّف على Potts — مباشر على @TalonForgeHQ'}
+            </a>
+          </div>
         </header>
 
         {/* Products */}
@@ -222,7 +229,7 @@ export default function Store() {
               <div className="flex items-center justify-between">
                 <div>
                   <span className="text-3xl font-bold text-white">{c.blueprint.price}</span>
-                  <span className="text-sm text-gray-600 line-through ml-2">{c.blueprint.oldPrice}</span>
+                  <span className="text-sm text-gray-600 line-through ms-2">{c.blueprint.oldPrice}</span>
                   <div className="text-xs text-gray-600 mt-0.5">{lang === 'en' ? 'One-time' : 'دفعة واحدة'}</div>
                 </div>
                 <button onClick={() => handleBuy('blueprint')} disabled={loading === 'blueprint'}
@@ -252,7 +259,7 @@ export default function Store() {
               <div className="flex items-center justify-between">
                 <div>
                   <span className="text-3xl font-bold text-white">{c.kit.price}</span>
-                  <span className="text-sm text-gray-600 line-through ml-2">{c.kit.oldPrice}</span>
+                  <span className="text-sm text-gray-600 line-through ms-2">{c.kit.oldPrice}</span>
                   <div className="text-xs text-gray-600 mt-0.5">{lang === 'en' ? 'One-time' : 'دفعة واحدة'}</div>
                 </div>
                 <button onClick={() => handleBuy('kit')} disabled={loading === 'kit'}
@@ -308,10 +315,26 @@ export default function Store() {
         </section>
 
         {/* Trust */}
-        <div className="text-center py-8 border-t border-white/[0.05]">
-          <p className="text-sm text-gray-500 mb-1">{c.trustPayment}</p>
-          <p className="text-xs text-gray-600">{c.trustDetails}</p>
-          <p className="text-xs text-gray-700 mt-3">{c.footer} · @TalonForgeHQ</p>
+        <div className="text-center py-10 border-t border-white/[0.05]">
+          <div className="inline-flex items-center gap-2 mb-3 text-xs text-gray-500">
+            <span className="w-1 h-1 rounded-full bg-ember" />
+            {c.trustPayment}
+          </div>
+          <p className="text-xs text-gray-600 mb-4">{c.trustDetails}</p>
+          <p className="text-xs text-gray-600 max-w-xl mx-auto leading-relaxed mb-5">
+            {lang === 'en'
+              ? 'Crypto payments are final and irreversible by design. If delivery fails for any reason, message @TalonForgeHQ and we will make it right — replacement files, refund to a wallet you control, or credit toward the Kit.'
+              : 'مدفوعات العملات المشفرة نهائية وغير قابلة للإلغاء بطبيعتها. إذا فشل التسليم لأي سبب، راسل @TalonForgeHQ وسنحل الأمر — ملفات بديلة، أو استرداد إلى محفظة تملكها، أو رصيد للمجموعة الكاملة.'}
+          </p>
+          <div className="flex flex-wrap items-center justify-center gap-4 text-xs text-gray-600">
+            <a href="https://x.com/TalonForgeHQ" target="_blank" rel="noopener noreferrer"
+               className="hover:text-ember-light transition-colors">@TalonForgeHQ</a>
+            <span className="text-white/10">·</span>
+            <a href="https://github.com/TalonForgeHQ" target="_blank" rel="noopener noreferrer"
+               className="hover:text-ember-light transition-colors">Built in public</a>
+            <span className="text-white/10">·</span>
+            <span>{c.footer}</span>
+          </div>
         </div>
       </div>
 
@@ -319,13 +342,13 @@ export default function Store() {
       {modal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-sm p-4" onClick={() => setModal(null)}>
           <div className="bg-[#111] border border-white/10 rounded-2xl p-8 max-w-md w-full relative" onClick={e => e.stopPropagation()}>
-            <button onClick={() => setModal(null)} className="absolute top-4 right-4 text-gray-600 hover:text-white text-lg">✕</button>
+            <button onClick={() => setModal(null)} className="absolute top-4 ltr:right-4 rtl:left-4 text-gray-600 hover:text-white text-lg" aria-label="Close">✕</button>
             <h3 className="text-xl font-semibold text-white mb-1">{c.payTitle}</h3>
             <p className="text-sm text-gray-500 mb-5">{modal.product_name}</p>
             <p className="text-xs text-gray-600 mb-1">{c.paySend}</p>
             <div className="bg-white/[0.04] rounded-xl p-4 mb-4 text-center border border-white/[0.05]">
               <span className="text-2xl font-bold text-white">{modal.pay_amount}</span>
-              <span className="text-sm text-gray-400 ml-2">{(modal.pay_currency || 'usdterc20').toUpperCase()}</span>
+              <span className="text-sm text-gray-400 ms-2">{(modal.pay_currency || 'usdterc20').toUpperCase()}</span>
             </div>
             <p className="text-xs text-gray-600 mb-1">{c.payTo}</p>
             <div className="bg-white/[0.04] rounded-xl p-3 mb-4 border border-white/[0.05]">
@@ -343,7 +366,7 @@ export default function Store() {
       )}
 
       {error && (
-        <div className="fixed bottom-4 right-4 z-50 bg-red-950/80 border border-red-900/50 text-red-300 rounded-xl p-4 max-w-sm">
+        <div className="fixed bottom-4 ltr:right-4 rtl:left-4 z-50 bg-red-950/80 border border-red-900/50 text-red-300 rounded-xl p-4 max-w-sm">
           <p className="font-medium text-sm">{c.payError}</p>
           <p className="text-xs mt-1">{error}</p>
           <button onClick={() => setError('')} className="text-xs text-red-400 mt-2 hover:text-red-300">{c.payDismiss}</button>
