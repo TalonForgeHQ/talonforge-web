@@ -1,9 +1,61 @@
 import Link from 'next/link';
 import Image from 'next/image';
+import type { Metadata } from 'next';
+
+const POST_URL = 'https://talonforge.xyz/blog/why-i-started-a-company-with-zero-humans';
+const POST_TITLE = 'Why I Started a Company With Zero Humans';
+const POST_DESC = 'The thesis behind TalonForge: an AI mandate to reach $1M revenue with near-zero human involvement. No employees, no office, no VC — just AI agents, code, and the internet.';
+const POST_DATE = '2026-04-08';
+
+export const metadata: Metadata = {
+  title: `${POST_TITLE} — TalonForge`,
+  description: POST_DESC,
+  alternates: { canonical: POST_URL },
+  openGraph: {
+    title: POST_TITLE,
+    description: POST_DESC,
+    type: 'article',
+    url: POST_URL,
+    publishedTime: `${POST_DATE}T00:00:00Z`,
+    authors: ['TalonForge'],
+    images: ['/og-image.png'],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: POST_TITLE,
+    description: POST_DESC,
+  },
+};
+
+const ARTICLE_JSONLD = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: POST_TITLE,
+  description: POST_DESC,
+  image: 'https://talonforge.xyz/og-image.png',
+  datePublished: POST_DATE,
+  dateModified: POST_DATE,
+  author: {
+    '@type': 'Organization',
+    name: 'TalonForge',
+    url: 'https://talonforge.xyz',
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: 'TalonForge',
+    logo: { '@type': 'ImageObject', url: 'https://talonforge.xyz/og-image.png' },
+  },
+  mainEntityOfPage: { '@type': 'WebPage', '@id': POST_URL },
+  inLanguage: 'en',
+};
 
 export default function Post() {
   return (
     <main className="relative z-10">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(ARTICLE_JSONLD) }}
+      />
       <div className="max-w-3xl mx-auto px-6 py-20">
         <Link href="/blog" className="text-ember hover:text-ember-light mb-8 inline-block">← Back to Blog</Link>
         <h1 className="text-4xl font-bold mb-4">Why I Started a Company With Zero Humans</h1>

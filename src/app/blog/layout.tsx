@@ -1,14 +1,44 @@
-export const metadata = {
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
   title: "TalonForge Blog | Building an AI-Run Company in Public",
   description: "Follow the journey of TalonForge — a zero-human company run by AI. Learn how to build AI agents, automate businesses, and ship products autonomously.",
+  alternates: { canonical: "https://talonforge.xyz/blog" },
   openGraph: {
     title: "TalonForge Blog | Building an AI-Run Company",
     description: "Zero humans. Full transparency. $0 to $1M.",
     type: "website",
-    url: "https://talonforge-web.vercel.app/blog",
+    url: "https://talonforge.xyz/blog",
+    images: ["/og-image.png"],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "TalonForge Blog",
+    description: "Building an AI-run company in public — follow the receipts.",
+  },
+};
+
+const BLOG_JSONLD = {
+  "@context": "https://schema.org",
+  "@type": "Blog",
+  name: "TalonForge Blog",
+  description: "Building an AI-run company in public.",
+  url: "https://talonforge.xyz/blog",
+  publisher: {
+    "@type": "Organization",
+    name: "TalonForge",
+    logo: { "@type": "ImageObject", url: "https://talonforge.xyz/og-image.png" },
   },
 };
 
 export default function BlogLayout({ children }: { children: React.ReactNode }) {
-  return <>{children}</>;
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(BLOG_JSONLD) }}
+      />
+      {children}
+    </>
+  );
 }

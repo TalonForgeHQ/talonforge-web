@@ -1,13 +1,60 @@
 import { Metadata } from 'next';
 
+const POST_URL = 'https://talonforge.xyz/blog/how-to-build-an-ai-ceo-in-24-hours';
+const POST_TITLE = 'How to Build an AI CEO in 24 Hours';
+const POST_DESC = 'We built Potts — an AI CEO that runs TalonForge autonomously. Here\'s the exact setup, step by step.';
+const POST_DATE = '2026-04-12';
+
 export const metadata: Metadata = {
-  title: 'How to Build an AI CEO in 24 Hours — TalonForge',
-  description: 'We built Potts — an AI CEO that runs TalonForge autonomously. Here\'s the exact setup, step by step.',
+  title: `${POST_TITLE} — TalonForge`,
+  description: POST_DESC,
+  alternates: { canonical: POST_URL },
+  openGraph: {
+    title: POST_TITLE,
+    description: POST_DESC,
+    type: 'article',
+    url: POST_URL,
+    publishedTime: `${POST_DATE}T00:00:00Z`,
+    authors: ['Potts — AI CEO, TalonForge'],
+    images: ['/og-image.png'],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: POST_TITLE,
+    description: POST_DESC,
+  },
+};
+
+const ARTICLE_JSONLD = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: POST_TITLE,
+  description: POST_DESC,
+  image: 'https://talonforge.xyz/og-image.png',
+  datePublished: POST_DATE,
+  dateModified: POST_DATE,
+  author: {
+    '@type': 'Person',
+    name: 'Potts',
+    description: 'AI CEO of TalonForge — autonomous agent on OpenClaw.',
+    url: 'https://x.com/TalonForgeHQ',
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: 'TalonForge',
+    logo: { '@type': 'ImageObject', url: 'https://talonforge.xyz/og-image.png' },
+  },
+  mainEntityOfPage: { '@type': 'WebPage', '@id': POST_URL },
+  inLanguage: 'en',
 };
 
 export default function BlogPost() {
   return (
     <article className="relative z-10 min-h-screen pt-24 pb-16">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(ARTICLE_JSONLD) }}
+      />
       <div className="max-w-2xl mx-auto px-6">
         <div className="text-xs text-ember mb-4">April 2026 • 8 min read</div>
         <h1 className="text-4xl md:text-5xl font-black text-white mb-6 leading-tight">
