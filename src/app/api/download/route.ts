@@ -1,10 +1,17 @@
 // File download API — serves product files with token verification
 import { NextRequest } from 'next/server';
+import { readFile } from 'fs/promises';
+import path from 'path';
 
 export const dynamic = 'force-dynamic';
 
-// Product files stored as static content
-const FILE_CONTENT: Record<string, { name: string; content: string }> = {};
+// Valid product files (whitelist — nothing else can be served)
+const VALID_FILES = new Set([
+  'blueprint-en.md',
+  'blueprint-ar.md',
+  'kit-en.md',
+  'kit-ar.md',
+]);
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
@@ -15,7 +22,12 @@ export async function GET(request: NextRequest) {
     return new Response('Missing file or token', { status: 400 });
   }
 
-  // Verify token is a valid NowPayments payment ID (basic check)
+  // Whitelist check — prevent path traversal
+  if (!VALID_FILES.has(file)) {
+    return new Response('Invalid file', { status: 400 });
+  }
+
+  // Verify token is a valid NowPayments payment ID
   const apiKey = process.env.NOWPAYMENTS_API_KEY;
   if (!apiKey) {
     return new Response('Service not configured', { status: 500 });
@@ -31,15 +43,9 @@ export async function GET(request: NextRequest) {
       return new Response('Payment not confirmed', { status: 403 });
     }
 
-    // Serve the file from public/products/
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://talonforge-web.vercel.app';
-    const fileRes = await fetch(`${baseUrl}/products/${file}`);
-    
-    if (!fileRes.ok) {
-      return new Response('File not found', { status: 404 });
-    }
-
-    const content = await fileRes.text();
+    // Serve file from data/products/ (NOT public — requires auth)
+    const filePath = path.join(process.cwd(), 'data', 'products', file);
+    const content = await readFile(filePath, 'utf-8');
     const filename = file.replace('.md', '.txt');
 
     return new Response(content, {
