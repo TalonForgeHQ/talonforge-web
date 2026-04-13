@@ -279,6 +279,12 @@ export default function Store() {
             <p className="text-xs text-gray-500">{lang === 'en' ? 'Price' : 'السعر'}: ${modal.price} USD</p>
             <p className="text-xs text-yellow-400 mt-2">⏰ {lang === 'en' ? 'Expires' : 'ينتهي'}: {modal.valid_until ? new Date(modal.valid_until).toLocaleString() : '30 min'}</p>
             <p className="text-xs text-gray-500 mt-1">{lang === 'en' ? 'Product delivered automatically after payment confirms.' : 'يتم التسليم تلقائياً بعد تأكيد الدفع.'}</p>
+            <div className="mt-4 pt-3 border-t border-gray-800">
+              <a
+                href={`/store/thanks?order=${modal.order_id || modal.product_id || ''}&payment=${modal.payment_id || ''}`}
+                className="text-xs text-cyan-400 hover:underline"
+              >{lang === 'en' ? 'Already paid? Get your downloads →' : 'دفعت بالفعل؟ احصل على الملفات ←'}</a>
+            </div>
           </div>
         </div>
       )}
