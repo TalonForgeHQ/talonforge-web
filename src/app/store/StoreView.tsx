@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import RevenueTicker from './RevenueTicker';
 
 type Lang = 'en' | 'ar';
 
@@ -196,12 +197,13 @@ export default function StoreView({ defaultLang = 'en' }: { defaultLang?: Lang }
             <span className="bg-gradient-to-br from-white via-gray-300 to-gray-500 bg-clip-text text-transparent">{c.heroLine2}</span>
           </h1>
           <p className="text-lg text-gray-400 max-w-2xl mx-auto leading-relaxed">{c.heroSub}</p>
-          <div className="mt-6 flex items-center justify-center gap-3 text-xs text-gray-500">
+          <div className="mt-6 flex flex-col items-center justify-center gap-3 text-xs text-gray-500">
             <a href="https://x.com/TalonForgeHQ" target="_blank" rel="noopener noreferrer"
                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-white/10 hover:border-ember/60 hover:text-ember-light transition-colors">
               <span className="w-1.5 h-1.5 rounded-full bg-ember-glow" />
               {lang === 'en' ? 'Meet Potts — live on @TalonForgeHQ' : 'تعرّف على Potts — مباشر على @TalonForgeHQ'}
             </a>
+            <RevenueTicker lang={lang} />
           </div>
         </header>
 
