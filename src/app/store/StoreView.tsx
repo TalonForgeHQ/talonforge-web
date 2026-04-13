@@ -267,7 +267,7 @@ export default function StoreView({ defaultLang = 'en' }: { defaultLang?: Lang }
                 <div className="p-1 pb-0">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src="/blueprint-cover.png" alt={`${c.blueprint.name} cover`}
-                       className="w-full h-52 md:h-64 object-cover rounded-t-[22px]" />
+                       className="w-full h-52 md:h-64 object-cover rounded-t-[22px] bg-gradient-to-b from-ember/[0.08] to-transparent" />
                 </div>
                 <div className="p-8">
                   <div className="flex items-baseline justify-between mb-2">
@@ -308,7 +308,7 @@ export default function StoreView({ defaultLang = 'en' }: { defaultLang?: Lang }
                 <div className="p-1 pb-0">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src="/kit-cover.png" alt={`${c.kit.name} product visual`}
-                       className="w-full h-52 md:h-64 object-cover rounded-t-[22px]" />
+                       className="w-full h-52 md:h-64 object-cover rounded-t-[22px] bg-gradient-to-b from-[#3cc7ff]/[0.08] to-transparent" />
                 </div>
                 <div className="p-8">
                   <div className="flex items-baseline justify-between mb-2">
