@@ -177,9 +177,9 @@ export default function StoreView({ defaultLang = 'en' }: { defaultLang?: Lang }
   return (
     <main className={`relative z-10 min-h-screen pt-20 pb-16 ${rtl ? 'rtl' : ''}`} dir={rtl ? 'rtl' : 'ltr'}>
       <ScrollProgress />
-      <div className="max-w-5xl mx-auto px-6">
+      <div className="max-w-6xl mx-auto px-6">
         {/* Lang Toggle */}
-        <div className="flex justify-end gap-2 mb-12">
+        <div className="flex justify-center gap-2 mb-12">
           {(['en', 'ar'] as Lang[]).map(l => (
             <button key={l} onClick={() => setLang(l)}
               className={`px-4 py-1.5 text-sm rounded-full transition-all font-medium ${
@@ -251,7 +251,7 @@ export default function StoreView({ defaultLang = 'en' }: { defaultLang?: Lang }
         </header>
 
         {/* Products — glass cards with product mockups */}
-        <section className="mb-28" aria-label={c.productsTitle}>
+        <section className="mb-32 md:mb-40" aria-label={c.productsTitle}>
           <Reveal>
             <div className="text-center mb-14">
               <p className="text-xs font-mono uppercase tracking-[0.25em] text-ember mb-3">{lang === 'en' ? 'Now Shipping' : 'متوفر الآن'}</p>
@@ -304,7 +304,7 @@ export default function StoreView({ defaultLang = 'en' }: { defaultLang?: Lang }
             {/* Kit */}
             <Reveal delay={0.15}>
               <GlassCard accent="cyan" tiltDirection="right" className="overflow-hidden h-full relative">
-                <div className="absolute top-4 ltr:right-4 rtl:left-4 z-10 px-3 py-1 rounded-full bg-gradient-to-r from-ember/90 to-ember-glow/90 text-[10px] font-bold tracking-widest text-white uppercase shadow-lg">{c.kit.badge}</div>
+                <div className="absolute top-4 left-1/2 -translate-x-1/2 z-10 px-3 py-1 rounded-full bg-gradient-to-r from-ember/90 to-ember-glow/90 text-[10px] font-bold tracking-widest text-white uppercase shadow-lg">{c.kit.badge}</div>
                 <div className="p-1 pb-0">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src="/kit-cover.png" alt={`${c.kit.name} product visual`}
@@ -357,7 +357,7 @@ export default function StoreView({ defaultLang = 'en' }: { defaultLang?: Lang }
         </section>
 
         {/* How it Works — revealed steps, connecting line */}
-        <section className="mb-28 relative" aria-label={c.howTitle}>
+        <section className="mb-32 md:mb-40 relative" aria-label={c.howTitle}>
           <Reveal>
             <div className="text-center mb-14">
               <p className="text-xs font-mono uppercase tracking-[0.25em] text-ember mb-3">{lang === 'en' ? 'The Flow' : 'الخطوات'}</p>
@@ -384,7 +384,7 @@ export default function StoreView({ defaultLang = 'en' }: { defaultLang?: Lang }
         </section>
 
         {/* Proof — animated counters */}
-        <section className="mb-28" aria-label={c.proofLabel}>
+        <section className="mb-32 md:mb-40" aria-label={c.proofLabel}>
           <Reveal>
             <div className="text-center mb-10">
               <p className="text-xs font-mono uppercase tracking-[0.25em] text-ember mb-3">{c.proofLabel}</p>
