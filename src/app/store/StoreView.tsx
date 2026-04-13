@@ -185,19 +185,45 @@ export default function StoreView({ defaultLang = 'en' }: { defaultLang?: Lang }
         </div>
 
         {/* Hero */}
-        <header className="text-center mb-20">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs text-gray-400 mb-6">
+        <header className="relative text-center mb-24">
+          {/* Faint logo watermark behind hero — brand echo through everything */}
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-x-0 -top-8 flex justify-center opacity-[0.08]"
+            style={{
+              maskImage: 'radial-gradient(circle at center, black 45%, transparent 85%)',
+              WebkitMaskImage: 'radial-gradient(circle at center, black 45%, transparent 85%)',
+            }}
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/logo.jpg" alt="" className="w-[720px] max-w-none object-contain select-none" />
+          </div>
+
+          {/* Foreground logo mark with ember glow halo */}
+          <div className="relative mb-8 flex justify-center">
+            <div aria-hidden className="absolute inset-0 flex justify-center">
+              <div className="w-48 h-48 rounded-full bg-gradient-to-br from-ember/30 via-ember/5 to-transparent blur-3xl" />
+            </div>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/logo.jpg"
+              alt="TalonForge — three diagonal claw slashes glowing cyan and orange on a dark digital backdrop"
+              className="relative w-28 h-28 md:w-32 md:h-32 object-contain rounded-2xl shadow-[0_0_60px_-8px_rgba(232,98,44,0.55)] ring-1 ring-white/5"
+            />
+          </div>
+
+          <div className="relative inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs text-gray-400 mb-6">
             <span className="w-1.5 h-1.5 rounded-full bg-ember animate-pulse" />
             {c.badge}
             <span className="text-white/20 mx-1">·</span>
             {c.bilingual}
           </div>
-          <h1 className="text-5xl md:text-7xl font-bold tracking-tight leading-[0.95] mb-6">
+          <h1 className="relative text-5xl md:text-7xl font-bold tracking-tight leading-[0.95] mb-6">
             <span className="text-white">{c.heroLine1} </span>
-            <span className="bg-gradient-to-br from-white via-gray-300 to-gray-500 bg-clip-text text-transparent">{c.heroLine2}</span>
+            <span className="bg-gradient-to-br from-ember-light via-ember to-ember-glow bg-clip-text text-transparent">{c.heroLine2}</span>
           </h1>
-          <p className="text-lg text-gray-400 max-w-2xl mx-auto leading-relaxed">{c.heroSub}</p>
-          <div className="mt-6 flex flex-col items-center justify-center gap-3 text-xs text-gray-500">
+          <p className="relative text-lg text-gray-400 max-w-2xl mx-auto leading-relaxed">{c.heroSub}</p>
+          <div className="relative mt-6 flex flex-col items-center justify-center gap-3 text-xs text-gray-500">
             <a href="https://x.com/TalonForgeHQ" target="_blank" rel="noopener noreferrer"
                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-white/10 hover:border-ember/60 hover:text-ember-light transition-colors">
               <span className="w-1.5 h-1.5 rounded-full bg-ember-glow" />
@@ -205,6 +231,10 @@ export default function StoreView({ defaultLang = 'en' }: { defaultLang?: Lang }
             </a>
             <RevenueTicker lang={lang} />
           </div>
+
+          {/* Twin claw-slash dividers — orange + cyan, echo the logo motif */}
+          <div aria-hidden className="relative mt-14 h-px w-full max-w-xl mx-auto bg-gradient-to-r from-transparent via-ember/60 to-transparent" />
+          <div aria-hidden className="relative h-px w-full max-w-md mx-auto mt-0.5 bg-gradient-to-r from-transparent via-[#3cc7ff]/50 to-transparent" />
         </header>
 
         {/* Products */}
