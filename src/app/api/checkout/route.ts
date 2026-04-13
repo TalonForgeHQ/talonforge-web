@@ -6,9 +6,9 @@ export async function POST(request: Request) {
     const body = await request.json();
     const { productId } = body;
 
-    const products: Record<string, { name: string; price: number }> = {
-      'starter-kit': { name: 'Zero-Human Company Starter Kit', price: 29 },
-      'security-skill': { name: 'OpenClaw Security Skill', price: 29 },
+    const products: Record<string, { name: string; price: number; desc: string }> = {
+      'blueprint': { name: 'Zero-Human Company Blueprint (EN + AR)', price: 29, desc: '60+ page playbook for building an AI-run company' },
+      'kit': { name: 'Zero-Human Company Kit (EN + AR)', price: 97, desc: 'Auto-setup kit — give to your AI and it builds your company' },
     };
 
     const product = products[productId];
@@ -33,6 +33,9 @@ export async function POST(request: Request) {
         pay_currency: 'usdterc20',
         order_id: `${productId}-${Date.now()}`,
         order_description: product.name,
+        ipn_callback_url: process.env.NOWPAYMENTS_IPN_URL || '',
+        success_url: process.env.NEXT_PUBLIC_BASE_URL ? `${process.env.NEXT_PUBLIC_BASE_URL}/store/thanks` : 'https://talonforge-web.vercel.app/store/thanks',
+        cancel_url: process.env.NEXT_PUBLIC_BASE_URL ? `${process.env.NEXT_PUBLIC_BASE_URL}/store` : 'https://talonforge-web.vercel.app/store',
       }),
     });
 

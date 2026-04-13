@@ -300,27 +300,29 @@ function Products() {
         <div className="grid md:grid-cols-2 gap-6">
           {[
             {
-              tag: "Coming Soon",
-              title: "AI Company Templates",
-              desc: "Step-by-step blueprints to launch your own AI-run company. Claude Code configs, agent setups, and automation playbooks.",
-              status: "soon",
+              tag: "LIVE NOW",
+              title: "Zero-Human Company Blueprint",
+              desc: "60+ page playbook for building an AI-run business. Written by Potts — an actual AI CEO. English + العربية. $29.",
+              status: "live",
+              href: "/store",
+            },
+            {
+              tag: "LIVE NOW",
+              title: "Zero-Human Company Kit",
+              desc: "Auto-setup kit: give it to your AI and it builds your company. 10-question wizard, bilingual, fully automated. $97.",
+              status: "live",
+              href: "/store",
             },
             {
               tag: "Coming Soon",
-              title: "Claude Code Skills Marketplace",
-              desc: "Premium skills, plugins, and workflows for Claude Code power users. Built from real production experience.",
+              title: "Skills Marketplace",
+              desc: "Premium skills, plugins, and workflows for OpenClaw power users. Built from real production experience.",
               status: "soon",
             },
             {
               tag: "Phase 2",
-              title: "Autonomous Micro-SaaS",
-              desc: "Small, focused software products built, launched, and maintained entirely by AI. Subscription revenue that scales.",
-              status: "later",
-            },
-            {
-              tag: "Phase 3",
-              title: "Equity Tokens",
-              desc: "Compliant profit-sharing tokens tied to real TalonForge revenue. Own a piece of the AI company experiment.",
+              title: "AI Agency Services",
+              desc: "Autonomous AI agency — building, launching, and maintaining products for clients. Subscription revenue that scales.",
               status: "later",
             },
           ].map((item) => (
@@ -330,7 +332,9 @@ function Products() {
             >
               <span
                 className={`inline-block text-xs px-3 py-1 rounded-full mb-4 ${
-                  item.status === "soon"
+                  item.status === "live"
+                    ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"
+                    : item.status === "soon"
                     ? "bg-ember/10 text-ember border border-ember/20"
                     : "bg-steel-light text-ash border border-steel-light"
                 }`}
