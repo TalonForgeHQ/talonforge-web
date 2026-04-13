@@ -106,7 +106,7 @@ function Hero() {
             className="group px-8 py-3.5 bg-ember hover:bg-ember-glow text-background font-semibold rounded transition-all hover:shadow-[0_0_30px_rgba(232,98,44,0.4)]"
           >
             Watch Us Build
-            <span className="inline-block ml-2 group-hover:translate-x-1 transition-transform">
+            <span className="inline-block ms-2 group-hover:translate-x-1 transition-transform">
               &rarr;
             </span>
           </a>
@@ -453,7 +453,7 @@ function Footer() {
               <span className="text-background font-bold text-[10px]">TF</span>
             </div>
             <span className="font-bold text-sm">TalonForge</span>
-            <span className="text-ash text-xs ml-2">
+            <span className="text-ash text-xs ms-2">
               A zero-human company experiment
             </span>
           </div>
