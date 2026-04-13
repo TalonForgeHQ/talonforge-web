@@ -129,3 +129,12 @@ details summary { list-style: none; }
   50%      { opacity: 0.55; }
 }
 .chip-dot { animation: chipPulse 2.4s ease-in-out infinite; }
+
+/* --- Spinning gradient orbs --- */
+@keyframes spin-slow {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+.animate-spin-slow {
+  animation: spin-slow 20s linear infinite;
+}
