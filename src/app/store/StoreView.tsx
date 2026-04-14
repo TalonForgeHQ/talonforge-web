@@ -246,8 +246,10 @@ export default function StoreView() {
       {/* Kit spotlight — the hero product */}
       <KitSpotlight lang={lang} onBuy={() => handleBuy('kit')} loading={loading === 'kit'} />
 
+      <div className="max-w-6xl mx-auto px-6"><div className="border-t border-white/[0.08]" /></div>
+
       {/* Founding 100 banner — honest scarcity */}
-      <section className="px-6 pt-4 pb-8">
+      <section className="px-6 pt-20 pb-20">
         <div className="max-w-5xl mx-auto">
           <div className="rounded-xl border border-[#c4a35a]/20 bg-[#c4a35a]/[0.03] px-5 py-4 text-center">
             <span className="text-[11px] font-mono uppercase tracking-[0.2em] text-[#c4a35a] me-3">
@@ -262,8 +264,10 @@ export default function StoreView() {
         </div>
       </section>
 
+      <div className="max-w-6xl mx-auto px-6"><div className="border-t border-white/[0.08]" /></div>
+
       {/* Starter — impulse strip above the main grid */}
-      <section id="products" className="pt-12 pb-6 px-6">
+      <section id="products" className="pt-24 pb-16 px-6">
         <div className="max-w-5xl mx-auto">
           <button
             onClick={() => handleBuy('starter')}
@@ -293,8 +297,10 @@ export default function StoreView() {
         </div>
       </section>
 
+      <div className="max-w-6xl mx-auto px-6"><div className="border-t border-white/[0.08]" /></div>
+
       {/* Main products */}
-      <section className="pt-12 pb-32 px-6">
+      <section className="pt-24 pb-32 px-6">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-16">
             <h2 style={{ fontFamily: 'var(--font-serif), ui-serif, Georgia, serif' }} className="text-3xl md:text-4xl font-semibold tracking-tight text-white mb-3">{c.productsTitle}</h2>
