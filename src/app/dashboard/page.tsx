@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import SiteNav from '../_components/SiteNav';
 import SiteFooter from '../_components/SiteFooter';
 import { useLang } from '../_components/LangContext';
+import { useAnimatedNumber } from '../_components/useAnimatedNumber';
 
 type Rev = { total_usd: number; count: number; status?: string };
 type Commit = {
@@ -141,6 +142,8 @@ export default function Dashboard() {
 
   const amount = rev?.total_usd ?? 0;
   const count = rev?.count ?? 0;
+  const animatedAmount = useAnimatedNumber(amount, 1400);
+  const animatedCount = useAnimatedNumber(count, 1000);
   const pctToTarget = Math.min(100, (amount / 1_000_000) * 100);
 
   return (
@@ -175,11 +178,11 @@ export default function Dashboard() {
               style={{ fontFamily: 'var(--font-serif), ui-serif, Georgia, serif' }}
               className="text-7xl md:text-[10rem] font-semibold text-[#c4a35a] leading-none tabular-nums tracking-[-0.04em]"
             >
-              {formatUsd(amount)}
+              {formatUsd(Math.round(animatedAmount))}
             </div>
             <div className="mt-5 flex items-center justify-center gap-5 text-[11px] font-mono uppercase tracking-[0.22em] text-neutral-500">
               <span>
-                {count} {c.ordersLabel}
+                {Math.round(animatedCount)} {c.ordersLabel}
               </span>
               <span className="text-neutral-700">·</span>
               <span>

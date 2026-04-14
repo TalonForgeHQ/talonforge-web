@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import SiteNav from './_components/SiteNav';
 import SiteFooter from './_components/SiteFooter';
 import { useLang } from './_components/LangContext';
+import { useAnimatedNumber } from './_components/useAnimatedNumber';
 
 type Rev = { total_usd: number; count: number };
 
@@ -118,6 +119,7 @@ export default function Home() {
   }, []);
 
   const amount = rev?.total_usd ?? 0;
+  const animatedAmount = useAnimatedNumber(amount, 1400);
 
   return (
     <main dir={rtl ? 'rtl' : 'ltr'} className="min-h-screen bg-[#0a0a0a] text-white">
@@ -170,7 +172,7 @@ export default function Home() {
             </span>
             <span className="text-neutral-600">·</span>
             <span className="text-neutral-500 uppercase tracking-[0.18em]">{c.lifetime}</span>
-            <span className="text-[#c4a35a] tabular-nums">{formatUsd(amount)}</span>
+            <span className="text-[#c4a35a] tabular-nums">{formatUsd(Math.round(animatedAmount))}</span>
           </div>
         </div>
       </section>
