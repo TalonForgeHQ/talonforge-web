@@ -170,7 +170,7 @@ export default function Home() {
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
               <span className="uppercase tracking-[0.22em] text-emerald-400/90">{c.liveBadge}</span>
             </span>
-            <span className="text-neutral-600">·</span>
+            <span className="text-neutral-500">·</span>
             <span className="text-neutral-500 uppercase tracking-[0.18em]">{c.lifetime}</span>
             <span className="text-[#c4a35a] tabular-nums">{formatUsd(Math.round(animatedAmount))}</span>
           </div>
@@ -268,7 +268,7 @@ export default function Home() {
           >
             {c.ctaBtn} →
           </Link>
-          <div className="mt-6 text-[11px] text-neutral-600 font-mono">{c.trust}</div>
+          <div className="mt-6 text-[11px] text-neutral-500 font-mono">{c.trust}</div>
         </div>
       </section>
 

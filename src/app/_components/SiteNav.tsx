@@ -41,6 +41,13 @@ export default function SiteNav() {
     };
   }, [open]);
 
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setOpen(false); };
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, [open]);
+
   return (
     <>
       <nav
@@ -98,6 +105,10 @@ export default function SiteNav() {
 
       {/* mobile menu drawer */}
       <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={lang === 'en' ? 'Site navigation' : 'قائمة الموقع'}
+        aria-hidden={!open}
         dir={rtl ? 'rtl' : 'ltr'}
         className={`md:hidden fixed inset-0 z-40 bg-[#0a0a0a]/98 backdrop-blur-xl transition-opacity duration-300 ${
           open ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'

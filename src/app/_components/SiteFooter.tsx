@@ -41,7 +41,7 @@ export default function SiteFooter() {
               <span className="text-white">Talon</span>
               <span className="text-[#c4a35a] italic">Forge</span>
             </Link>
-            <p className="mt-2 text-xs text-neutral-600">{c.tag}</p>
+            <p className="mt-2 text-xs text-neutral-500">{c.tag}</p>
           </div>
 
           <nav className="flex items-center justify-center gap-6 text-[13px]">
@@ -82,7 +82,7 @@ export default function SiteFooter() {
           </div>
         </div>
 
-        <div className="border-t border-white/[0.04] pt-6 flex flex-col md:flex-row md:justify-between gap-3 text-[11px] text-neutral-600 text-center md:text-start">
+        <div className="border-t border-white/[0.04] pt-6 flex flex-col md:flex-row md:justify-between gap-3 text-[11px] text-neutral-500 text-center md:text-start">
           <span>{c.rights}</span>
           <span>{c.note}</span>
         </div>

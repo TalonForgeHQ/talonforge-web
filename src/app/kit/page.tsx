@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import SiteNav from '../_components/SiteNav';
 import SiteFooter from '../_components/SiteFooter';
 import LiveStatus from '../store/LiveStatus';
@@ -191,14 +191,14 @@ export default function KitPage() {
               <ul className="space-y-5">
                 {c.promiseIsNot.map((item, i) => (
                   <li key={i} className="flex items-start gap-3 text-[15px] text-neutral-500 leading-relaxed">
-                    <span className="text-neutral-600 mt-1.5 text-[10px]">○</span>
+                    <span className="text-neutral-500 mt-1.5 text-[10px]">○</span>
                     <span>{item}</span>
                   </li>
                 ))}
               </ul>
             </div>
           </div>
-          <p className="text-center mt-20 text-sm text-neutral-600 italic">{c.testimonialNote}</p>
+          <p className="text-center mt-20 text-sm text-neutral-500 italic">{c.testimonialNote}</p>
         </div>
       </section>
 
@@ -222,39 +222,59 @@ export default function KitPage() {
           >
             {loading ? '...' : c.primaryCta} →
           </button>
-          <div className="mt-6 text-[11px] text-neutral-600 font-mono">{c.trustRow}</div>
+          <div className="mt-6 text-[11px] text-neutral-500 font-mono">{c.trustRow}</div>
         </div>
       </section>
 
       <SiteFooter />
 
       {/* Payment modal */}
-      {modal && (
-        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center px-6" onClick={() => setModal(null)}>
-          <div className="bg-[#0a0a0a] border border-[#c4a35a]/30 rounded-2xl p-8 max-w-md w-full" onClick={(e) => e.stopPropagation()}>
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold">Complete Payment</h3>
-              <button onClick={() => setModal(null)} className="text-neutral-500 hover:text-white">×</button>
-            </div>
-            <p className="text-sm text-neutral-500 mb-5">{modal.product_name}</p>
-            <div className="mb-4">
-              <p className="text-[11px] uppercase tracking-widest text-neutral-600 mb-2">Send exactly</p>
-              <div className="p-4 bg-white/[0.03] rounded-lg border border-white/[0.06] text-center">
-                <span className="text-2xl font-bold">{modal.pay_amount}</span>
-                <span className="text-neutral-500 text-xs ms-2">{String(modal.pay_currency).toUpperCase()}</span>
-              </div>
-            </div>
-            <div className="mb-4">
-              <p className="text-[11px] uppercase tracking-widest text-neutral-600 mb-2">To this address</p>
-              <div className="p-3 bg-white/[0.03] rounded-lg border border-white/[0.06] text-[11px] font-mono break-all">{modal.pay_address}</div>
-            </div>
-            <p className="text-xs text-neutral-600 mb-4">${modal.price} USD · Files delivered automatically after confirmation.</p>
-            <a href={`/store/thanks?order=${encodeURIComponent(modal.order_id)}&payment=${encodeURIComponent(modal.payment_id)}`} className="block text-center text-sm text-[#c4a35a] hover:text-[#d4b46a]">
-              Already paid? Get your files →
-            </a>
-          </div>
-        </div>
-      )}
-    </main>
+      <PaymentModal modal={modal} onClose={() => setModal(null)} />
+      </main>
   );
 }
+
+function PaymentModal({ modal, onClose }: { modal: any; onClose: () => void }) {
+  useEffect(() => {
+    if (!modal) return;
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, [modal, onClose]);
+
+  if (!modal) return null;
+
+  return (
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="kit-modal-title"
+      className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center px-6"
+      onClick={onClose}
+    >
+      <div className="bg-[#0a0a0a] border border-[#c4a35a]/30 rounded-2xl p-8 max-w-md w-full" onClick={(e) => e.stopPropagation()}>
+        <div className="flex items-center justify-between mb-4">
+          <h3 id="kit-modal-title" className="text-lg font-semibold">Complete Payment</h3>
+          <button aria-label="Close payment dialog" onClick={onClose} className="text-neutral-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-[#c4a35a] rounded-full w-8 h-8 flex items-center justify-center">×</button>
+        </div>
+        <p className="text-sm text-neutral-400 mb-5">{modal.product_name}</p>
+        <div className="mb-4">
+          <p className="text-[11px] uppercase tracking-widest text-neutral-400 mb-2">Send exactly</p>
+          <div className="p-4 bg-white/[0.03] rounded-lg border border-white/[0.06] text-center">
+            <span className="text-2xl font-bold">{modal.pay_amount}</span>
+            <span className="text-neutral-400 text-xs ms-2">{String(modal.pay_currency).toUpperCase()}</span>
+          </div>
+        </div>
+        <div className="mb-4">
+          <p className="text-[11px] uppercase tracking-widest text-neutral-400 mb-2">To this address</p>
+          <div className="p-3 bg-white/[0.03] rounded-lg border border-white/[0.06] text-[11px] font-mono break-all">{modal.pay_address}</div>
+        </div>
+        <p className="text-xs text-neutral-400 mb-4">${modal.price} USD · Files delivered automatically after confirmation.</p>
+        <a href={`/store/thanks?order=${encodeURIComponent(modal.order_id)}&payment=${encodeURIComponent(modal.payment_id)}`} className="block text-center text-sm text-[#c4a35a] hover:text-[#d4b46a]">
+          Already paid? Get your files →
+        </a>
+      </div>
+    </div>
+  );
+}
+

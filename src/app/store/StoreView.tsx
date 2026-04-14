@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import LiveStatus from './LiveStatus';
 import KitSpotlight from './KitSpotlight';
 import Builders from './Builders';
@@ -179,6 +179,13 @@ export default function StoreView() {
   const [loading, setLoading] = useState<string | null>(null);
   const [error, setError] = useState('');
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (!modal) return;
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setModal(null); };
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, [modal]);
   const c = CONTENT[lang];
 
   const handleBuy = async (productId: string) => {
@@ -237,7 +244,7 @@ export default function StoreView() {
               {lang === 'en' ? 'How it works →' : 'كيف يعمل ←'}
             </a>
           </div>
-          <p className="mt-10 text-[11px] font-mono uppercase tracking-[0.2em] text-neutral-600">
+          <p className="mt-10 text-[11px] font-mono uppercase tracking-[0.2em] text-neutral-500">
             {c.badge}
           </p>
         </div>
@@ -287,7 +294,7 @@ export default function StoreView() {
             <div className="flex items-center gap-4 flex-shrink-0 ms-auto">
               <div className="flex items-baseline gap-2">
                 <span className="text-2xl font-bold text-white">{c.starter.price}</span>
-                <span className="text-xs text-neutral-600 line-through">{c.starter.oldPrice}</span>
+                <span className="text-xs text-neutral-500 line-through">{c.starter.oldPrice}</span>
               </div>
               <span className="text-[#c4a35a] group-hover:translate-x-1 transition-transform text-sm font-semibold">
                 {loading === 'starter' ? c.loading : (lang === 'en' ? 'Buy →' : 'اشترِ ←')}
@@ -312,14 +319,14 @@ export default function StoreView() {
             <div className="rounded-2xl border border-white/[0.08] bg-white/[0.02] p-8 flex flex-col">
               <div className="flex items-center justify-between mb-1">
                 <h3 style={{ fontFamily: 'var(--font-serif), ui-serif, Georgia, serif' }} className="text-xl font-semibold text-white">{c.blueprint.name}</h3>
-                <span className="text-[10px] font-mono uppercase tracking-widest text-neutral-600">PDF</span>
+                <span className="text-[10px] font-mono uppercase tracking-widest text-neutral-500">PDF</span>
               </div>
               <p className="text-sm text-neutral-500 italic mb-5">{c.blueprint.tagline}</p>
               <p className="text-sm text-neutral-400 leading-relaxed mb-6 flex-grow">{c.blueprint.desc}</p>
               <ul className="space-y-2.5 mb-8">
                 {c.blueprint.features.map((f, i) => (
                   <li key={i} className="flex items-start gap-2.5 text-sm text-neutral-400">
-                    <span className="text-neutral-600 mt-0.5 text-[10px]">●</span>
+                    <span className="text-neutral-500 mt-0.5 text-[10px]">●</span>
                     <span>{f}</span>
                   </li>
                 ))}
@@ -328,9 +335,9 @@ export default function StoreView() {
                 <div className="flex items-baseline justify-between mb-5">
                   <div className="flex items-baseline gap-2">
                     <span className="text-3xl font-bold text-white">{c.blueprint.price}</span>
-                    <span className="text-sm text-neutral-600 line-through">{c.blueprint.oldPrice}</span>
+                    <span className="text-sm text-neutral-500 line-through">{c.blueprint.oldPrice}</span>
                   </div>
-                  <span className="text-[11px] text-neutral-600">{lang === 'en' ? 'One-time' : 'دفعة واحدة'}</span>
+                  <span className="text-[11px] text-neutral-500">{lang === 'en' ? 'One-time' : 'دفعة واحدة'}</span>
                 </div>
                 <button
                   onClick={() => handleBuy('blueprint')}
@@ -365,7 +372,7 @@ export default function StoreView() {
                 <div className="flex items-baseline justify-between mb-5">
                   <div className="flex items-baseline gap-2">
                     <span className="text-4xl font-bold text-white">{c.kit.price}</span>
-                    <span className="text-sm text-neutral-600 line-through">{c.kit.oldPrice}</span>
+                    <span className="text-sm text-neutral-500 line-through">{c.kit.oldPrice}</span>
                   </div>
                   <span className="text-[11px] text-neutral-500">{lang === 'en' ? 'One-time' : 'دفعة واحدة'}</span>
                 </div>
@@ -386,14 +393,14 @@ export default function StoreView() {
               </div>
               <div className="flex items-center justify-between mb-1 mt-2">
                 <h3 style={{ fontFamily: 'var(--font-serif), ui-serif, Georgia, serif' }} className="text-xl font-semibold text-white">{c.toolbox.name}</h3>
-                <span className="text-[10px] font-mono uppercase tracking-widest text-neutral-600">BUNDLE</span>
+                <span className="text-[10px] font-mono uppercase tracking-widest text-neutral-500">BUNDLE</span>
               </div>
               <p className="text-sm text-neutral-500 italic mb-5">{c.toolbox.tagline}</p>
               <p className="text-sm text-neutral-400 leading-relaxed mb-6 flex-grow">{c.toolbox.desc}</p>
               <ul className="space-y-2.5 mb-8">
                 {c.toolbox.features.map((f, i) => (
                   <li key={i} className="flex items-start gap-2.5 text-sm text-neutral-400">
-                    <span className="text-neutral-600 mt-0.5 text-[10px]">●</span>
+                    <span className="text-neutral-500 mt-0.5 text-[10px]">●</span>
                     <span>{f}</span>
                   </li>
                 ))}
@@ -402,9 +409,9 @@ export default function StoreView() {
                 <div className="flex items-baseline justify-between mb-5">
                   <div className="flex items-baseline gap-2">
                     <span className="text-3xl font-bold text-white">{c.toolbox.price}</span>
-                    <span className="text-sm text-neutral-600 line-through">{c.toolbox.oldPrice}</span>
+                    <span className="text-sm text-neutral-500 line-through">{c.toolbox.oldPrice}</span>
                   </div>
-                  <span className="text-[11px] text-neutral-600">{lang === 'en' ? 'One-time' : 'دفعة واحدة'}</span>
+                  <span className="text-[11px] text-neutral-500">{lang === 'en' ? 'One-time' : 'دفعة واحدة'}</span>
                 </div>
                 <button
                   onClick={() => handleBuy('toolbox')}
@@ -432,7 +439,7 @@ export default function StoreView() {
               </div>
               <div className="flex items-baseline gap-2">
                 <span className="text-2xl font-bold text-white">$97</span>
-                <span className="text-xs text-neutral-600 line-through">$149</span>
+                <span className="text-xs text-neutral-500 line-through">$149</span>
                 <span className="text-[#c4a35a] ms-2 group-hover:translate-x-1 transition-transform">→</span>
               </div>
             </button>
@@ -501,7 +508,7 @@ export default function StoreView() {
                   className="w-full py-5 flex items-center justify-between text-left"
                 >
                   <span className="text-sm font-medium text-white">{f.q}</span>
-                  <span className={`text-neutral-600 transition-transform text-lg ml-4 flex-shrink-0 ${openFaq === i ? 'rotate-45' : ''}`}>+</span>
+                  <span className={`text-neutral-500 transition-transform text-lg ml-4 flex-shrink-0 ${openFaq === i ? 'rotate-45' : ''}`}>+</span>
                 </button>
                 {openFaq === i && (
                   <p className="pb-5 text-sm text-neutral-400 leading-relaxed">{f.a}</p>
@@ -515,8 +522,8 @@ export default function StoreView() {
       {/* Trust strip */}
       <section className="py-12 px-6 border-t border-white/[0.05]">
         <div className="max-w-5xl mx-auto text-center">
-          <p className="text-xs text-neutral-600 mb-6">{c.trustPayment}</p>
-          <div className="flex flex-wrap items-center justify-center gap-4 text-xs text-neutral-600">
+          <p className="text-xs text-neutral-500 mb-6">{c.trustPayment}</p>
+          <div className="flex flex-wrap items-center justify-center gap-4 text-xs text-neutral-500">
             <span>BTC</span>
             <span className="text-neutral-800">·</span>
             <span>ETH</span>
@@ -534,26 +541,32 @@ export default function StoreView() {
 
       {/* Payment Modal */}
       {modal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-md p-4" onClick={() => setModal(null)}>
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="store-modal-title"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-md p-4"
+          onClick={() => setModal(null)}
+        >
           <div className="bg-black border border-white/[0.1] rounded-2xl p-8 max-w-md w-full relative" onClick={e => e.stopPropagation()}>
-            <button onClick={() => setModal(null)} className="absolute top-4 right-4 text-neutral-600 hover:text-white text-lg" aria-label="Close">✕</button>
-            <h3 className="text-lg font-semibold text-white mb-1">{c.payTitle}</h3>
-            <p className="text-sm text-neutral-500 mb-6">{modal.product_name}</p>
-            <p className="text-xs text-neutral-600 mb-1">{c.paySend}</p>
+            <button onClick={() => setModal(null)} className="absolute top-4 right-4 text-neutral-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-[#c4a35a] rounded-full w-8 h-8 flex items-center justify-center" aria-label="Close payment dialog">✕</button>
+            <h3 id="store-modal-title" className="text-lg font-semibold text-white mb-1">{c.payTitle}</h3>
+            <p className="text-sm text-neutral-400 mb-6">{modal.product_name}</p>
+            <p className="text-xs text-neutral-400 mb-1">{c.paySend}</p>
             <div className="rounded-xl p-4 mb-5 border border-white/[0.06] bg-white/[0.02] text-center">
               <span className="text-xl font-bold text-white">{modal.pay_amount}</span>
-              <span className="text-sm text-neutral-400 ml-2">{(modal.pay_currency || 'usdterc20').toUpperCase()}</span>
+              <span className="text-sm text-neutral-300 ml-2">{(modal.pay_currency || 'usdterc20').toUpperCase()}</span>
             </div>
-            <p className="text-xs text-neutral-600 mb-1">{c.payTo}</p>
+            <p className="text-xs text-neutral-400 mb-1">{c.payTo}</p>
             <div className="rounded-xl p-3 mb-5 border border-white/[0.06] bg-white/[0.02]">
-              <p className="font-mono text-xs text-neutral-300 break-all select-all">{modal.pay_address}</p>
+              <p className="font-mono text-xs text-neutral-200 break-all select-all">{modal.pay_address}</p>
             </div>
-            <p className="text-xs text-neutral-600">${modal.price} USD</p>
-            <p className="text-xs text-neutral-600 mt-1">{c.payExpires}: {modal.valid_until ? new Date(modal.valid_until).toLocaleString() : '30 min'}</p>
-            <p className="text-xs text-neutral-500 mt-4">{c.payAutoDeliver}</p>
+            <p className="text-xs text-neutral-400">${modal.price} USD</p>
+            <p className="text-xs text-neutral-400 mt-1">{c.payExpires}: {modal.valid_until ? new Date(modal.valid_until).toLocaleString() : '30 min'}</p>
+            <p className="text-xs text-neutral-300 mt-4">{c.payAutoDeliver}</p>
             <div className="mt-4 pt-4 border-t border-white/[0.06]">
               <a href={`/store/thanks?order=${modal.order_id || modal.product_id || ''}&payment=${modal.payment_id || ''}`}
-                className="text-xs text-neutral-400 hover:text-white transition-colors">{c.payAlreadyPaid}</a>
+                className="text-xs text-neutral-300 hover:text-white transition-colors">{c.payAlreadyPaid}</a>
             </div>
           </div>
         </div>

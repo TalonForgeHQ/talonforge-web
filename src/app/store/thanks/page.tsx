@@ -88,7 +88,7 @@ function ThanksContent() {
                     <span className="text-white font-mono text-sm">{dl.file}</span>
                     <span className="text-[#c4a35a] group-hover:translate-x-1 transition-transform">↓</span>
                   </div>
-                  <span className="text-neutral-600 text-xs block mt-1">Link valid 24h</span>
+                  <span className="text-neutral-500 text-xs block mt-1">Link valid 24h</span>
                 </a>
               ))}
             </div>
@@ -117,7 +117,7 @@ function ThanksContent() {
           </ul>
         </div>
 
-        <a href="/store" className="text-sm text-neutral-600 hover:text-[#c4a35a] transition-colors">
+        <a href="/store" className="text-sm text-neutral-500 hover:text-[#c4a35a] transition-colors">
           ← back to store
         </a>
       </div>

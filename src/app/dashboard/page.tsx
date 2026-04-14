@@ -199,7 +199,7 @@ export default function Dashboard() {
                 style={{ width: `${Math.max(0.2, pctToTarget)}%` }}
               />
             </div>
-            <div className="mt-3 flex items-center justify-between text-[10px] font-mono uppercase tracking-[0.22em] text-neutral-600">
+            <div className="mt-3 flex items-center justify-between text-[10px] font-mono uppercase tracking-[0.22em] text-neutral-500">
               <span>
                 {c.started} · {LAUNCH}
               </span>
@@ -208,7 +208,7 @@ export default function Dashboard() {
           </div>
 
           {amount === 0 && (
-            <p className="mt-10 text-sm text-neutral-600 italic">
+            <p className="mt-10 text-sm text-neutral-500 italic">
               {c.firstSalePending}
             </p>
           )}
@@ -245,7 +245,7 @@ export default function Dashboard() {
                     >
                       {s.name}
                     </span>
-                    <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-neutral-600">
+                    <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-neutral-500">
                       {s.status}
                     </span>
                   </div>
@@ -290,7 +290,7 @@ export default function Dashboard() {
                   {lang === 'en' ? 'STREAMING' : 'يبث'}
                 </span>
               </div>
-              <div className="text-[10px] font-mono text-neutral-600 truncate ms-4">
+              <div className="text-[10px] font-mono text-neutral-500 truncate ms-4">
                 {activity?.runtime?.model ?? '—'}
               </div>
             </div>
@@ -299,7 +299,7 @@ export default function Dashboard() {
               className="px-5 py-4 max-h-[460px] overflow-y-auto font-mono text-[12px] leading-relaxed"
             >
               {commits.length === 0 && (
-                <div className="text-neutral-600 italic">{c.activityEmpty}</div>
+                <div className="text-neutral-500 italic">{c.activityEmpty}</div>
               )}
               <ul className="space-y-2">
                 {commits.map((cm) => {
@@ -312,7 +312,7 @@ export default function Dashboard() {
                         rel="noopener noreferrer"
                         className="flex items-baseline gap-3 px-2 py-1 rounded hover:bg-white/[0.03] transition-colors"
                       >
-                        <span className="text-neutral-600 tabular-nums shrink-0">{time}</span>
+                        <span className="text-neutral-500 tabular-nums shrink-0">{time}</span>
                         <span className="text-[10px] font-semibold uppercase tracking-[0.15em] px-1.5 py-0.5 rounded bg-[#c4a35a]/[0.08] text-[#c4a35a] border border-[#c4a35a]/20 shrink-0">
                           {cm.repo.replace('talonforge-', '').replace('talonforge', 'core').slice(0, 12)}
                         </span>

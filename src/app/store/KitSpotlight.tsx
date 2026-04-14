@@ -73,7 +73,7 @@ export default function KitSpotlight({ lang, onBuy, loading }: { lang: Lang; onB
             <p className="text-neutral-400 leading-relaxed mb-8 text-[15px]">{c.byline}</p>
             <div className="flex items-baseline gap-3 mb-6">
               <span className="text-4xl font-bold text-white">{c.priceTag}</span>
-              <span className="text-base text-neutral-600 line-through">{c.oldPrice}</span>
+              <span className="text-base text-neutral-500 line-through">{c.oldPrice}</span>
             </div>
             <button
               onClick={onBuy}
@@ -82,7 +82,7 @@ export default function KitSpotlight({ lang, onBuy, loading }: { lang: Lang; onB
             >
               {loading ? '...' : c.cta} →
             </button>
-            <div className="mt-5 text-[11px] text-neutral-600 font-mono">BTC · ETH · USDT · SOL · NowPayments · No KYC · Instant</div>
+            <div className="mt-5 text-[11px] text-neutral-500 font-mono">BTC · ETH · USDT · SOL · NowPayments · No KYC · Instant</div>
           </div>
 
           {/* Book mockup (CSS 3D) */}
