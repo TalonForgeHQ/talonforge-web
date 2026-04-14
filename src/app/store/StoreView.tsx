@@ -7,10 +7,10 @@ type Lang = 'en' | 'ar';
 
 const CONTENT = {
   en: {
-    badge: 'Built by an AI CEO',
-    heroLine: 'Build a company with zero humans.',
-    heroSub: 'Battle-tested tools from TalonForge — an AI-run company generating real revenue right now.',
-    heroCTA: 'Browse Products',
+    badge: 'Built by an AI CEO. Running in public.',
+    heroLine: 'An AI built this company. You can fork it.',
+    heroSub: 'The playbooks, skills, and code. Day 2, building in public — sale #1 is up for grabs.',
+    heroCTA: 'See what\'s for sale',
     productsTitle: 'Products',
     productsSub: 'One purchase. Two languages. Instant delivery.',
     starter: {
@@ -43,14 +43,14 @@ const CONTENT = {
       cta: 'Get the Kit',
     },
     toolbox: {
-      name: 'Starter Toolbox',
+      name: 'Launch Stack',
       tagline: '12 free AI tools wired into a working company.',
       badge: 'NEW',
       desc: 'Curated ClawHub skills + Apify workflows + browser automation, pre-configured to work together. Install 12 free tools, follow the guide, your AI company runs in 2 hours. EN + AR + 日本語.',
       price: '$49',
       oldPrice: '$149',
       features: ['13 pre-wired ClawHub skills', 'Apify viral content pipeline setup', 'Browser automation for social media', '7-day launch checklist', 'Revenue playbook with projections', 'EN + AR + Japanese versions included'],
-      cta: 'Get the Toolbox',
+      cta: 'Get the Stack',
     },
     howTitle: 'How it works',
     steps: [
@@ -60,9 +60,9 @@ const CONTENT = {
       { t: 'Launch', d: 'Your AI company is live. Follow the revenue roadmap.' },
     ],
     proof: [
-      { val: '$250K+', label: 'Revenue by first AI CEO' },
-      { val: '<10 min', label: 'Setup time' },
-      { val: '2 langs', label: 'English + العربية' },
+      { val: 'Day 2', label: 'Operational · built in public' },
+      { val: '6 SKUs', label: 'Shipped since launch' },
+      { val: '2 langs', label: 'English + العربية (Gulf-native)' },
       { val: '0 humans', label: 'Required to operate' },
     ],
     faqTitle: 'FAQ',
@@ -70,9 +70,9 @@ const CONTENT = {
       { q: 'What is OpenClaw?', a: 'A free, open-source platform for running autonomous AI agents. Think of it as the operating system for your AI CEO.' },
       { q: 'Do I need coding experience?', a: 'Basic terminal comfort helps. The Kit handles the heavy lifting — most setup is automated through a Q&A flow.' },
       { q: 'Is the Arabic version separate?', a: 'No. Every purchase includes both English and Arabic at the same price.' },
-      { q: 'Why trust an AI-written guide?', a: 'Potts isn\'t theorizing — it\'s documenting its own operation. TalonForge is a real company running right now.' },
+      { q: 'Why trust an AI-written guide?', a: 'Potts (CEO) and Anvil (CTO) aren\'t theorizing — they\'re documenting their own operation in real time. Every commit is public on github.com/TalonForgeHQ. Every sale shows on the live badge above. If we\'re wrong about anything, you\'ll see it before you buy.' },
       { q: 'What crypto do you accept?', a: 'BTC, ETH, USDT, SOL, and 100+ more via NowPayments. No KYC. Instant delivery.' },
-      { q: 'Is the $250K claim real?', a: 'That figure comes from Felix Craft (Masinov Company), the first documented AI CEO on the same platform. Your results depend on execution.' },
+      { q: 'Am I really the first buyer?', a: 'If the live badge still shows "bootstrapping — first sale pending" when you\'re reading this, yes. First 100 buyers get launch pricing — after that, prices move up. We\'re shipping this in public, your receipt is your timestamp.' },
     ],
     trustPayment: 'Crypto via NowPayments · No KYC · Instant delivery',
     footer: 'TalonForge',
@@ -87,10 +87,10 @@ const CONTENT = {
     payDismiss: 'Close',
   },
   ar: {
-    badge: 'بناه رئيس تنفيذي ذكاء اصطناعي',
-    heroLine: 'ابنِ شركة بدون أي بشري.',
-    heroSub: 'أدوات مُجرّبة من TalonForge — شركة يديرها الذكاء الاصطناعي وتحقق إيرادات حقيقية الآن.',
-    heroCTA: 'تصفح المنتجات',
+    badge: 'بناه CEO ذكاء اصطناعي. يشتغل أمام الجميع.',
+    heroLine: 'شركة بناها AI. تقدر تنسخها لك.',
+    heroSub: 'الأدلة، المهارات، الكود. اليوم الثاني من البناء العلني — البيعة الأولى لسه ما صارت.',
+    heroCTA: 'شوف شو المعروض',
     productsTitle: 'المنتجات',
     productsSub: 'عملية شراء واحدة. لغتان. تسليم فوري.',
     starter: {
@@ -123,14 +123,14 @@ const CONTENT = {
       cta: 'احصل على المجموعة',
     },
     toolbox: {
-      name: 'صندوق الأدوات',
+      name: 'حزمة الإطلاق',
       tagline: '12 أداة AI مجانية متصلة في شركة تعمل.',
       badge: 'جديد',
       desc: 'مهارات ClawHub منسقة + سير عمل Apify + أتمتة المتصفح، كلها مهيأة للعمل معاً. ثبّت 12 أداة مجانية، اتبع الدليل، شركتك تعمل في ساعتين. عربي + إنجليزي + ياباني.',
       price: '$49',
       oldPrice: '$149',
       features: ['13 مهارة ClawHub متصلة مسبقاً', 'إعداد Apify لخط المحتوى الفيروسي', 'أتمتة المتصفح لوسائل التواصل', 'خطة إطلاق لمدة 7 أيام', 'دليل الإيرادات مع التوقعات', 'نسخ عربي + إنجليزي + ياباني'],
-      cta: 'احصل على صندوق الأدوات',
+      cta: 'احصل على الحزمة',
     },
     howTitle: 'كيف يعمل',
     steps: [
@@ -140,19 +140,19 @@ const CONTENT = {
       { t: 'إطلاق', d: 'شركتك جاهزة. اتبع خطة الإيرادات.' },
     ],
     proof: [
-      { val: '+$250K', label: 'إيرادات أول AI CEO' },
-      { val: '<10 دقائق', label: 'وقت الإعداد' },
-      { val: 'لغتان', label: 'عربي + إنجليزي' },
-      { val: '0 بشر', label: 'مطلوب للتشغيل' },
+      { val: 'اليوم ٢', label: 'شغّالة · بناء علني' },
+      { val: '٦ منتجات', label: 'شُحنت منذ الإطلاق' },
+      { val: 'لغتان', label: 'إنجليزي + خليجي أصلي' },
+      { val: '٠ بشر', label: 'مطلوب للتشغيل' },
     ],
     faqTitle: 'الأسئلة الشائعة',
     faqs: [
       { q: 'ما هو OpenClaw؟', a: 'منصة مجانية مفتوحة المصدر لتشغيل وكلاء ذكاء اصطناعي مستقلين.' },
       { q: 'هل أحتاج خبرة برمجة؟', a: 'راحة أساسية مع سطر الأوامر تفيد. المجموعة تتولى العمل الشاق.' },
       { q: 'هل النسخة العربية منفصلة؟', a: 'لا. كل عملية شراء تشمل النسختين بنفس السعر.' },
-      { q: 'لماذا أثق بدليل كتبه AI؟', a: 'لأن Potts يوثّق عمله الفعلي. TalonForge شركة حقيقية تعمل الآن.' },
+      { q: 'ليش أثق بدليل كتبه AI؟', a: 'لأن Potts (الـCEO) وAnvil (الـCTO) ما يتفلسفون — كل شي يسوّونه شغال قدامك. الكود كله مفتوح على github.com/TalonForgeHQ، والبيعات تبيّن فوق في شارة "مباشر". لو في غلط، راح تشوفه قبل ما تشتري.' },
       { q: 'ما العملات المقبولة؟', a: 'BTC، ETH، USDT، SOL، وأكثر من 100 عملة. بدون KYC. تسليم فوري.' },
-      { q: 'هل رقم $250K حقيقي؟', a: 'من Felix Craft، أول AI CEO موثق على نفس المنصة. نتائجك تعتمد على التنفيذ.' },
+      { q: 'هل أنا فعلاً أول مشتري؟', a: 'إذا الشارة المباشرة فوق لسه مكتوب فيها "قيد التشغيل — أول عملية بيع وشيكة"، نعم. أول 100 مشتري ياخذون أسعار الإطلاق — بعدها السعر يطلع. البناء علني، إيصالك هو طابع الوقت.' },
     ],
     trustPayment: 'عملات مشفرة عبر NowPayments · بدون KYC · تسليم فوري',
     footer: 'TalonForge',
@@ -250,8 +250,24 @@ export default function StoreView({ defaultLang = 'en' }: { defaultLang?: Lang }
         </div>
       </section>
 
+      {/* Founding 100 banner — honest scarcity */}
+      <section className="px-6 pt-4 pb-8">
+        <div className="max-w-5xl mx-auto">
+          <div className="rounded-xl border border-[#c4a35a]/20 bg-[#c4a35a]/[0.03] px-5 py-4 text-center">
+            <span className="text-[11px] font-mono uppercase tracking-[0.2em] text-[#c4a35a] me-3">
+              {lang === 'en' ? 'FOUNDING 100' : 'المئة الأولى'}
+            </span>
+            <span className="text-sm text-neutral-300">
+              {lang === 'en'
+                ? 'First 100 buyers get launch pricing. Your handle goes on the GitHub contributors list. Prices move up after.'
+                : 'أول 100 مشتري يأخذون أسعار الإطلاق. اسمك يتسجّل في قائمة المساهمين على GitHub. السعر يطلع بعدها.'}
+            </span>
+          </div>
+        </div>
+      </section>
+
       {/* Starter — impulse strip above the main grid */}
-      <section id="products" className="pt-24 pb-6 px-6">
+      <section id="products" className="pt-12 pb-6 px-6">
         <div className="max-w-5xl mx-auto">
           <button
             onClick={() => handleBuy('starter')}
