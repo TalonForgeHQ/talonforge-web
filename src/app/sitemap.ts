@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 
-const BASE = "https://talonforge.xyz";
+const BASE = "https://www.talonforge.xyz";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
@@ -30,22 +30,22 @@ export default function sitemap(): MetadataRoute.Sitemap {
       },
     },
     {
+      url: `${BASE}/ar`,
+      lastModified: now,
+      changeFrequency: "weekly",
+      priority: 0.9,
+    },
+    {
       url: `${BASE}/ar/store`,
       lastModified: now,
       changeFrequency: "daily",
       priority: 0.9,
-      alternates: {
-        languages: {
-          en: `${BASE}/store`,
-          ar: `${BASE}/ar/store`,
-        },
-      },
     },
     {
-      url: `${BASE}/store/thanks`,
+      url: `${BASE}/kit`,
       lastModified: now,
-      changeFrequency: "monthly",
-      priority: 0.3,
+      changeFrequency: "weekly",
+      priority: 0.9,
     },
     {
       url: `${BASE}/blog`,
@@ -64,6 +64,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: now,
       changeFrequency: "monthly",
       priority: 0.6,
+    },
+    {
+      url: `${BASE}/blog/day-3-checkout-live`,
+      lastModified: now,
+      changeFrequency: "monthly",
+      priority: 0.7,
+    },
+    {
+      url: `${BASE}/ar/blog/how-to-build-ai-company`,
+      lastModified: now,
+      changeFrequency: "monthly",
+      priority: 0.5,
     },
   ];
 }
