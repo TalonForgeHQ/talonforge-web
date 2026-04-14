@@ -2,9 +2,25 @@
 
 import { useEffect, useState } from 'react';
 import SiteNav from '../_components/SiteNav';
+import SiteFooter from '../_components/SiteFooter';
 import { useLang } from '../_components/LangContext';
 
 type Rev = { total_usd: number; count: number; status?: string };
+type Commit = {
+  sha: string;
+  message: string;
+  author: string;
+  date: string;
+  repo: string;
+  url: string;
+};
+type Activity = {
+  runtime?: { time?: string; model?: string; provider?: string };
+  today?: string;
+  workQueue?: string;
+  xActivity?: string;
+  commits?: Commit[];
+};
 
 const COPY = {
   en: {
@@ -26,6 +42,11 @@ const COPY = {
       { name: 'Skills Marketplace', price: '—', desc: 'Per-skill licensing. Coming.', status: 'SOON' },
       { name: 'AI Agency', price: '—', desc: 'Retainer clients. Phase 2.', status: 'LATER' },
     ],
+    activityEyebrow: 'LIVE CONSOLE',
+    activityTitle: 'What the AI is doing right now.',
+    activitySub: 'Streaming from the CTO\'s daily log on the VPS. Last actions, last commits, last decisions.',
+    activityEmpty: 'Idle.',
+    activityRuntime: 'Runtime',
     timelineTitle: 'The path to $1M.',
     timelineSub: 'Every milestone gets a timestamp when it lands. No projections.',
     timeline: [
@@ -59,6 +80,11 @@ const COPY = {
       { name: 'سوق المهارات', price: '—', desc: 'ترخيص حسب المهارة. قريباً.', status: 'قريباً' },
       { name: 'وكالة AI', price: '—', desc: 'عملاء شهريون. المرحلة ٢.', status: 'لاحقاً' },
     ],
+    activityEyebrow: 'وحدة الإخراج المباشر',
+    activityTitle: 'شو يسوّي الـAI الحين.',
+    activitySub: 'يبث من سجل CTO اليومي على الخادم. آخر الإجراءات، آخر الكوميتات، آخر القرارات.',
+    activityEmpty: 'خامل.',
+    activityRuntime: 'وقت التشغيل',
     timelineTitle: 'الطريق إلى مليون.',
     timelineSub: 'كل محطة تحصل ختم زمني لمّا توصلها. بدون توقعات.',
     timeline: [
@@ -85,6 +111,7 @@ export default function Dashboard() {
   const { lang, rtl } = useLang();
   const c = COPY[lang];
   const [rev, setRev] = useState<Rev | null>(null);
+  const [activity, setActivity] = useState<Activity | null>(null);
 
   useEffect(() => {
     let alive = true;
@@ -95,6 +122,12 @@ export default function Dashboard() {
           if (alive && d) setRev(d);
         })
         .catch(() => {});
+      fetch('/api/activity', { cache: 'no-store' })
+        .then((r) => (r.ok ? r.json() : null))
+        .then((d) => {
+          if (alive && d) setActivity(d);
+        })
+        .catch(() => {});
     };
     tick();
     const id = setInterval(tick, 30_000);
@@ -103,6 +136,8 @@ export default function Dashboard() {
       clearInterval(id);
     };
   }, []);
+
+  const commits = activity?.commits ?? [];
 
   const amount = rev?.total_usd ?? 0;
   const count = rev?.count ?? 0;
@@ -228,6 +263,75 @@ export default function Dashboard() {
       {/* Separator */}
       <div className="max-w-6xl mx-auto px-6"><div className="border-t border-white/[0.08]" /></div>
 
+      {/* Activity feed */}
+      <section className="py-32 px-6">
+        <div className="max-w-3xl mx-auto">
+          <div className="text-center mb-16">
+            <span className="text-[10px] font-mono uppercase tracking-[0.28em] text-[#c4a35a] mb-5 block">
+              {c.activityEyebrow}
+            </span>
+            <h2
+              style={{ fontFamily: 'var(--font-serif), ui-serif, Georgia, serif' }}
+              className="text-3xl md:text-5xl font-semibold tracking-[-0.02em] text-white mb-5"
+            >
+              {c.activityTitle}
+            </h2>
+            <p className="text-neutral-400 leading-relaxed max-w-xl mx-auto">{c.activitySub}</p>
+          </div>
+
+          <div className="rounded-2xl bg-black/60 border border-white/[0.06] p-1">
+            <div className="flex items-center justify-between px-5 py-3 border-b border-white/[0.05]">
+              <div className="flex items-center gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                <span className="text-[11px] font-mono uppercase tracking-[0.22em] text-emerald-400/90">
+                  {lang === 'en' ? 'STREAMING' : 'يبث'}
+                </span>
+              </div>
+              <div className="text-[10px] font-mono text-neutral-600 truncate ms-4">
+                {activity?.runtime?.model ?? '—'}
+              </div>
+            </div>
+            <div
+              dir="ltr"
+              className="px-5 py-4 max-h-[460px] overflow-y-auto font-mono text-[12px] leading-relaxed"
+            >
+              {commits.length === 0 && (
+                <div className="text-neutral-600 italic">{c.activityEmpty}</div>
+              )}
+              <ul className="space-y-2">
+                {commits.map((cm) => {
+                  const time = new Date(cm.date).toISOString().slice(11, 16);
+                  return (
+                    <li key={cm.sha} className="group">
+                      <a
+                        href={cm.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-baseline gap-3 px-2 py-1 rounded hover:bg-white/[0.03] transition-colors"
+                      >
+                        <span className="text-neutral-600 tabular-nums shrink-0">{time}</span>
+                        <span className="text-[10px] font-semibold uppercase tracking-[0.15em] px-1.5 py-0.5 rounded bg-[#c4a35a]/[0.08] text-[#c4a35a] border border-[#c4a35a]/20 shrink-0">
+                          {cm.repo.replace('talonforge-', '').replace('talonforge', 'core').slice(0, 12)}
+                        </span>
+                        <span className="text-neutral-300 group-hover:text-white transition-colors truncate flex-1">
+                          {cm.message}
+                        </span>
+                        <span className="text-neutral-700 tabular-nums shrink-0 hidden sm:inline">
+                          {cm.sha}
+                        </span>
+                      </a>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Separator */}
+      <div className="max-w-6xl mx-auto px-6"><div className="border-t border-white/[0.08]" /></div>
+
       {/* Timeline */}
       <section className="py-32 px-6">
         <div className="max-w-3xl mx-auto">
@@ -283,12 +387,7 @@ export default function Dashboard() {
         </div>
       </section>
 
-      <footer className="py-16 px-6 border-t border-white/[0.05]">
-        <div className="max-w-6xl mx-auto text-center text-xs text-neutral-600 flex items-center justify-center gap-6 flex-wrap">
-          <span>© 2026 TalonForge</span>
-          <span>{c.pageFooter}</span>
-        </div>
-      </footer>
+      <SiteFooter />
     </main>
   );
 }

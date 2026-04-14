@@ -4,6 +4,9 @@ import { useState } from 'react';
 import LiveStatus from './LiveStatus';
 import KitSpotlight from './KitSpotlight';
 import Builders from './Builders';
+import SiteNav from '../_components/SiteNav';
+import SiteFooter from '../_components/SiteFooter';
+import { useLang } from '../_components/LangContext';
 
 type Lang = 'en' | 'ar';
 
@@ -170,14 +173,13 @@ const CONTENT = {
   },
 };
 
-export default function StoreView({ defaultLang = 'en' }: { defaultLang?: Lang } = {}) {
-  const [lang, setLang] = useState<Lang>(defaultLang);
+export default function StoreView() {
+  const { lang, rtl } = useLang();
   const [modal, setModal] = useState<any>(null);
   const [loading, setLoading] = useState<string | null>(null);
   const [error, setError] = useState('');
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const c = CONTENT[lang];
-  const rtl = lang === 'ar';
 
   const handleBuy = async (productId: string) => {
     setLoading(productId);
@@ -199,19 +201,8 @@ export default function StoreView({ defaultLang = 'en' }: { defaultLang?: Lang }
   };
 
   return (
-    <main className={`min-h-screen bg-black text-white ${rtl ? 'rtl' : ''}`} dir={rtl ? 'rtl' : 'ltr'}>
-      {/* Nav */}
-      <nav className="fixed top-0 inset-x-0 z-50 bg-black/80 backdrop-blur-md border-b border-white/[0.06]">
-        <div className="max-w-5xl mx-auto px-6 h-14 flex items-center justify-between">
-          <a href="/" className="text-sm font-semibold tracking-tight text-white">TalonForge</a>
-          <button
-            onClick={() => setLang(lang === 'en' ? 'ar' : 'en')}
-            className="text-xs text-neutral-500 hover:text-white transition-colors flex items-center gap-1.5"
-          >
-            {lang === 'en' ? '🇸🇦 عربي' : '🇬🇧 English'}
-          </button>
-        </div>
-      </nav>
+    <main className="min-h-screen bg-black text-white" dir={rtl ? 'rtl' : 'ltr'}>
+      <SiteNav />
 
       {/* Hero */}
       <section className="pt-36 pb-28 px-6 relative overflow-hidden">
@@ -515,11 +506,11 @@ export default function StoreView({ defaultLang = 'en' }: { defaultLang?: Lang }
         </div>
       </section>
 
-      {/* Trust / Footer */}
-      <footer className="py-24 px-6 border-t border-white/[0.05]">
+      {/* Trust strip */}
+      <section className="py-12 px-6 border-t border-white/[0.05]">
         <div className="max-w-5xl mx-auto text-center">
           <p className="text-xs text-neutral-600 mb-6">{c.trustPayment}</p>
-          <div className="flex flex-wrap items-center justify-center gap-4 text-xs text-neutral-600 mb-8">
+          <div className="flex flex-wrap items-center justify-center gap-4 text-xs text-neutral-600">
             <span>BTC</span>
             <span className="text-neutral-800">·</span>
             <span>ETH</span>
@@ -530,15 +521,10 @@ export default function StoreView({ defaultLang = 'en' }: { defaultLang?: Lang }
             <span className="text-neutral-800">·</span>
             <span>100+</span>
           </div>
-          <div className="flex flex-wrap items-center justify-center gap-4 text-xs text-neutral-700">
-            <a href="https://x.com/TalonForgeHQ" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">@TalonForgeHQ</a>
-            <span>·</span>
-            <a href="https://github.com/TalonForgeHQ" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">GitHub</a>
-            <span>·</span>
-            <span>{c.footer}</span>
-          </div>
         </div>
-      </footer>
+      </section>
+
+      <SiteFooter />
 
       {/* Payment Modal */}
       {modal && (

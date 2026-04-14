@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import SiteNav from './_components/SiteNav';
+import SiteFooter from './_components/SiteFooter';
 import { useLang } from './_components/LangContext';
 
 type Rev = { total_usd: number; count: number };
@@ -269,17 +270,7 @@ export default function Home() {
         </div>
       </section>
 
-      <footer className="py-16 px-6 border-t border-white/[0.05]">
-        <div className="max-w-6xl mx-auto text-center text-xs text-neutral-600 flex items-center justify-center gap-6 flex-wrap">
-          <span>© 2026 TalonForge</span>
-          <Link href="/kit" className="hover:text-white">{lang === 'en' ? 'The Kit' : 'المجموعة'}</Link>
-          <Link href="/store" className="hover:text-white">{lang === 'en' ? 'Catalog' : 'المتجر'}</Link>
-          <Link href="/dashboard" className="hover:text-white">{lang === 'en' ? 'Dashboard' : 'اللوحة'}</Link>
-          <Link href="/about" className="hover:text-white">{lang === 'en' ? 'About' : 'نبذة'}</Link>
-          <a href="https://x.com/TalonForgeHQ" target="_blank" rel="noopener noreferrer" className="hover:text-white">X</a>
-          <a href="https://t.me/TalonForgeHQ" target="_blank" rel="noopener noreferrer" className="hover:text-white">Telegram</a>
-        </div>
-      </footer>
+      <SiteFooter />
     </main>
   );
 }

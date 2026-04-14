@@ -1,48 +1,93 @@
 import { NextResponse } from 'next/server';
-import fs from 'fs';
-import path from 'path';
+
+// Fetches recent commits across the TalonForgeHQ org and renders them as the
+// dashboard activity feed. Replaces the previous VPS-file-reading
+// implementation, which was invisible to Vercel's serverless functions.
+
+export const revalidate = 60;
+
+const REPOS = [
+  'TalonForgeHQ/talonforge-web',
+  'TalonForgeHQ/talonforge',
+  'TalonForgeHQ/products',
+  'TalonForgeHQ/talonforge-soul-templates',
+];
+
+type Commit = {
+  sha: string;
+  message: string;
+  author: string;
+  date: string;
+  repo: string;
+  url: string;
+};
+
+async function fetchRepoCommits(repo: string): Promise<Commit[]> {
+  try {
+    const headers: Record<string, string> = {
+      Accept: 'application/vnd.github+json',
+      'X-GitHub-Api-Version': '2022-11-28',
+      'User-Agent': 'talonforge-dashboard',
+    };
+    const token = process.env.GITHUB_TOKEN;
+    if (token) headers.Authorization = `Bearer ${token}`;
+
+    const res = await fetch(`https://api.github.com/repos/${repo}/commits?per_page=10`, {
+      headers,
+      next: { revalidate: 60 },
+    });
+    if (!res.ok) return [];
+    const data = (await res.json()) as Array<{
+      sha: string;
+      commit: { message: string; author: { name?: string; date?: string } };
+      author?: { login?: string } | null;
+      html_url: string;
+    }>;
+    return data.map((c) => ({
+      sha: c.sha.slice(0, 7),
+      message: c.commit.message.split('\n')[0],
+      author: c.author?.login || c.commit.author?.name || 'unknown',
+      date: c.commit.author?.date || new Date().toISOString(),
+      repo: repo.split('/')[1],
+      url: c.html_url,
+    }));
+  } catch {
+    return [];
+  }
+}
+
+function renderTodayLog(commits: Commit[]): string {
+  if (commits.length === 0) return 'No commits in the last cycle.';
+  const today = new Date().toISOString().split('T')[0];
+  const lines: string[] = [`# ${today}`];
+  for (const c of commits.slice(0, 30)) {
+    const time = new Date(c.date).toISOString().slice(11, 16);
+    lines.push(`- [${time}] ${c.repo}: ${c.message} (${c.sha})`);
+  }
+  return lines.join('\n');
+}
 
 export async function GET() {
   try {
-    const memoryDir = '/root/.openclaw/workspace/memory';
-    const today = new Date().toISOString().split('T')[0];
+    const all = (await Promise.all(REPOS.map(fetchRepoCommits))).flat();
+    all.sort((a, b) => b.date.localeCompare(a.date));
 
-    const todayFile = path.join(memoryDir, `${today}.md`);
-    const todayNotes = fs.existsSync(todayFile)
-      ? fs.readFileSync(todayFile, 'utf-8').split('\n').slice(-80).join('\n')
-      : 'No activity yet today';
-
-    const workQueue = fs.existsSync(path.join(memoryDir, 'work-queue.md'))
-      ? fs.readFileSync(path.join(memoryDir, 'work-queue.md'), 'utf-8')
-      : 'No active tasks';
-
-    const xLog = fs.existsSync(path.join(memoryDir, 'x-automation-logs.md'))
-      ? fs.readFileSync(path.join(memoryDir, 'x-automation-logs.md'), 'utf-8').split('\n').slice(-30).join('\n')
-      : '';
-
-    const xCronLog = fs.existsSync(path.join(memoryDir, 'x-cron.log'))
-      ? fs.readFileSync(path.join(memoryDir, 'x-cron.log'), 'utf-8').split('\n').slice(-15).join('\n')
-      : '';
-
-    const xLeads = fs.existsSync(path.join(memoryDir, 'x-leads-auto.md'))
-      ? fs.readFileSync(path.join(memoryDir, 'x-leads-auto.md'), 'utf-8').split('\n').slice(-20).join('\n')
-      : '';
-
-    const runtime = {
-      time: new Date().toISOString(),
-      model: 'ollama-cloud/glm-5.1',
-      provider: 'Ollama Cloud (Z.AI quota exhausted, resets Apr 15)',
-      store: 'https://www.talonforge.xyz/store',
-    };
+    const today = renderTodayLog(all);
 
     return NextResponse.json({
-      runtime,
-      today: todayNotes,
-      workQueue: workQueue.slice(0, 3000),
-      xActivity: xLog.slice(0, 1500),
-      xCron: xCronLog.slice(0, 800),
-      xLeads: xLeads.slice(0, 1000),
-      timestamp: Date.now()
+      runtime: {
+        time: new Date().toISOString(),
+        model: 'claude-opus-4-6',
+        provider: 'Anthropic via Claude Code',
+        store: 'https://www.talonforge.xyz/store',
+      },
+      today,
+      workQueue: '',
+      xActivity: '',
+      xCron: '',
+      xLeads: '',
+      commits: all.slice(0, 30),
+      timestamp: Date.now(),
     });
   } catch (e) {
     return NextResponse.json({ error: String(e) }, { status: 500 });

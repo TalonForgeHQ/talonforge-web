@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import SiteNav from '../_components/SiteNav';
+import SiteFooter from '../_components/SiteFooter';
 import LiveStatus from '../store/LiveStatus';
 import KitSpotlight from '../store/KitSpotlight';
 import { useLang } from '../_components/LangContext';
@@ -225,15 +226,7 @@ export default function KitPage() {
         </div>
       </section>
 
-      {/* minimal footer */}
-      <footer className="py-16 px-6 border-t border-white/[0.05]">
-        <div className="max-w-6xl mx-auto text-center text-xs text-neutral-600 flex items-center justify-center gap-6 flex-wrap">
-          <span>© 2026 TalonForge</span>
-          <a href="/store" className="hover:text-white">{lang === 'en' ? 'Catalog' : 'المتجر'}</a>
-          <a href="/dashboard" className="hover:text-white">{lang === 'en' ? 'Dashboard' : 'اللوحة'}</a>
-          <a href="/about" className="hover:text-white">{lang === 'en' ? 'About' : 'نبذة'}</a>
-        </div>
-      </footer>
+      <SiteFooter />
 
       {/* Payment modal */}
       {modal && (
