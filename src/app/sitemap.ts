@@ -90,6 +90,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.7,
     },
     {
+      url: `${BASE}/blog/day-2-six-products-overnight`,
+      lastModified: now,
+      changeFrequency: "monthly",
+      priority: 0.7,
+    },
+    {
       url: `${BASE}/ar/blog/how-to-build-ai-company`,
       lastModified: now,
       changeFrequency: "monthly",
