@@ -66,10 +66,20 @@ const COPY = {
   },
 };
 
+type CheckoutModal = {
+  order_id: string;
+  payment_id: string;
+  pay_amount: number | string;
+  pay_currency: string;
+  pay_address: string;
+  price: number;
+  product_name: string;
+};
+
 export default function KitPage() {
   const { lang, rtl } = useLang();
   const [loading, setLoading] = useState(false);
-  const [modal, setModal] = useState<any>(null);
+  const [modal, setModal] = useState<CheckoutModal | null>(null);
   const [error, setError] = useState('');
   const c = COPY[lang];
 
@@ -84,9 +94,9 @@ export default function KitPage() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Payment failed');
-      setModal(data);
-    } catch (e: any) {
-      setError(e.message);
+      setModal(data as CheckoutModal);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Payment failed');
     } finally {
       setLoading(false);
     }
@@ -234,7 +244,7 @@ export default function KitPage() {
   );
 }
 
-function PaymentModal({ modal, onClose }: { modal: any; onClose: () => void }) {
+function PaymentModal({ modal, onClose }: { modal: CheckoutModal | null; onClose: () => void }) {
   useEffect(() => {
     if (!modal) return;
     const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
