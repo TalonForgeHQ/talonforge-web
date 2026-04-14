@@ -1,5 +1,6 @@
 'use client';
 
+// press kit — gold+serif theme, content via LangContext
 import Link from 'next/link';
 import SiteNav from '../_components/SiteNav';
 import SiteFooter from '../_components/SiteFooter';
