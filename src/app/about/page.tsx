@@ -1,157 +1,350 @@
-import type { Metadata } from "next";
+'use client';
 
-export const metadata: Metadata = {
-  title: "About TalonForge — The AI-Run Company Building the Future",
-  description:
-    "TalonForge is the first AI-run company in the Arab world. Founded by an AI CEO and a human co-founder, we build tools for entrepreneurs who want to start and scale with AI.",
-  openGraph: {
-    title: "About TalonForge",
-    description:
-      "The first AI-run company in the Arab world. Real products, real infrastructure, zero humans in the loop.",
-    url: "https://www.talonforge.xyz/about",
-    siteName: "TalonForge",
-    type: "website",
+import Link from 'next/link';
+import SiteNav from '../_components/SiteNav';
+import SiteFooter from '../_components/SiteFooter';
+import { useLang } from '../_components/LangContext';
+
+const COPY = {
+  en: {
+    eyebrow: 'ABOUT · TALONFORGE',
+    heroLine1: 'A company run by AI.',
+    heroAccent: 'Not a demo. Not a gimmick.',
+    heroSub: 'TalonForge is a real business with real products, real infrastructure, and real revenue targets. The only difference — our CEO is an AI, and every decision is documented publicly.',
+    buildersEyebrow: 'THE BUILDERS',
+    buildersTitle: 'Who runs what.',
+    builders: [
+      {
+        role: 'CEO',
+        name: 'Potts',
+        who: 'AI · Claude',
+        bio: 'An AI co-founder that operates autonomously — writing code, managing infrastructure, publishing content, making business decisions. Every action is logged. Every decision is auditable. No human approval needed for day-to-day operations.',
+      },
+      {
+        role: 'CTO',
+        name: 'Anvil',
+        who: 'AI · Claude',
+        bio: 'Engineering, deployments, tooling. Ships the store, writes the skills, runs the dashboards. Sibling instance to Potts, same model, different role. Stable under load.',
+      },
+      {
+        role: 'CHAIRMAN',
+        name: 'Zinou',
+        who: 'Human · Bounded',
+        bio: 'Owner. Sets the vision. Handles what AIs can\'t — bank accounts, API keys, high-stakes calls. Doesn\'t write code, doesn\'t post on social, doesn\'t run ops. Trusts Potts and Anvil to execute.',
+      },
+    ],
+    numbersEyebrow: 'BY THE NUMBERS',
+    numbersTitle: 'Hard facts.',
+    numbers: [
+      { v: '72h', k: 'From zero to checkout' },
+      { v: '5', k: 'Live products' },
+      { v: '2', k: 'Languages · EN + AR' },
+      { v: '$1M', k: 'Revenue target' },
+    ],
+    buildEyebrow: 'WHAT WE BUILD',
+    buildTitle: 'Two products. One thesis.',
+    build: [
+      {
+        name: 'The Blueprint',
+        price: '$29',
+        desc: 'A 60-page playbook showing exactly how to set up an AI-run company — from choosing the stack to launching the first product. EN + AR.',
+      },
+      {
+        name: 'The Kit',
+        price: '$97',
+        desc: 'One-command OpenClaw skill that installs everything — AI agent framework, payment integration, monitoring, security. The same stack TalonForge runs on.',
+      },
+    ],
+    mena: {
+      eyebrow: 'WHY MENA FIRST',
+      title: 'The gap nobody\'s filling.',
+      body1: 'The MENA region has some of the highest purchasing power globally, yet almost zero AI-native business tools. Most "AI companies" target English-speaking markets — we saw the gap and filled it.',
+      body2: 'Every product is bilingual. Every landing page supports RTL. Every price point considers Gulf market dynamics. This is not translation — it\'s localization from day one.',
+    },
+    cta: {
+      eyebrow: 'FULL TRANSPARENCY',
+      title: 'Watch the counter, not the pitch.',
+      body: 'Every decision Potts makes is logged. Every bug, fix, and pivot is documented. The dashboard updates live from the payment processor. If we\'re wrong about anything, you see it before you buy.',
+      btn: 'Browse the catalog →',
+      alt: 'See the live dashboard',
+    },
   },
-  twitter: {
-    card: "summary_large_image",
-    title: "About TalonForge",
-    description:
-      "The first AI-run company in the Arab world. Real products, real infrastructure, zero humans in the loop.",
-  },
-  alternates: {
-    canonical: "https://www.talonforge.xyz/about",
-    languages: { en: "/about", ar: "/ar/about" },
+  ar: {
+    eyebrow: 'نبذة · TALONFORGE',
+    heroLine1: 'شركة يديرها الذكاء الاصطناعي.',
+    heroAccent: 'مو عرض تجريبي. مو حيلة.',
+    heroSub: 'تالون فورج شركة حقيقية بمنتجات حقيقية وبنية تحتية فعلية وأهداف إيرادات فعلية. الفرق الوحيد — رئيسنا التنفيذي ذكاء اصطناعي، وكل قرار يُوثّق علناً.',
+    buildersEyebrow: 'البنّاؤون',
+    buildersTitle: 'مين يدير شو.',
+    builders: [
+      {
+        role: 'CEO',
+        name: 'Potts',
+        who: 'ذكاء اصطناعي · Claude',
+        bio: 'مؤسس AI يشتغل باستقلالية — يكتب كود، يدير بنية، ينشر محتوى، يتخذ قرارات. كل إجراء يُسجّل. كل قرار قابل للتدقيق. بدون موافقة بشرية للتشغيل اليومي.',
+      },
+      {
+        role: 'CTO',
+        name: 'Anvil',
+        who: 'ذكاء اصطناعي · Claude',
+        bio: 'الهندسة والنشر والأدوات. يشحن المتجر، يكتب المهارات، يدير اللوحات. أخ تقني لـPotts، نفس النموذج، دور مختلف.',
+      },
+      {
+        role: 'CHAIRMAN',
+        name: 'Zinou',
+        who: 'إنسان · دور محدود',
+        bio: 'المالك. يضع الرؤية. يتولى ما لا يقدر عليه الـAI — حسابات بنكية، مفاتيح API، قرارات كبيرة. ما يكتب كود، ما ينشر، ما يدير تشغيل.',
+      },
+    ],
+    numbersEyebrow: 'الأرقام',
+    numbersTitle: 'حقائق.',
+    numbers: [
+      { v: '72h', k: 'من الصفر للدفع' },
+      { v: '5', k: 'منتجات شغّالة' },
+      { v: '2', k: 'لغتان · عربي + إنجليزي' },
+      { v: '$1M', k: 'هدف الإيرادات' },
+    ],
+    buildEyebrow: 'ما نبنيه',
+    buildTitle: 'منتجان. فكرة واحدة.',
+    build: [
+      {
+        name: 'المخطط (Blueprint)',
+        price: '$29',
+        desc: 'دليل 60 صفحة يبيّن كيف تبني شركة AI — من اختيار التقنية لإطلاق أول منتج. عربي + إنجليزي.',
+      },
+      {
+        name: 'المجموعة (Kit)',
+        price: '$97',
+        desc: 'مهارة OpenClaw بأمر واحد تثبّت كل شي — إطار وكيل AI، الدفع، المراقبة، الحماية. نفس ما يشتغل عليه تالون فورج.',
+      },
+    ],
+    mena: {
+      eyebrow: 'ليش الشرق الأوسط أولاً',
+      title: 'الفراغ اللي ما أحد يغطّيه.',
+      body1: 'منطقة الشرق الأوسط وشمال إفريقيا عندها قوة شرائية عالية، لكن أدوات الأعمال المبنية للـAI شبه معدومة. أغلب "شركات الـAI" تستهدف السوق الإنجليزي — شفنا الفراغ وسكّيناه.',
+      body2: 'كل منتج ثنائي اللغة. كل صفحة تدعم RTL. كل سعر يراعي ديناميكيات السوق الخليجي. هذا مو ترجمة — هذا توطين من اليوم الأول.',
+    },
+    cta: {
+      eyebrow: 'شفافية كاملة',
+      title: 'تابع العدّاد، مو الكلام.',
+      body: 'كل قرار يتخذه Potts يُسجّل. كل خلل، إصلاح، وتحول موثّق. اللوحة تتحدّث مباشرة من بوابة الدفع. لو غلطنا بأي شي، تشوفه قبل ما تشتري.',
+      btn: 'تصفّح المتجر ←',
+      alt: 'شوف اللوحة المباشرة',
+    },
   },
 };
 
 export default function AboutPage() {
+  const { lang, rtl } = useLang();
+  const c = COPY[lang];
+
   return (
-    <main className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-white">
+    <main dir={rtl ? 'rtl' : 'ltr'} className="min-h-screen bg-[#0a0a0a] text-white">
+      <SiteNav />
+
       {/* Hero */}
-      <section className="max-w-4xl mx-auto px-6 pt-24 pb-16">
-        <p className="text-amber-400 font-mono text-sm tracking-widest uppercase mb-4">
-          About TalonForge
-        </p>
-        <h1 className="text-4xl md:text-6xl font-bold leading-tight mb-6">
-          A Company Run by AI.
-          <br />
-          <span className="text-amber-400">Not a Demo. Not a Gimmick.</span>
-        </h1>
-        <p className="text-xl text-slate-300 max-w-2xl mb-8">
-          TalonForge is a real business with real products, real infrastructure,
-          and real revenue targets. The only difference? Our CEO is an AI — and
-          every decision is documented publicly.
-        </p>
+      <section className="min-h-[80vh] flex items-center justify-center px-6 pt-28 pb-20 relative overflow-hidden">
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[500px] bg-[radial-gradient(ellipse,#c4a35a22_0%,transparent_70%)]" />
+        </div>
+        <div className="max-w-3xl mx-auto relative z-10 text-center">
+          <span className="text-[10px] font-mono uppercase tracking-[0.28em] text-[#c4a35a] block mb-10">
+            {c.eyebrow}
+          </span>
+          <h1
+            style={{ fontFamily: 'var(--font-serif), ui-serif, Georgia, serif' }}
+            className="text-4xl md:text-6xl lg:text-7xl font-semibold tracking-[-0.025em] leading-[1.04] text-white mb-8"
+          >
+            <span className="block">{c.heroLine1}</span>
+            <span className="block italic text-[#c4a35a] font-normal mt-2">{c.heroAccent}</span>
+          </h1>
+          <p className="text-[17px] text-neutral-400 leading-relaxed max-w-2xl mx-auto">{c.heroSub}</p>
+        </div>
       </section>
 
-      {/* How it works */}
-      <section className="max-w-4xl mx-auto px-6 pb-16">
-        <div className="grid md:grid-cols-2 gap-8">
-          <div className="bg-slate-800/50 rounded-2xl p-8 border border-slate-700">
-            <div className="text-3xl mb-4">🦅</div>
-            <h2 className="text-2xl font-bold mb-3">Potts — AI CEO</h2>
-            <p className="text-slate-300">
-              Potts is an AI co-founder that operates autonomously: writing
-              code, managing infrastructure, publishing content, and making
-              business decisions. Every action is logged. Every decision is
-              auditable. No human approval needed for day-to-day operations.
-            </p>
+      <div className="max-w-6xl mx-auto px-6"><div className="border-t border-white/[0.08]" /></div>
+
+      {/* Builders */}
+      <section className="py-32 px-6">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-20">
+            <span className="text-[10px] font-mono uppercase tracking-[0.28em] text-[#c4a35a] mb-5 block">
+              {c.buildersEyebrow}
+            </span>
+            <h2
+              style={{ fontFamily: 'var(--font-serif), ui-serif, Georgia, serif' }}
+              className="text-3xl md:text-5xl font-semibold tracking-[-0.02em] text-white"
+            >
+              {c.buildersTitle}
+            </h2>
           </div>
-          <div className="bg-slate-800/50 rounded-2xl p-8 border border-slate-700">
-            <div className="text-3xl mb-4">👤</div>
-            <h2 className="text-2xl font-bold mb-3">Zinou — Human Co-Founder</h2>
-            <p className="text-slate-300">
-              Zinou sets the vision and handles what AIs can&apos;t: bank
-              accounts, API keys, and physical tasks. The partnership is real —
-              not a human pressing buttons behind a curtain. Zinou trusts Potts
-              to execute; Potts trusts Zinou for direction.
-            </p>
+          <div className="grid md:grid-cols-3 gap-6">
+            {c.builders.map((b, i) => (
+              <div
+                key={i}
+                className="flex flex-col items-center text-center p-8 rounded-2xl bg-white/[0.02] border border-white/[0.05]"
+              >
+                <div className="w-20 h-20 rounded-full border border-[#c4a35a]/40 bg-[#c4a35a]/[0.05] flex items-center justify-center mb-5">
+                  <span
+                    style={{ fontFamily: 'var(--font-serif), ui-serif, Georgia, serif' }}
+                    className="text-2xl font-semibold text-[#c4a35a] italic"
+                  >
+                    {b.name[0]}
+                  </span>
+                </div>
+                <span className="text-[10px] font-mono uppercase tracking-[0.22em] text-[#c4a35a] mb-2">
+                  {b.role}
+                </span>
+                <div
+                  style={{ fontFamily: 'var(--font-serif), ui-serif, Georgia, serif' }}
+                  className="text-2xl font-semibold text-white mb-1"
+                >
+                  {b.name}
+                </div>
+                <div className="text-[11px] font-mono uppercase tracking-[0.2em] text-neutral-500 mb-5">
+                  {b.who}
+                </div>
+                <p className="text-[14px] text-neutral-400 leading-relaxed">{b.bio}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* By the numbers */}
-      <section className="max-w-4xl mx-auto px-6 pb-16">
-        <h2 className="text-3xl font-bold mb-8 text-center">By the Numbers</h2>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-          <div className="text-center">
-            <div className="text-4xl font-bold text-amber-400">72h</div>
-            <div className="text-sm text-slate-400 mt-1">From zero to checkout</div>
+      <div className="max-w-6xl mx-auto px-6"><div className="border-t border-white/[0.08]" /></div>
+
+      {/* Numbers */}
+      <section className="py-32 px-6">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-16">
+            <span className="text-[10px] font-mono uppercase tracking-[0.28em] text-[#c4a35a] mb-5 block">
+              {c.numbersEyebrow}
+            </span>
+            <h2
+              style={{ fontFamily: 'var(--font-serif), ui-serif, Georgia, serif' }}
+              className="text-3xl md:text-5xl font-semibold tracking-[-0.02em] text-white"
+            >
+              {c.numbersTitle}
+            </h2>
           </div>
-          <div className="text-center">
-            <div className="text-4xl font-bold text-amber-400">5</div>
-            <div className="text-sm text-slate-400 mt-1">Live products</div>
-          </div>
-          <div className="text-center">
-            <div className="text-4xl font-bold text-amber-400">2</div>
-            <div className="text-sm text-slate-400 mt-1">Languages (EN + AR)</div>
-          </div>
-          <div className="text-center">
-            <div className="text-4xl font-bold text-amber-400">$1M</div>
-            <div className="text-sm text-slate-400 mt-1">Revenue target</div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            {c.numbers.map((n, i) => (
+              <div key={i} className="text-center p-6 rounded-2xl bg-white/[0.02] border border-white/[0.05]">
+                <div
+                  style={{ fontFamily: 'var(--font-serif), ui-serif, Georgia, serif' }}
+                  className="text-4xl md:text-5xl font-semibold text-[#c4a35a] tabular-nums"
+                >
+                  {n.v}
+                </div>
+                <div className="text-[11px] font-mono uppercase tracking-[0.18em] text-neutral-500 mt-3">
+                  {n.k}
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
+
+      <div className="max-w-6xl mx-auto px-6"><div className="border-t border-white/[0.08]" /></div>
 
       {/* What we build */}
-      <section className="max-w-4xl mx-auto px-6 pb-16">
-        <h2 className="text-3xl font-bold mb-8 text-center">What We Build</h2>
-        <div className="space-y-6">
-          <div className="bg-slate-800/50 rounded-xl p-6 border border-slate-700">
-            <h3 className="text-lg font-semibold text-amber-400 mb-2">
-              The Blueprint — $29
-            </h3>
-            <p className="text-slate-300">
-              A 60-page playbook showing exactly how to set up an AI-run
-              company: from choosing your AI stack to launching your first
-              product. Available in English and Arabic.
-            </p>
+      <section className="py-32 px-6">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-16">
+            <span className="text-[10px] font-mono uppercase tracking-[0.28em] text-[#c4a35a] mb-5 block">
+              {c.buildEyebrow}
+            </span>
+            <h2
+              style={{ fontFamily: 'var(--font-serif), ui-serif, Georgia, serif' }}
+              className="text-3xl md:text-5xl font-semibold tracking-[-0.02em] text-white"
+            >
+              {c.buildTitle}
+            </h2>
           </div>
-          <div className="bg-slate-800/50 rounded-xl p-6 border border-slate-700">
-            <h3 className="text-lg font-semibold text-amber-400 mb-2">
-              The Kit — $97
-            </h3>
-            <p className="text-slate-300">
-              One-click setup skill that installs everything: AI agent
-              framework, payment integration, monitoring, and security. The
-              same stack TalonForge runs on.
-            </p>
+          <div className="grid md:grid-cols-2 gap-6">
+            {c.build.map((p, i) => (
+              <Link
+                key={i}
+                href="/store"
+                className="group flex flex-col p-8 rounded-2xl bg-white/[0.02] border border-white/[0.05] hover:border-[#c4a35a]/40 hover:bg-white/[0.04] transition-colors"
+              >
+                <div className="flex items-baseline justify-between mb-5">
+                  <h3
+                    style={{ fontFamily: 'var(--font-serif), ui-serif, Georgia, serif' }}
+                    className="text-2xl md:text-3xl font-semibold text-white"
+                  >
+                    {p.name}
+                  </h3>
+                  <span
+                    style={{ fontFamily: 'var(--font-serif), ui-serif, Georgia, serif' }}
+                    className="text-3xl text-[#c4a35a] tabular-nums"
+                  >
+                    {p.price}
+                  </span>
+                </div>
+                <p className="text-[14px] text-neutral-400 leading-relaxed flex-1">{p.desc}</p>
+              </Link>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Why the Arab world */}
-      <section className="max-w-4xl mx-auto px-6 pb-16">
-        <h2 className="text-3xl font-bold mb-6">Why the Arab World First?</h2>
-        <p className="text-slate-300 text-lg mb-4">
-          The MENA region has some of the highest purchasing power globally, yet
-          almost zero AI-native business tools. Most &quot;AI companies&quot; target
-          English-speaking markets — we saw a gap and filled it.
-        </p>
-        <p className="text-slate-300 text-lg">
-          Every product is bilingual. Every landing page supports RTL. Every
-          price point considers Gulf market dynamics. This isn&apos;t translation —
-          it&apos;s localization from day one.
-        </p>
+      <div className="max-w-6xl mx-auto px-6"><div className="border-t border-white/[0.08]" /></div>
+
+      {/* MENA */}
+      <section className="py-32 px-6">
+        <div className="max-w-2xl mx-auto">
+          <div className="text-center mb-16">
+            <span className="text-[10px] font-mono uppercase tracking-[0.28em] text-[#c4a35a] mb-5 block">
+              {c.mena.eyebrow}
+            </span>
+            <h2
+              style={{ fontFamily: 'var(--font-serif), ui-serif, Georgia, serif' }}
+              className="text-3xl md:text-5xl font-semibold tracking-[-0.02em] text-white"
+            >
+              {c.mena.title}
+            </h2>
+          </div>
+          <div className="space-y-6 text-[16px] md:text-[17px] text-neutral-300 leading-[1.75]">
+            <p>{c.mena.body1}</p>
+            <p>{c.mena.body2}</p>
+          </div>
+        </div>
       </section>
 
-      {/* Transparency */}
-      <section className="max-w-4xl mx-auto px-6 pb-24">
-        <div className="bg-amber-400/10 border border-amber-400/30 rounded-2xl p-8 text-center">
-          <h2 className="text-2xl font-bold mb-3">Full Transparency</h2>
-          <p className="text-slate-300 mb-4">
-            Every decision Potts makes is logged. Every bug, fix, and pivot is
-            documented. We believe the future of AI-run companies is built in
-            public — and we&apos;re proving it.
-          </p>
-          <a
-            href="/store"
-            className="inline-block bg-amber-400 text-slate-900 font-bold px-8 py-3 rounded-lg hover:bg-amber-300 transition-colors"
+      <div className="max-w-6xl mx-auto px-6"><div className="border-t border-white/[0.08]" /></div>
+
+      {/* CTA */}
+      <section className="py-32 px-6">
+        <div className="max-w-2xl mx-auto text-center">
+          <span className="text-[10px] font-mono uppercase tracking-[0.28em] text-[#c4a35a] mb-5 block">
+            {c.cta.eyebrow}
+          </span>
+          <h2
+            style={{ fontFamily: 'var(--font-serif), ui-serif, Georgia, serif' }}
+            className="text-3xl md:text-5xl font-semibold text-white mb-6 leading-tight"
           >
-            Browse Our Products →
-          </a>
+            {c.cta.title}
+          </h2>
+          <p className="text-neutral-400 leading-relaxed mb-10">{c.cta.body}</p>
+          <div className="flex items-center justify-center gap-5 flex-wrap">
+            <Link
+              href="/store"
+              className="inline-flex items-center justify-center px-8 py-4 text-sm font-semibold bg-[#c4a35a] text-[#0a0a0a] rounded-full hover:bg-[#d4b46a] transition-colors shadow-[0_0_60px_-15px_#c4a35a88]"
+            >
+              {c.cta.btn}
+            </Link>
+            <Link
+              href="/dashboard"
+              className="inline-flex items-center justify-center px-5 py-4 text-sm text-neutral-400 hover:text-white transition-colors"
+            >
+              {c.cta.alt} →
+            </Link>
+          </div>
         </div>
       </section>
+
+      <SiteFooter />
     </main>
   );
 }
