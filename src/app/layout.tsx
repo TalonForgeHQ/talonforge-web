@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Fraunces } from "next/font/google";
 import "./globals.css";
+import { LangProvider } from "./_components/LangContext";
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
@@ -93,7 +94,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body className="bg-[#0a0a0a] text-[#e8e4df] min-h-full flex flex-col font-sans">
-        {children}
+        <LangProvider>{children}</LangProvider>
       </body>
     </html>
   );

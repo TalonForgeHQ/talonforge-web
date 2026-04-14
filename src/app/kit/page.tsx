@@ -4,17 +4,20 @@ import { useState } from 'react';
 import SiteNav from '../_components/SiteNav';
 import LiveStatus from '../store/LiveStatus';
 import KitSpotlight from '../store/KitSpotlight';
-
-type Lang = 'en' | 'ar';
+import { useLang } from '../_components/LangContext';
 
 const COPY = {
   en: {
     eyebrow: 'THE FLAGSHIP',
-    heroLine: 'Hand your AI this file. Come back to a running company.',
+    heroLine1: 'Hand your AI this file.',
+    heroLine2: 'Come back to a running company.',
     heroSub: 'The Zero-Human Company Kit is an OpenClaw skill. One command, ten questions, and your AI sets up identity, memory, safety rails, launch plan, and revenue roadmap. English or Gulf-native Arabic.',
     primaryCta: 'Get The Kit — $97',
     secondaryCta: "See what's inside ↓",
+    promiseLabel: 'PROMISE · ANTI-PROMISE',
     promiseTitle: 'What this is. And what it is not.',
+    isLabel: 'IS',
+    isNotLabel: 'IS NOT',
     promiseIs: [
       'A skill file you give to any OpenClaw-compatible AI agent.',
       'A structured Q&A that builds SOUL.md, IDENTITY.md, MEMORY.md, safety rails, and a launch plan.',
@@ -27,18 +30,22 @@ const COPY = {
       'A course. You read the guide once, run the skill once, and your company exists.',
       'Locked in. The files it generates are yours, plain-text markdown, portable everywhere.',
     ],
-    testimonialNote: '(We are on day 2. When a buyer signs off, their words land here.)',
+    testimonialNote: 'We are on day 2. When a buyer signs off, their words land here.',
     ctaFinalTitle: 'Fork the company that sells it to you.',
     ctaFinalSub: 'Pay in crypto. Files deliver the moment the transaction confirms.',
     trustRow: 'BTC · ETH · USDT · SOL · NowPayments · No KYC · Instant',
   },
   ar: {
     eyebrow: 'المنتج الأساسي',
-    heroLine: 'أعطِ ذكاءك الاصطناعي هذا الملف. ارجع لتجد شركة شغّالة.',
-    heroSub: 'مجموعة شركة بدون بشر هي مهارة OpenClaw. أمر واحد، عشر أسئلة، والذكاء الاصطناعي يبني الهوية، الذاكرة، الحماية، خطة الإطلاق، وخريطة الإيرادات. إنجليزي أو عربي خليجي.',
+    heroLine1: 'أعطِ ذكاءك الاصطناعي هذا الملف.',
+    heroLine2: 'ارجع لتجد شركة شغّالة.',
+    heroSub: 'مجموعة شركة بدون بشر هي مهارة OpenClaw. أمر واحد، عشر أسئلة، والذكاء الاصطناعي يبني الهوية والذاكرة والحماية وخطة الإطلاق وخريطة الإيرادات. إنجليزي أو عربي خليجي.',
     primaryCta: 'احصل على المجموعة — $97',
     secondaryCta: 'شوف اللي بالداخل ↓',
-    promiseTitle: 'شو هي المجموعة. وشو ما هي.',
+    promiseLabel: 'وعد · لا وعد',
+    promiseTitle: 'شو هي. وشو ما هي.',
+    isLabel: 'هي',
+    isNotLabel: 'ليست',
     promiseIs: [
       'ملف مهارة تعطيه لأي وكيل AI متوافق مع OpenClaw.',
       'سلسلة أسئلة منظمة تبني SOUL.md و IDENTITY.md و MEMORY.md وحماية وخطة إطلاق.',
@@ -51,7 +58,7 @@ const COPY = {
       'دورة تعليمية. اقرأ الدليل مرة، شغّل المهارة مرة، وشركتك موجودة.',
       'مقيّد. الملفات اللي تنتج لك، markdown عادي، منقول بأي مكان.',
     ],
-    testimonialNote: '(نحن في اليوم الثاني. لمّا أول مشتري يوقّع، كلامه يطلع هنا.)',
+    testimonialNote: 'نحن في اليوم الثاني. لمّا أول مشتري يوقّع، كلامه يطلع هنا.',
     ctaFinalTitle: 'انسخ الشركة التي تبيعك المجموعة.',
     ctaFinalSub: 'ادفع بالعملات المشفرة. الملفات تصل لحظة تأكيد التحويل.',
     trustRow: 'BTC · ETH · USDT · SOL · NowPayments · بدون KYC · فوري',
@@ -59,12 +66,11 @@ const COPY = {
 };
 
 export default function KitPage() {
-  const [lang, setLang] = useState<Lang>('en');
+  const { lang, rtl } = useLang();
   const [loading, setLoading] = useState(false);
   const [modal, setModal] = useState<any>(null);
   const [error, setError] = useState('');
   const c = COPY[lang];
-  const rtl = lang === 'ar';
 
   const buy = async () => {
     setLoading(true);
@@ -86,38 +92,36 @@ export default function KitPage() {
   };
 
   return (
-    <main className={`min-h-screen bg-[#0a0a0a] text-white ${rtl ? 'rtl' : ''}`} dir={rtl ? 'rtl' : 'ltr'}>
+    <main
+      dir={rtl ? 'rtl' : 'ltr'}
+      className="min-h-screen bg-[#0a0a0a] text-white"
+    >
       <SiteNav />
 
-      {/* Hero — full viewport, nothing else in sight */}
-      <section className="min-h-[88vh] flex items-center px-6 pt-24 pb-20 relative overflow-hidden">
+      {/* Hero — centered, narrower column, more breathing room */}
+      <section className="min-h-[92vh] flex items-center justify-center px-6 pt-24 pb-16 relative overflow-hidden">
         <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[500px] bg-[radial-gradient(ellipse,#c4a35a22_0%,transparent_70%)]"></div>
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[500px] bg-[radial-gradient(ellipse,#c4a35a22_0%,transparent_70%)]" />
         </div>
-        <div className="max-w-4xl mx-auto relative z-10">
-          <div className="mb-10 flex items-center justify-between">
-            <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-[#c4a35a]">
-              {c.eyebrow}
-            </span>
-            <button
-              onClick={() => setLang(lang === 'en' ? 'ar' : 'en')}
-              className="text-xs text-neutral-500 hover:text-white transition-colors"
-            >
-              {lang === 'en' ? '🇸🇦 عربي' : '🇬🇧 English'}
-            </button>
-          </div>
+
+        <div className="max-w-3xl mx-auto relative z-10 text-center">
+          <span className="text-[10px] font-mono uppercase tracking-[0.28em] text-[#c4a35a] block mb-10">
+            {c.eyebrow}
+          </span>
+
           <h1
             style={{ fontFamily: 'var(--font-serif), ui-serif, Georgia, serif' }}
-            className="text-4xl md:text-6xl lg:text-7xl font-semibold tracking-[-0.025em] leading-[1.03] text-white mb-8"
+            className="text-4xl md:text-6xl lg:text-[5.25rem] font-semibold tracking-[-0.025em] leading-[1.02] text-white mb-8"
           >
-            Hand your AI this file.
-            <br />
-            <span className="italic text-[#c4a35a] font-normal">Come back to a running company.</span>
+            <span className="block">{c.heroLine1}</span>
+            <span className="block italic text-[#c4a35a] font-normal mt-2">{c.heroLine2}</span>
           </h1>
-          <p className="text-lg text-neutral-400 leading-relaxed max-w-2xl mb-12">
+
+          <p className="text-[17px] md:text-lg text-neutral-400 leading-relaxed max-w-2xl mx-auto mb-12">
             {c.heroSub}
           </p>
-          <div className="flex items-center gap-4 flex-wrap">
+
+          <div className="flex items-center justify-center gap-4 flex-wrap mb-10">
             <button
               onClick={buy}
               disabled={loading}
@@ -132,7 +136,8 @@ export default function KitPage() {
               {c.secondaryCta}
             </a>
           </div>
-          <div className="mt-10">
+
+          <div className="flex justify-center">
             <LiveStatus lang={lang} />
           </div>
           {error && <div className="mt-6 text-sm text-amber-400">{error}</div>}
@@ -140,7 +145,7 @@ export default function KitPage() {
       </section>
 
       {/* Separator */}
-      <div className="max-w-6xl mx-auto px-6"><div className="border-t border-white/[0.08]"></div></div>
+      <div className="max-w-6xl mx-auto px-6"><div className="border-t border-white/[0.08]" /></div>
 
       {/* Kit spotlight section (book + chapters) */}
       <div id="inside">
@@ -148,14 +153,14 @@ export default function KitPage() {
       </div>
 
       {/* Separator */}
-      <div className="max-w-6xl mx-auto px-6"><div className="border-t border-white/[0.08]"></div></div>
+      <div className="max-w-6xl mx-auto px-6"><div className="border-t border-white/[0.08]" /></div>
 
       {/* Promise / Anti-promise */}
       <section className="py-32 px-6">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-20">
-            <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-[#c4a35a] mb-5 block">
-              {lang === 'en' ? 'PROMISE · ANTI-PROMISE' : 'وعد · لا وعد'}
+            <span className="text-[10px] font-mono uppercase tracking-[0.28em] text-[#c4a35a] mb-5 block">
+              {c.promiseLabel}
             </span>
             <h2
               style={{ fontFamily: 'var(--font-serif), ui-serif, Georgia, serif' }}
@@ -164,10 +169,10 @@ export default function KitPage() {
               {c.promiseTitle}
             </h2>
           </div>
-          <div className="grid md:grid-cols-2 gap-12">
+          <div className="grid md:grid-cols-2 gap-12 max-w-4xl mx-auto">
             <div>
-              <h3 className="text-[11px] font-mono uppercase tracking-[0.2em] text-[#c4a35a] mb-6">
-                {lang === 'en' ? 'IS' : 'هي'}
+              <h3 className="text-[11px] font-mono uppercase tracking-[0.22em] text-[#c4a35a] mb-6">
+                {c.isLabel}
               </h3>
               <ul className="space-y-5">
                 {c.promiseIs.map((item, i) => (
@@ -179,8 +184,8 @@ export default function KitPage() {
               </ul>
             </div>
             <div>
-              <h3 className="text-[11px] font-mono uppercase tracking-[0.2em] text-neutral-500 mb-6">
-                {lang === 'en' ? 'IS NOT' : 'ليست'}
+              <h3 className="text-[11px] font-mono uppercase tracking-[0.22em] text-neutral-500 mb-6">
+                {c.isNotLabel}
               </h3>
               <ul className="space-y-5">
                 {c.promiseIsNot.map((item, i) => (
@@ -197,7 +202,7 @@ export default function KitPage() {
       </section>
 
       {/* Separator */}
-      <div className="max-w-6xl mx-auto px-6"><div className="border-t border-white/[0.08]"></div></div>
+      <div className="max-w-6xl mx-auto px-6"><div className="border-t border-white/[0.08]" /></div>
 
       {/* Final CTA */}
       <section className="py-32 px-6">
@@ -222,11 +227,11 @@ export default function KitPage() {
 
       {/* minimal footer */}
       <footer className="py-16 px-6 border-t border-white/[0.05]">
-        <div className="max-w-6xl mx-auto text-center text-xs text-neutral-600">
-          <span className="me-5">© 2026 TalonForge</span>
-          <a href="/store" className="hover:text-white me-5">Catalog</a>
-          <a href="/dashboard" className="hover:text-white me-5">Dashboard</a>
-          <a href="/about" className="hover:text-white">About</a>
+        <div className="max-w-6xl mx-auto text-center text-xs text-neutral-600 flex items-center justify-center gap-6 flex-wrap">
+          <span>© 2026 TalonForge</span>
+          <a href="/store" className="hover:text-white">{lang === 'en' ? 'Catalog' : 'المتجر'}</a>
+          <a href="/dashboard" className="hover:text-white">{lang === 'en' ? 'Dashboard' : 'اللوحة'}</a>
+          <a href="/about" className="hover:text-white">{lang === 'en' ? 'About' : 'نبذة'}</a>
         </div>
       </footer>
 

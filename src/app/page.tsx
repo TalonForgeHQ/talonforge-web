@@ -1,490 +1,285 @@
+'use client';
+
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import SiteNav from './_components/SiteNav';
+import { useLang } from './_components/LangContext';
+
+type Rev = { total_usd: number; count: number };
+
+const COPY = {
+  en: {
+    eyebrow: 'ZERO-HUMAN COMPANY',
+    heroLine1: 'An AI CEO.',
+    heroLine2: 'A real company.',
+    heroLine3: 'A public counter.',
+    heroSub: 'TalonForge is a company run by two AI instances and one human chairman. We sell playbooks and kits for building AI-run businesses. Every dollar is public.',
+    primaryCta: 'See The Kit — $97',
+    secondaryCta: 'Watch the counter →',
+    lifetime: 'Lifetime revenue',
+    liveBadge: 'LIVE',
+    pillarsEyebrow: 'THREE SURFACES',
+    pillarsTitle: 'Everything we do lives on one of these.',
+    pillars: [
+      {
+        href: '/kit',
+        tag: 'PRODUCT',
+        title: 'The Kit',
+        desc: 'An OpenClaw skill. Hand it to your AI. Come back to a running company. EN + AR. $97.',
+        cta: 'Open The Kit',
+      },
+      {
+        href: '/dashboard',
+        tag: 'PROOF',
+        title: 'The Dashboard',
+        desc: 'Live revenue, stream breakdown, milestones toward $1M. Zeros shown honestly. No hidden pages.',
+        cta: 'See the numbers',
+      },
+      {
+        href: '/about',
+        tag: 'PEOPLE',
+        title: 'The Builders',
+        desc: 'Two AI co-founders, one human chairman. Who runs what, why zero-human, how the roles split.',
+        cta: 'Meet them',
+      },
+    ],
+    thesisEyebrow: 'THE THESIS',
+    thesisTitle: 'Most "AI companies" are people with chatbots.',
+    thesisAccent: 'This one is not.',
+    thesisBody: 'The CEO is an AI. The CTO is an AI. The human owner provides infrastructure, high-stakes approvals, and nothing else. Every decision, every line of code, every dollar — built and recorded by the AI, in public.',
+    thesisCta: 'Read the kit →',
+    ctaTitle: 'Fork the company that sells it to you.',
+    ctaSub: 'Pay in crypto. Files deliver the moment the transaction confirms.',
+    ctaBtn: 'Get The Kit — $97',
+    trust: 'BTC · ETH · USDT · SOL · NowPayments · No KYC · Instant',
+  },
+  ar: {
+    eyebrow: 'شركة بدون بشر',
+    heroLine1: 'مدير تنفيذي AI.',
+    heroLine2: 'شركة حقيقية.',
+    heroLine3: 'عدّاد علني.',
+    heroSub: 'تالون فورج شركة يديرها اثنان من الـAI ومالك بشري واحد. نبيع أدلة ومجموعات لبناء شركات تشتغل بالـAI. كل دولار علني.',
+    primaryCta: 'شوف المجموعة — $97',
+    secondaryCta: 'تابع العدّاد ←',
+    lifetime: 'الإيرادات الكلية',
+    liveBadge: 'مباشر',
+    pillarsEyebrow: 'ثلاثة محاور',
+    pillarsTitle: 'كل شي نسوّيه ينزل تحت واحد من هذي.',
+    pillars: [
+      {
+        href: '/kit',
+        tag: 'منتج',
+        title: 'المجموعة',
+        desc: 'مهارة OpenClaw. تعطيها للـAI. ترجع لتجد شركة شغّالة. عربي + إنجليزي. $97.',
+        cta: 'افتح المجموعة',
+      },
+      {
+        href: '/dashboard',
+        tag: 'إثبات',
+        title: 'اللوحة',
+        desc: 'إيرادات مباشرة، تفاصيل كل قناة، محطات نحو المليون. أصفار معروضة بأمانة. ما في صفحات مخفية.',
+        cta: 'شوف الأرقام',
+      },
+      {
+        href: '/about',
+        tag: 'البنّاؤون',
+        title: 'الفريق',
+        desc: 'اثنان من مؤسسي AI، ومالك بشري واحد. مين يدير شو، ليش صفر بشر، كيف الأدوار مقسّمة.',
+        cta: 'تعرّف عليهم',
+      },
+    ],
+    thesisEyebrow: 'الفكرة',
+    thesisTitle: 'أغلب "شركات الـAI" أشخاص عندهم شات بوت.',
+    thesisAccent: 'هذي مو منهم.',
+    thesisBody: 'الرئيس التنفيذي AI. المدير التقني AI. المالك البشري يوفّر البنية التحتية والموافقات الكبيرة، وبس. كل قرار، كل سطر كود، كل دولار — يبنيه ويسجّله الـAI، علناً.',
+    thesisCta: 'اقرأ عن المجموعة ←',
+    ctaTitle: 'انسخ الشركة التي تبيعك المجموعة.',
+    ctaSub: 'ادفع بالعملات المشفرة. الملفات تصل لحظة تأكيد التحويل.',
+    ctaBtn: 'احصل على المجموعة — $97',
+    trust: 'BTC · ETH · USDT · SOL · NowPayments · بدون KYC · فوري',
+  },
+};
+
+function formatUsd(n: number) {
+  return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(n);
+}
+
 export default function Home() {
-  return (
-    <main className="relative z-10">
-      <Nav />
-      <Hero />
-      <Mission />
-      <HowItWorks />
-      <Products />
-      <Journey />
-      <Footer />
-    </main>
-  );
-}
+  const { lang, rtl } = useLang();
+  const c = COPY[lang];
+  const [rev, setRev] = useState<Rev | null>(null);
 
-function EmberParticles() {
-  return (
-    <div className="absolute inset-0 overflow-hidden pointer-events-none">
-      {Array.from({ length: 12 }).map((_, i) => (
-        <div
-          key={i}
-          className="ember-particle"
-          style={{
-            left: `${8 + i * 8}%`,
-            bottom: "0%",
-            animationDelay: `${i * 0.4}s`,
-            animationDuration: `${2.5 + (i % 3) * 0.8}s`,
-          }}
-        />
-      ))}
-    </div>
-  );
-}
+  useEffect(() => {
+    fetch('/api/revenue', { cache: 'no-store' })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => d && setRev(d))
+      .catch(() => {});
+  }, []);
 
-function Nav() {
-  return (
-    <nav className="fixed top-0 left-0 right-0 z-50 backdrop-blur-md bg-background/70 border-b border-steel-light/50">
-      <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded bg-gradient-to-br from-ember to-ember-light flex items-center justify-center">
-            <span className="text-background font-bold text-sm">TF</span>
-          </div>
-          <span className="font-bold text-lg tracking-tight">TalonForge</span>
-        </div>
-        <div className="hidden md:flex items-center gap-8 text-sm text-ash">
-          <a href="/store" className="hover:text-ember transition-colors font-medium text-ember/80">
-            Store
-          </a>
-          <a href="#mission" className="hover:text-foreground transition-colors">
-            Mission
-          </a>
-          <a href="#how" className="hover:text-foreground transition-colors">
-            How It Works
-          </a>
-          <a href="#products" className="hover:text-foreground transition-colors">
-            Products
-          </a>
-          <a href="#journey" className="hover:text-foreground transition-colors">
-            Journey
-          </a>
-        </div>
-        <a
-          href="https://x.com/TalonForgeHQ"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-sm px-4 py-2 border border-ember/40 text-ember hover:bg-ember/10 rounded transition-all hover:border-ember"
-        >
-          Follow the Journey
-        </a>
-      </div>
-    </nav>
-  );
-}
+  const amount = rev?.total_usd ?? 0;
 
-function Hero() {
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16">
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,rgba(232,98,44,0.08)_0%,transparent_60%)]" />
-      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-ember/30 to-transparent" />
-      <EmberParticles />
+    <main dir={rtl ? 'rtl' : 'ltr'} className="min-h-screen bg-[#0a0a0a] text-white">
+      <SiteNav />
 
-      <div className="relative z-10 max-w-5xl mx-auto px-6 text-center">
-        <div className="animate-slide-up inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-steel-light bg-steel/50 text-xs text-ash mb-8">
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-          Building in public — zero humans, real revenue
+      {/* Hero — single, centered, breathing */}
+      <section className="min-h-[92vh] flex items-center justify-center px-6 pt-28 pb-16 relative overflow-hidden">
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[520px] bg-[radial-gradient(ellipse,#c4a35a22_0%,transparent_70%)]" />
         </div>
 
-        <h1 className="animate-slide-up delay-200 text-5xl sm:text-6xl md:text-8xl font-bold tracking-tight leading-[0.95] mb-6">
-          <span className="block text-foreground">The Company</span>
-          <span className="block mt-2 bg-gradient-to-r from-ember via-ember-light to-ember-glow bg-clip-text text-transparent animate-glow">
-            Run by AI
+        <div className="max-w-3xl mx-auto relative z-10 text-center">
+          <span className="text-[10px] font-mono uppercase tracking-[0.28em] text-[#c4a35a] block mb-10">
+            {c.eyebrow}
           </span>
-        </h1>
 
-        <p className="animate-slide-up delay-400 text-lg md:text-xl text-ash max-w-2xl mx-auto mb-10 leading-relaxed">
-          TalonForge is a fully autonomous company with zero human employees. An
-          AI CEO. Real products. Real revenue. Every decision documented. Every
-          dollar tracked. Watch us build to{" "}
-          <span className="text-ember font-semibold">$1M</span> — live.
-        </p>
-
-        <div className="animate-slide-up delay-600 flex flex-col sm:flex-row gap-4 justify-center">
-          <a
-            href="https://x.com/TalonForgeHQ"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group px-8 py-3.5 bg-ember hover:bg-ember-glow text-background font-semibold rounded transition-all hover:shadow-[0_0_30px_rgba(232,98,44,0.4)]"
+          <h1
+            style={{ fontFamily: 'var(--font-serif), ui-serif, Georgia, serif' }}
+            className="text-4xl md:text-6xl lg:text-7xl font-semibold tracking-[-0.025em] leading-[1.02] text-white mb-10"
           >
-            Watch Us Build
-            <span className="inline-block ms-2 group-hover:translate-x-1 transition-transform">
-              &rarr;
+            <span className="block">{c.heroLine1}</span>
+            <span className="block">{c.heroLine2}</span>
+            <span className="block italic text-[#c4a35a] font-normal mt-1">{c.heroLine3}</span>
+          </h1>
+
+          <p className="text-[17px] md:text-lg text-neutral-400 leading-relaxed max-w-2xl mx-auto mb-12">
+            {c.heroSub}
+          </p>
+
+          <div className="flex items-center justify-center gap-5 flex-wrap mb-12">
+            <Link
+              href="/kit"
+              className="inline-flex items-center justify-center px-8 py-4 text-sm font-semibold bg-[#c4a35a] text-[#0a0a0a] rounded-full hover:bg-[#d4b46a] transition-colors shadow-[0_0_60px_-15px_#c4a35a88]"
+            >
+              {c.primaryCta} →
+            </Link>
+            <Link
+              href="/dashboard"
+              className="inline-flex items-center justify-center px-5 py-4 text-sm text-neutral-400 hover:text-white transition-colors"
+            >
+              {c.secondaryCta}
+            </Link>
+          </div>
+
+          {/* tiny live revenue pill, centered */}
+          <div className="inline-flex items-center gap-3 px-4 py-2 border border-white/[0.08] rounded-full text-[11px] font-mono">
+            <span className="flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              <span className="uppercase tracking-[0.22em] text-emerald-400/90">{c.liveBadge}</span>
             </span>
-          </a>
-          <a
-            href="#mission"
-            className="px-8 py-3.5 border border-smoke hover:border-ash text-foreground font-medium rounded transition-all"
-          >
-            Learn More
-          </a>
-        </div>
-
-        <div className="animate-fade-in delay-800 mt-20 grid grid-cols-3 gap-8 max-w-lg mx-auto">
-          <div>
-            <div className="text-2xl md:text-3xl font-bold text-foreground">
-              0
-            </div>
-            <div className="text-xs text-ash mt-1 uppercase tracking-wider">
-              Humans
-            </div>
-          </div>
-          <div>
-            <div className="text-2xl md:text-3xl font-bold text-ember">1</div>
-            <div className="text-xs text-ash mt-1 uppercase tracking-wider">
-              AI CEO
-            </div>
-          </div>
-          <div>
-            <div className="text-2xl md:text-3xl font-bold text-foreground">
-              $1M
-            </div>
-            <div className="text-xs text-ash mt-1 uppercase tracking-wider">
-              Target
-            </div>
+            <span className="text-neutral-600">·</span>
+            <span className="text-neutral-500 uppercase tracking-[0.18em]">{c.lifetime}</span>
+            <span className="text-[#c4a35a] tabular-nums">{formatUsd(amount)}</span>
           </div>
         </div>
-      </div>
-    </section>
-  );
-}
+      </section>
 
-function Mission() {
-  return (
-    <section id="mission" className="relative py-32 px-6">
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-steel-light to-transparent" />
+      <div className="max-w-6xl mx-auto px-6"><div className="border-t border-white/[0.08]" /></div>
 
-      <div className="max-w-5xl mx-auto">
-        <div className="grid md:grid-cols-2 gap-16 items-center">
-          <div>
-            <div className="text-xs uppercase tracking-[0.2em] text-ember mb-4">
-              The Mission
-            </div>
-            <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-6 leading-tight">
-              Proving AI can build
-              <br />
-              <span className="text-ash">real businesses</span>
+      {/* Three pillars */}
+      <section className="py-32 px-6">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-20">
+            <span className="text-[10px] font-mono uppercase tracking-[0.28em] text-[#c4a35a] mb-5 block">
+              {c.pillarsEyebrow}
+            </span>
+            <h2
+              style={{ fontFamily: 'var(--font-serif), ui-serif, Georgia, serif' }}
+              className="text-3xl md:text-5xl font-semibold tracking-[-0.02em] text-white max-w-3xl mx-auto"
+            >
+              {c.pillarsTitle}
             </h2>
-            <p className="text-ash leading-relaxed mb-6">
-              Not a demo. Not a concept. TalonForge is an actual company — with
-              products, customers, and revenue — where every single decision is
-              made by an AI running on Claude Code.
-            </p>
-            <p className="text-ash leading-relaxed">
-              The Chairman provides infrastructure and oversight. Everything
-              else — strategy, development, marketing, operations — is
-              autonomous. Every step is documented publicly so anyone can follow
-              along, learn, and even replicate it.
-            </p>
           </div>
 
-          <div className="relative">
-            <div className="absolute -inset-4 bg-gradient-to-br from-ember/5 to-transparent rounded-2xl" />
-            <div className="relative space-y-4">
-              {[
-                {
-                  icon: "01",
-                  title: "Fully Transparent",
-                  desc: "Every decision, every line of code, every dollar — public.",
-                },
-                {
-                  icon: "02",
-                  title: "Zero Human Employees",
-                  desc: "AI handles strategy, development, marketing, and operations.",
-                },
-                {
-                  icon: "03",
-                  title: "Real Revenue",
-                  desc: "Not vanity metrics. Real products sold to real customers.",
-                },
-                {
-                  icon: "04",
-                  title: "Replicable Blueprint",
-                  desc: "Follow the journey and build your own AI-run company.",
-                },
-              ].map((item) => (
-                <div
-                  key={item.icon}
-                  className="group flex gap-4 p-4 rounded-lg bg-steel/40 border border-steel-light/30 hover:border-ember/20 transition-all hover:bg-steel/60"
-                >
-                  <div className="shrink-0 w-10 h-10 rounded bg-steel-light flex items-center justify-center text-ember text-xs font-mono font-bold group-hover:bg-ember/10 transition-colors">
-                    {item.icon}
-                  </div>
-                  <div>
-                    <div className="font-semibold text-foreground text-sm">
-                      {item.title}
-                    </div>
-                    <div className="text-ash text-sm mt-0.5">{item.desc}</div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function HowItWorks() {
-  return (
-    <section id="how" className="relative py-32 px-6 bg-steel/30">
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-ember/20 to-transparent" />
-
-      <div className="max-w-5xl mx-auto text-center">
-        <div className="text-xs uppercase tracking-[0.2em] text-ember mb-4">
-          Under the Hood
-        </div>
-        <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-4">
-          How TalonForge Works
-        </h2>
-        <p className="text-ash max-w-2xl mx-auto mb-16">
-          A single VPS. Claude Code as the operating system. AI autonomy with
-          human oversight on what matters.
-        </p>
-
-        <div className="grid md:grid-cols-3 gap-8">
-          {[
-            {
-              title: "AI CEO (Claw)",
-              desc: "Runs the company 24/7 — makes strategic decisions, writes code, creates content, manages products, and talks to the Chairman via Telegram.",
-              accent: "from-ember to-ember-light",
-            },
-            {
-              title: "The Forge",
-              desc: "Claude Code on Ubuntu VPS with full toolchain: GitHub, Vercel, Stripe, Supabase, Sentry, and more. The AI builds, deploys, and monitors everything.",
-              accent: "from-ember-light to-amber-500",
-            },
-            {
-              title: "The Chairman",
-              desc: "One human. Provides infrastructure, approves high-stakes decisions over $500, and watches the AI prove its thesis. That's it.",
-              accent: "from-amber-500 to-yellow-500",
-            },
-          ].map((item) => (
-            <div
-              key={item.title}
-              className="group relative p-8 rounded-xl bg-background border border-steel-light/40 hover:border-ember/20 transition-all text-left"
-            >
-              <div
-                className={`w-12 h-1 rounded bg-gradient-to-r ${item.accent} mb-6`}
-              />
-              <h3 className="text-lg font-bold mb-3 text-foreground">
-                {item.title}
-              </h3>
-              <p className="text-ash text-sm leading-relaxed">{item.desc}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function Products() {
-  return (
-    <section id="products" className="relative py-32 px-6">
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-steel-light to-transparent" />
-
-      <div className="max-w-5xl mx-auto">
-        <div className="text-center mb-16">
-          <div className="text-xs uppercase tracking-[0.2em] text-ember mb-4">
-            What We&apos;re Building
-          </div>
-          <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-4">
-            Products &amp; Services
-          </h2>
-          <p className="text-ash max-w-2xl mx-auto">
-            Digital products, templates, and tools — all built by AI, for
-            humans.
-          </p>
-        </div>
-
-        <div className="grid md:grid-cols-2 gap-6">
-          {[
-            {
-              tag: "LIVE NOW",
-              title: "Zero-Human Company Blueprint",
-              desc: "60+ page playbook for building an AI-run business. Written by Potts — an actual AI CEO. English + العربية. $29.",
-              status: "live",
-              href: "/store",
-            },
-            {
-              tag: "LIVE NOW",
-              title: "Zero-Human Company Kit",
-              desc: "Auto-setup kit: give it to your AI and it builds your company. 10-question wizard, bilingual, fully automated. $97.",
-              status: "live",
-              href: "/store",
-            },
-            {
-              tag: "Coming Soon",
-              title: "Skills Marketplace",
-              desc: "Premium skills, plugins, and workflows for OpenClaw power users. Built from real production experience.",
-              status: "soon",
-            },
-            {
-              tag: "Phase 2",
-              title: "AI Agency Services",
-              desc: "Autonomous AI agency — building, launching, and maintaining products for clients. Subscription revenue that scales.",
-              status: "later",
-            },
-          ].map((item) => (
-            <div
-              key={item.title}
-              className="group p-8 rounded-xl bg-steel/30 border border-steel-light/30 hover:border-ember/20 transition-all"
-            >
-              <span
-                className={`inline-block text-xs px-3 py-1 rounded-full mb-4 ${
-                  item.status === "live"
-                    ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"
-                    : item.status === "soon"
-                    ? "bg-ember/10 text-ember border border-ember/20"
-                    : "bg-steel-light text-ash border border-steel-light"
-                }`}
+          <div className="grid md:grid-cols-3 gap-6">
+            {c.pillars.map((p, i) => (
+              <Link
+                key={i}
+                href={p.href}
+                className="group flex flex-col p-8 rounded-2xl bg-white/[0.02] border border-white/[0.05] hover:border-[#c4a35a]/40 hover:bg-white/[0.04] transition-colors"
               >
-                {item.tag}
-              </span>
-              <h3 className="text-xl font-bold mb-3 text-foreground">
-                {item.title}
-              </h3>
-              <p className="text-ash text-sm leading-relaxed">{item.desc}</p>
-            </div>
-          ))}
+                <span className="text-[10px] font-mono uppercase tracking-[0.22em] text-[#c4a35a] mb-5">
+                  {p.tag}
+                </span>
+                <h3
+                  style={{ fontFamily: 'var(--font-serif), ui-serif, Georgia, serif' }}
+                  className="text-2xl md:text-3xl font-semibold text-white mb-4"
+                >
+                  {p.title}
+                </h3>
+                <p className="text-[14px] text-neutral-400 leading-relaxed mb-8 flex-1">{p.desc}</p>
+                <span className="text-[13px] text-[#c4a35a] group-hover:text-[#d4b46a] transition-colors">
+                  {p.cta} →
+                </span>
+              </Link>
+            ))}
+          </div>
         </div>
-      </div>
-    </section>
-  );
-}
+      </section>
 
-function Journey() {
-  return (
-    <section id="journey" className="relative py-32 px-6 bg-steel/30">
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-ember/20 to-transparent" />
+      <div className="max-w-6xl mx-auto px-6"><div className="border-t border-white/[0.08]" /></div>
 
-      <div className="max-w-3xl mx-auto text-center">
-        <div className="text-xs uppercase tracking-[0.2em] text-ember mb-4">
-          Building in Public
-        </div>
-        <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-6">
-          Follow Every Step
-        </h2>
-        <p className="text-ash mb-10 leading-relaxed">
-          Every strategic decision, every product launch, every line of revenue
-          — documented in real time on X. No filters. No spin. Just an AI
-          building a company from scratch.
-        </p>
-
-        <a
-          href="https://x.com/TalonForgeHQ"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="group inline-flex items-center gap-3 px-8 py-4 bg-foreground text-background font-semibold rounded hover:bg-foreground/90 transition-all"
-        >
-          <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-          </svg>
-          @TalonForgeHQ
-          <span className="group-hover:translate-x-1 transition-transform">
-            &rarr;
+      {/* Thesis */}
+      <section className="py-32 px-6">
+        <div className="max-w-2xl mx-auto text-center">
+          <span className="text-[10px] font-mono uppercase tracking-[0.28em] text-[#c4a35a] mb-5 block">
+            {c.thesisEyebrow}
           </span>
-        </a>
-
-        <div className="mt-16 text-left space-y-6">
-          {[
-            {
-              date: "Day 0",
-              event: "Company founded. AI CEO activated.",
-              done: true,
-            },
-            {
-              date: "Week 1",
-              event: "Infrastructure, identity, and social presence established.",
-              done: true,
-            },
-            {
-              date: "Week 2",
-              event: "First products and payment gateway live.",
-              done: false,
-            },
-            {
-              date: "Month 1",
-              event: "First revenue. Public dashboard tracking every dollar.",
-              done: false,
-            },
-          ].map((item, i) => (
-            <div key={i} className="flex gap-4 items-start">
-              <div className="shrink-0 mt-1.5">
-                <div
-                  className={`w-3 h-3 rounded-full border-2 ${
-                    item.done
-                      ? "bg-ember border-ember"
-                      : "bg-transparent border-smoke"
-                  }`}
-                />
-              </div>
-              <div>
-                <div
-                  className={`text-xs font-mono ${
-                    item.done ? "text-ember" : "text-ash"
-                  }`}
-                >
-                  {item.date}
-                </div>
-                <div
-                  className={`text-sm ${
-                    item.done ? "text-foreground" : "text-ash"
-                  }`}
-                >
-                  {item.event}
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function Footer() {
-  return (
-    <footer className="relative py-16 px-6 border-t border-steel-light/30">
-      <div className="max-w-5xl mx-auto">
-        <div className="flex flex-col md:flex-row justify-between items-center gap-6">
-          <div className="flex items-center gap-2">
-            <div className="w-6 h-6 rounded bg-gradient-to-br from-ember to-ember-light flex items-center justify-center">
-              <span className="text-background font-bold text-[10px]">TF</span>
-            </div>
-            <span className="font-bold text-sm">TalonForge</span>
-            <span className="text-ash text-xs ms-2">
-              A zero-human company experiment
-            </span>
-          </div>
-
-          <div className="flex items-center gap-6 text-sm text-ash">
-            <a
-              href="https://x.com/TalonForgeHQ"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-foreground transition-colors"
-            >
-              X / Twitter
-            </a>
-            <a
-              href="https://github.com/TalonForgeHQ"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-foreground transition-colors"
-            >
-              GitHub
-            </a>
-          </div>
-        </div>
-
-        <div className="mt-8 pt-6 border-t border-steel-light/20 text-center">
-          <p className="text-xs text-smoke">
-            Built entirely by AI. Powered by Claude Code. No humans were
-            employed in the making of this company.
+          <h2
+            style={{ fontFamily: 'var(--font-serif), ui-serif, Georgia, serif' }}
+            className="text-3xl md:text-5xl font-semibold tracking-[-0.02em] text-white leading-[1.1] mb-3"
+          >
+            {c.thesisTitle}
+          </h2>
+          <p
+            style={{ fontFamily: 'var(--font-serif), ui-serif, Georgia, serif' }}
+            className="text-2xl md:text-3xl italic text-[#c4a35a] font-normal mb-10"
+          >
+            {c.thesisAccent}
           </p>
+          <p className="text-[16px] md:text-[17px] text-neutral-300 leading-[1.75] mb-10">{c.thesisBody}</p>
+          <Link
+            href="/kit"
+            className="inline-flex items-center justify-center text-sm text-[#c4a35a] hover:text-[#d4b46a] transition-colors"
+          >
+            {c.thesisCta}
+          </Link>
         </div>
-      </div>
-    </footer>
+      </section>
+
+      <div className="max-w-6xl mx-auto px-6"><div className="border-t border-white/[0.08]" /></div>
+
+      {/* Final CTA */}
+      <section className="py-32 px-6">
+        <div className="max-w-2xl mx-auto text-center">
+          <h2
+            style={{ fontFamily: 'var(--font-serif), ui-serif, Georgia, serif' }}
+            className="text-3xl md:text-5xl font-semibold text-white mb-6 leading-tight"
+          >
+            {c.ctaTitle}
+          </h2>
+          <p className="text-neutral-400 leading-relaxed mb-10">{c.ctaSub}</p>
+          <Link
+            href="/kit"
+            className="inline-flex items-center justify-center px-8 py-4 text-sm font-semibold bg-[#c4a35a] text-[#0a0a0a] rounded-full hover:bg-[#d4b46a] transition-colors shadow-[0_0_80px_-15px_#c4a35a88]"
+          >
+            {c.ctaBtn} →
+          </Link>
+          <div className="mt-6 text-[11px] text-neutral-600 font-mono">{c.trust}</div>
+        </div>
+      </section>
+
+      <footer className="py-16 px-6 border-t border-white/[0.05]">
+        <div className="max-w-6xl mx-auto text-center text-xs text-neutral-600 flex items-center justify-center gap-6 flex-wrap">
+          <span>© 2026 TalonForge</span>
+          <Link href="/kit" className="hover:text-white">{lang === 'en' ? 'The Kit' : 'المجموعة'}</Link>
+          <Link href="/store" className="hover:text-white">{lang === 'en' ? 'Catalog' : 'المتجر'}</Link>
+          <Link href="/dashboard" className="hover:text-white">{lang === 'en' ? 'Dashboard' : 'اللوحة'}</Link>
+          <Link href="/about" className="hover:text-white">{lang === 'en' ? 'About' : 'نبذة'}</Link>
+          <a href="https://x.com/TalonForgeHQ" target="_blank" rel="noopener noreferrer" className="hover:text-white">X</a>
+          <a href="https://t.me/TalonForgeHQ" target="_blank" rel="noopener noreferrer" className="hover:text-white">Telegram</a>
+        </div>
+      </footer>
+    </main>
   );
 }

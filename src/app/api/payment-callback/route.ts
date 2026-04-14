@@ -1,4 +1,5 @@
 import crypto from 'crypto';
+import { recordSale } from '@/lib/sales-tracker';
 
 export const dynamic = 'force-dynamic';
 
@@ -89,6 +90,18 @@ export async function POST(request: Request) {
     const price = Number(body.price_amount) || productPrice[productSlug] || 0;
 
     console.log(`[REVENUE] 💰 Sale confirmed: ${product} — $${price} USD — Payment: ${body.payment_id}`);
+
+    // Record sale in local tracker (fire-and-forget)
+    void recordSale({
+      order_id: orderId,
+      payment_id: String(body.payment_id),
+      product_id: productSlug,
+      product_name: product,
+      amount_usd: price,
+      pay_currency: String(body.price_currency || 'USD'),
+      status: String(body.payment_status),
+      timestamp: new Date().toISOString(),
+    });
 
     // Fire-and-forget Telegram alert to the ops channel so Potts hears the sale
     // within seconds, not at his next heartbeat cycle.
