@@ -108,16 +108,16 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.8,
     },
     {
-      url: `${BASE}/free-guide`,
+      url: `${BASE}/blog/the-arab-worlds-first-ai-company`,
       lastModified: now,
       changeFrequency: "monthly",
-      priority: 0.7,
+      priority: 0.6,
     },
     {
       url: `${BASE}/dashboard`,
       lastModified: now,
-      changeFrequency: "daily",
-      priority: 0.4,
+      changeFrequency: "hourly",
+      priority: 0.85,
     },
   ];
 }
