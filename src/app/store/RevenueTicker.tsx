@@ -72,7 +72,7 @@ export default function RevenueTicker({ lang }: { lang: 'en' | 'ar' }) {
 
   return (
     <div
-      className="mt-4 inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-ember/30 bg-ember/5 text-xs text-gray-300"
+      className="mt-4 inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-ember/30 bg-ember/5 text-xs text-neutral-300"
       aria-live="polite"
       aria-label={msg}
     >
@@ -82,7 +82,7 @@ export default function RevenueTicker({ lang }: { lang: 'en' | 'ar' }) {
       </span>
       <span className="text-ember font-medium">{t.prefix}</span>
       <span>{msg}</span>
-      <span className="text-gray-600">· {t.sinceLabel(data.since)}</span>
+      <span className="text-neutral-600">· {t.sinceLabel(data.since)}</span>
     </div>
   );
 }

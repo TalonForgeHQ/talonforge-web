@@ -1,9 +1,9 @@
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'The Kit — Hand your AI a file. Come back to a running company.',
+  title: 'The Kit — Hand your AI a file. Come back to a company.',
   description:
-    "An OpenClaw skill file. One command, ten questions, and your AI sets up identity, memory, safety rails, launch plan, and revenue roadmap. English or Gulf-native Arabic. $97. Pay in crypto.",
+    "An OpenClaw skill. One command, 10 questions, your AI sets up identity, memory, safety rails, launch plan, revenue roadmap. EN + AR. $97.",
   alternates: { canonical: 'https://talonforge.xyz/kit' },
   openGraph: {
     title: 'The Kit — Hand your AI a file. Come back to a running company.',

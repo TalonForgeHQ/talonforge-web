@@ -127,7 +127,7 @@ function ThanksContent() {
 
 export default function Thanks() {
   return (
-    <Suspense fallback={<div className="min-h-screen flex items-center justify-center text-gray-400">Loading...</div>}>
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center text-neutral-400">Loading...</div>}>
       <ThanksContent />
     </Suspense>
   );
