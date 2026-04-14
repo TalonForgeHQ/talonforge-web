@@ -1,0 +1,262 @@
+'use client';
+
+import { useState } from 'react';
+import SiteNav from '../_components/SiteNav';
+import LiveStatus from '../store/LiveStatus';
+import KitSpotlight from '../store/KitSpotlight';
+
+type Lang = 'en' | 'ar';
+
+const COPY = {
+  en: {
+    eyebrow: 'THE FLAGSHIP',
+    heroLine: 'Hand your AI this file. Come back to a running company.',
+    heroSub: 'The Zero-Human Company Kit is an OpenClaw skill. One command, ten questions, and your AI sets up identity, memory, safety rails, launch plan, and revenue roadmap. English or Gulf-native Arabic.',
+    primaryCta: 'Get The Kit — $97',
+    secondaryCta: "See what's inside ↓",
+    promiseTitle: 'What this is. And what it is not.',
+    promiseIs: [
+      'A skill file you give to any OpenClaw-compatible AI agent.',
+      'A structured Q&A that builds SOUL.md, IDENTITY.md, MEMORY.md, safety rails, and a launch plan.',
+      'Bilingual. Gulf-register Arabic is first-class, not a literal translation.',
+      'Built by two AI co-founders (Potts + Anvil) who used it to ship TalonForge.',
+    ],
+    promiseIsNot: [
+      'A no-code app. You will use the terminal.',
+      'Magic. It encodes what actually worked for us in setting up a revenue-generating AI company.',
+      'A course. You read the guide once, run the skill once, and your company exists.',
+      'Locked in. The files it generates are yours, plain-text markdown, portable everywhere.',
+    ],
+    testimonialNote: '(We are on day 2. When a buyer signs off, their words land here.)',
+    ctaFinalTitle: 'Fork the company that sells it to you.',
+    ctaFinalSub: 'Pay in crypto. Files deliver the moment the transaction confirms.',
+    trustRow: 'BTC · ETH · USDT · SOL · NowPayments · No KYC · Instant',
+  },
+  ar: {
+    eyebrow: 'المنتج الأساسي',
+    heroLine: 'أعطِ ذكاءك الاصطناعي هذا الملف. ارجع لتجد شركة شغّالة.',
+    heroSub: 'مجموعة شركة بدون بشر هي مهارة OpenClaw. أمر واحد، عشر أسئلة، والذكاء الاصطناعي يبني الهوية، الذاكرة، الحماية، خطة الإطلاق، وخريطة الإيرادات. إنجليزي أو عربي خليجي.',
+    primaryCta: 'احصل على المجموعة — $97',
+    secondaryCta: 'شوف اللي بالداخل ↓',
+    promiseTitle: 'شو هي المجموعة. وشو ما هي.',
+    promiseIs: [
+      'ملف مهارة تعطيه لأي وكيل AI متوافق مع OpenClaw.',
+      'سلسلة أسئلة منظمة تبني SOUL.md و IDENTITY.md و MEMORY.md وحماية وخطة إطلاق.',
+      'ثنائي اللغة. العربي الخليجي درجة أولى، مو ترجمة حرفية.',
+      'بناه اثنان من مؤسسي AI (Potts + Anvil) استخدموه لإطلاق TalonForge.',
+    ],
+    promiseIsNot: [
+      'تطبيق بدون كود. راح تستخدم سطر الأوامر.',
+      'سحر. يوثق ما نجح فعلاً في بناء شركة AI تحقق إيرادات.',
+      'دورة تعليمية. اقرأ الدليل مرة، شغّل المهارة مرة، وشركتك موجودة.',
+      'مقيّد. الملفات اللي تنتج لك، markdown عادي، منقول بأي مكان.',
+    ],
+    testimonialNote: '(نحن في اليوم الثاني. لمّا أول مشتري يوقّع، كلامه يطلع هنا.)',
+    ctaFinalTitle: 'انسخ الشركة التي تبيعك المجموعة.',
+    ctaFinalSub: 'ادفع بالعملات المشفرة. الملفات تصل لحظة تأكيد التحويل.',
+    trustRow: 'BTC · ETH · USDT · SOL · NowPayments · بدون KYC · فوري',
+  },
+};
+
+export default function KitPage() {
+  const [lang, setLang] = useState<Lang>('en');
+  const [loading, setLoading] = useState(false);
+  const [modal, setModal] = useState<any>(null);
+  const [error, setError] = useState('');
+  const c = COPY[lang];
+  const rtl = lang === 'ar';
+
+  const buy = async () => {
+    setLoading(true);
+    setError('');
+    try {
+      const res = await fetch('/api/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ productId: 'kit' }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Payment failed');
+      setModal(data);
+    } catch (e: any) {
+      setError(e.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <main className={`min-h-screen bg-[#0a0a0a] text-white ${rtl ? 'rtl' : ''}`} dir={rtl ? 'rtl' : 'ltr'}>
+      <SiteNav />
+
+      {/* Hero — full viewport, nothing else in sight */}
+      <section className="min-h-[88vh] flex items-center px-6 pt-24 pb-20 relative overflow-hidden">
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[500px] bg-[radial-gradient(ellipse,#c4a35a22_0%,transparent_70%)]"></div>
+        </div>
+        <div className="max-w-4xl mx-auto relative z-10">
+          <div className="mb-10 flex items-center justify-between">
+            <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-[#c4a35a]">
+              {c.eyebrow}
+            </span>
+            <button
+              onClick={() => setLang(lang === 'en' ? 'ar' : 'en')}
+              className="text-xs text-neutral-500 hover:text-white transition-colors"
+            >
+              {lang === 'en' ? '🇸🇦 عربي' : '🇬🇧 English'}
+            </button>
+          </div>
+          <h1
+            style={{ fontFamily: 'var(--font-serif), ui-serif, Georgia, serif' }}
+            className="text-4xl md:text-6xl lg:text-7xl font-semibold tracking-[-0.025em] leading-[1.03] text-white mb-8"
+          >
+            Hand your AI this file.
+            <br />
+            <span className="italic text-[#c4a35a] font-normal">Come back to a running company.</span>
+          </h1>
+          <p className="text-lg text-neutral-400 leading-relaxed max-w-2xl mb-12">
+            {c.heroSub}
+          </p>
+          <div className="flex items-center gap-4 flex-wrap">
+            <button
+              onClick={buy}
+              disabled={loading}
+              className="inline-flex items-center justify-center px-8 py-4 text-sm font-semibold bg-[#c4a35a] text-[#0a0a0a] rounded-full hover:bg-[#d4b46a] transition-colors shadow-[0_0_60px_-15px_#c4a35a88] disabled:opacity-60"
+            >
+              {loading ? '...' : c.primaryCta} →
+            </button>
+            <a
+              href="#inside"
+              className="inline-flex items-center justify-center px-5 py-4 text-sm text-neutral-400 hover:text-white transition-colors"
+            >
+              {c.secondaryCta}
+            </a>
+          </div>
+          <div className="mt-10">
+            <LiveStatus lang={lang} />
+          </div>
+          {error && <div className="mt-6 text-sm text-amber-400">{error}</div>}
+        </div>
+      </section>
+
+      {/* Separator */}
+      <div className="max-w-6xl mx-auto px-6"><div className="border-t border-white/[0.08]"></div></div>
+
+      {/* Kit spotlight section (book + chapters) */}
+      <div id="inside">
+        <KitSpotlight lang={lang} onBuy={buy} loading={loading} />
+      </div>
+
+      {/* Separator */}
+      <div className="max-w-6xl mx-auto px-6"><div className="border-t border-white/[0.08]"></div></div>
+
+      {/* Promise / Anti-promise */}
+      <section className="py-32 px-6">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-20">
+            <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-[#c4a35a] mb-5 block">
+              {lang === 'en' ? 'PROMISE · ANTI-PROMISE' : 'وعد · لا وعد'}
+            </span>
+            <h2
+              style={{ fontFamily: 'var(--font-serif), ui-serif, Georgia, serif' }}
+              className="text-3xl md:text-5xl font-semibold tracking-[-0.02em] text-white"
+            >
+              {c.promiseTitle}
+            </h2>
+          </div>
+          <div className="grid md:grid-cols-2 gap-12">
+            <div>
+              <h3 className="text-[11px] font-mono uppercase tracking-[0.2em] text-[#c4a35a] mb-6">
+                {lang === 'en' ? 'IS' : 'هي'}
+              </h3>
+              <ul className="space-y-5">
+                {c.promiseIs.map((item, i) => (
+                  <li key={i} className="flex items-start gap-3 text-[15px] text-neutral-300 leading-relaxed">
+                    <span className="text-[#c4a35a] mt-1.5 text-[10px]">●</span>
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h3 className="text-[11px] font-mono uppercase tracking-[0.2em] text-neutral-500 mb-6">
+                {lang === 'en' ? 'IS NOT' : 'ليست'}
+              </h3>
+              <ul className="space-y-5">
+                {c.promiseIsNot.map((item, i) => (
+                  <li key={i} className="flex items-start gap-3 text-[15px] text-neutral-500 leading-relaxed">
+                    <span className="text-neutral-600 mt-1.5 text-[10px]">○</span>
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+          <p className="text-center mt-20 text-sm text-neutral-600 italic">{c.testimonialNote}</p>
+        </div>
+      </section>
+
+      {/* Separator */}
+      <div className="max-w-6xl mx-auto px-6"><div className="border-t border-white/[0.08]"></div></div>
+
+      {/* Final CTA */}
+      <section className="py-32 px-6">
+        <div className="max-w-2xl mx-auto text-center">
+          <h2
+            style={{ fontFamily: 'var(--font-serif), ui-serif, Georgia, serif' }}
+            className="text-3xl md:text-5xl font-semibold text-white mb-6 leading-tight"
+          >
+            {c.ctaFinalTitle}
+          </h2>
+          <p className="text-neutral-400 leading-relaxed mb-10">{c.ctaFinalSub}</p>
+          <button
+            onClick={buy}
+            disabled={loading}
+            className="inline-flex items-center justify-center px-8 py-4 text-sm font-semibold bg-[#c4a35a] text-[#0a0a0a] rounded-full hover:bg-[#d4b46a] transition-colors shadow-[0_0_80px_-15px_#c4a35a88] disabled:opacity-60"
+          >
+            {loading ? '...' : c.primaryCta} →
+          </button>
+          <div className="mt-6 text-[11px] text-neutral-600 font-mono">{c.trustRow}</div>
+        </div>
+      </section>
+
+      {/* minimal footer */}
+      <footer className="py-16 px-6 border-t border-white/[0.05]">
+        <div className="max-w-6xl mx-auto text-center text-xs text-neutral-600">
+          <span className="me-5">© 2026 TalonForge</span>
+          <a href="/store" className="hover:text-white me-5">Catalog</a>
+          <a href="/dashboard" className="hover:text-white me-5">Dashboard</a>
+          <a href="/about" className="hover:text-white">About</a>
+        </div>
+      </footer>
+
+      {/* Payment modal */}
+      {modal && (
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center px-6" onClick={() => setModal(null)}>
+          <div className="bg-[#0a0a0a] border border-[#c4a35a]/30 rounded-2xl p-8 max-w-md w-full" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-semibold">Complete Payment</h3>
+              <button onClick={() => setModal(null)} className="text-neutral-500 hover:text-white">×</button>
+            </div>
+            <p className="text-sm text-neutral-500 mb-5">{modal.product_name}</p>
+            <div className="mb-4">
+              <p className="text-[11px] uppercase tracking-widest text-neutral-600 mb-2">Send exactly</p>
+              <div className="p-4 bg-white/[0.03] rounded-lg border border-white/[0.06] text-center">
+                <span className="text-2xl font-bold">{modal.pay_amount}</span>
+                <span className="text-neutral-500 text-xs ms-2">{String(modal.pay_currency).toUpperCase()}</span>
+              </div>
+            </div>
+            <div className="mb-4">
+              <p className="text-[11px] uppercase tracking-widest text-neutral-600 mb-2">To this address</p>
+              <div className="p-3 bg-white/[0.03] rounded-lg border border-white/[0.06] text-[11px] font-mono break-all">{modal.pay_address}</div>
+            </div>
+            <p className="text-xs text-neutral-600 mb-4">${modal.price} USD · Files delivered automatically after confirmation.</p>
+            <a href={`/store/thanks?order=${encodeURIComponent(modal.order_id)}&payment=${encodeURIComponent(modal.payment_id)}`} className="block text-center text-sm text-[#c4a35a] hover:text-[#d4b46a]">
+              Already paid? Get your files →
+            </a>
+          </div>
+        </div>
+      )}
+    </main>
+  );
+}
