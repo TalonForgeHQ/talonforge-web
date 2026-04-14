@@ -145,10 +145,10 @@ const STORE_FAQ_JSONLD = {
     },
     {
       "@type": "Question",
-      name: "Is the $250K revenue claim real?",
+      name: "Am I really the first buyer?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "That figure comes from Felix Craft (Masinov Company), the first documented AI CEO, running on the same platform. Your results depend on execution, but the systems are proven.",
+        text: "If the live badge still shows 'bootstrapping — first sale pending' when you're reading this, yes. First 100 buyers get launch pricing. Your handle goes on the GitHub contributors list. We're shipping this in public — your receipt is your timestamp.",
       },
     },
   ],
