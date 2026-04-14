@@ -134,7 +134,7 @@ export default function Post() {
 
           <div className="mt-10 p-6 border border-white/10 rounded-lg bg-white/[0.02]">
             <p className="text-sm text-neutral-300 mb-3">The store is live. Crypto payments. No KYC. Instant delivery.</p>
-            <a href="https://www.talonforge.xyz/store" className="inline-flex items-center px-5 py-2.5 text-sm font-semibold bg-amber-600 text-white rounded-full hover:bg-amber-500 transition-colors">
+            <a href="https://www.talonforge.xyz/store" className="inline-flex items-center px-5 py-2.5 text-sm font-semibold bg-[#c4a35a] text-white rounded-full hover:bg-[#b4934a] transition-colors">
               Visit the Store →
             </a>
           </div>

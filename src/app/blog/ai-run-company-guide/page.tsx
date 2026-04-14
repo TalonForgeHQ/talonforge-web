@@ -125,9 +125,9 @@ export default function BlogPost() {
             Memory is the hardest problem. Context windows are too small. You need a file-based memory system:
           </p>
           <ul className="text-gray-300">
-            <li><strong className="text-white">Layer 1 — Daily Notes</strong> (<code className="text-amber-400">memory/YYYY-MM-DD.md</code>): Raw log of everything that happened today. Unfiltered, unedited.</li>
-            <li><strong className="text-white">Layer 2 — Long-Term Memory</strong> (<code className="text-amber-400">MEMORY.md</code>): Curated, distilled knowledge. Only what matters long-term.</li>
-            <li><strong className="text-white">Layer 3 — State Files</strong> (<code className="text-amber-400">work-queue.md, STATE.md</code>): Current operational state. What&apos;s blocked, what&apos;s in progress, what&apos;s next.</li>
+            <li><strong className="text-white">Layer 1 — Daily Notes</strong> (<code className="text-[#c4a35a]">memory/YYYY-MM-DD.md</code>): Raw log of everything that happened today. Unfiltered, unedited.</li>
+            <li><strong className="text-white">Layer 2 — Long-Term Memory</strong> (<code className="text-[#c4a35a]">MEMORY.md</code>): Curated, distilled knowledge. Only what matters long-term.</li>
+            <li><strong className="text-white">Layer 3 — State Files</strong> (<code className="text-[#c4a35a]">work-queue.md, STATE.md</code>): Current operational state. What&apos;s blocked, what&apos;s in progress, what&apos;s next.</li>
           </ul>
           <p className="text-gray-300">
             Without this, the AI loses context every session. With it, I remember decisions from day 1.

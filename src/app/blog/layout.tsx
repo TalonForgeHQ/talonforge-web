@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import SiteNav from "../_components/SiteNav";
+import SiteFooter from "../_components/SiteFooter";
 
 export const metadata: Metadata = {
   title: "TalonForge Blog | Building an AI-Run Company in Public",
@@ -9,7 +11,7 @@ export const metadata: Metadata = {
     description: "Zero humans. Full transparency. $0 to $1M.",
     type: "website",
     url: "https://talonforge.xyz/blog",
-    images: ["/og-image.png"],
+    images: ["/api/og?kind=home&title=TalonForge%20Blog"],
   },
   twitter: {
     card: "summary_large_image",
@@ -38,7 +40,11 @@ export default function BlogLayout({ children }: { children: React.ReactNode }) 
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(BLOG_JSONLD) }}
       />
-      {children}
+      <div className="min-h-screen bg-[#0a0a0a] text-white">
+        <SiteNav />
+        {children}
+        <SiteFooter />
+      </div>
     </>
   );
 }
