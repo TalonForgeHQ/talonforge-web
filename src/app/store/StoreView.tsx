@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import LiveStatus from './LiveStatus';
 
 type Lang = 'en' | 'ar';
 
@@ -211,74 +212,88 @@ export default function StoreView({ defaultLang = 'en' }: { defaultLang?: Lang }
       </nav>
 
       {/* Hero */}
-      <section className="pt-40 pb-32 px-6">
-        <div className="max-w-5xl mx-auto text-center">
-          <p className="text-xs font-medium uppercase tracking-[0.2em] text-neutral-500 mb-8">{c.badge}</p>
-          <h1 className="text-5xl md:text-7xl font-bold tracking-[-0.035em] leading-[1.05] text-white max-w-3xl mx-auto mb-6">
+      <section className="pt-36 pb-28 px-6 relative overflow-hidden">
+        {/* Warm gold gradient underglow */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-[radial-gradient(ellipse,#c4a35a22_0%,transparent_70%)]"></div>
+        </div>
+        <div className="max-w-5xl mx-auto text-center relative z-10">
+          <div className="mb-8 flex justify-center">
+            <LiveStatus lang={lang} />
+          </div>
+          <h1
+            style={{ fontFamily: 'var(--font-serif), ui-serif, Georgia, serif' }}
+            className="text-5xl md:text-7xl font-semibold tracking-[-0.025em] leading-[1.02] text-white max-w-3xl mx-auto mb-6"
+          >
             {c.heroLine}
           </h1>
           <p className="text-lg text-neutral-400 max-w-xl mx-auto leading-relaxed mb-10">
             {c.heroSub}
           </p>
-          <a
-            href="#products"
-            className="inline-flex items-center justify-center px-8 py-3.5 text-sm font-medium bg-white text-black rounded-full hover:bg-neutral-200 transition-colors"
-          >
-            {c.heroCTA}
-          </a>
+          <div className="flex items-center justify-center gap-3">
+            <a
+              href="#products"
+              className="inline-flex items-center justify-center px-7 py-3 text-sm font-medium bg-[#c4a35a] text-[#0a0a0a] rounded-full hover:bg-[#d4b46a] transition-colors shadow-[0_0_40px_-10px_#c4a35a66]"
+            >
+              {c.heroCTA}
+            </a>
+            <a
+              href="#howto"
+              className="inline-flex items-center justify-center px-5 py-3 text-sm font-medium text-neutral-400 hover:text-white transition-colors"
+            >
+              {lang === 'en' ? 'How it works →' : 'كيف يعمل ←'}
+            </a>
+          </div>
+          <p className="mt-10 text-[11px] font-mono uppercase tracking-[0.2em] text-neutral-600">
+            {c.badge}
+          </p>
         </div>
       </section>
 
-      {/* Products */}
-      <section id="products" className="py-32 px-6">
+      {/* Starter — impulse strip above the main grid */}
+      <section id="products" className="pt-24 pb-6 px-6">
         <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-20">
-            <h2 className="text-3xl md:text-4xl font-semibold tracking-tight text-white mb-3">{c.productsTitle}</h2>
+          <button
+            onClick={() => handleBuy('starter')}
+            disabled={loading === 'starter'}
+            className="w-full group rounded-2xl border border-[#c4a35a]/25 bg-gradient-to-r from-[#c4a35a]/[0.04] to-transparent hover:border-[#c4a35a]/50 transition-colors p-5 md:p-6 flex flex-col md:flex-row items-start md:items-center gap-4 md:gap-6 text-left disabled:opacity-60"
+          >
+            <div className="px-2.5 py-1 rounded-full bg-[#c4a35a] text-[#0a0a0a] text-[10px] font-bold tracking-widest uppercase flex-shrink-0">
+              {c.starter.badge}
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className="flex items-baseline gap-3 mb-1 flex-wrap">
+                <h3 className="text-lg font-semibold text-white">{c.starter.name}</h3>
+                <span className="text-xs text-neutral-500">{c.starter.tagline}</span>
+              </div>
+              <p className="text-sm text-neutral-400 leading-relaxed">{c.starter.desc}</p>
+            </div>
+            <div className="flex items-center gap-4 flex-shrink-0 ms-auto">
+              <div className="flex items-baseline gap-2">
+                <span className="text-2xl font-bold text-white">{c.starter.price}</span>
+                <span className="text-xs text-neutral-600 line-through">{c.starter.oldPrice}</span>
+              </div>
+              <span className="text-[#c4a35a] group-hover:translate-x-1 transition-transform text-sm font-semibold">
+                {loading === 'starter' ? c.loading : (lang === 'en' ? 'Buy →' : 'اشترِ ←')}
+              </span>
+            </div>
+          </button>
+        </div>
+      </section>
+
+      {/* Main products */}
+      <section className="pt-12 pb-32 px-6">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 style={{ fontFamily: 'var(--font-serif), ui-serif, Georgia, serif' }} className="text-3xl md:text-4xl font-semibold tracking-tight text-white mb-3">{c.productsTitle}</h2>
             <p className="text-sm text-neutral-500">{c.productsSub}</p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {/* Starter Pack — $9 entry tier */}
-            <div className="rounded-2xl border border-white/[0.08] bg-white/[0.02] p-8 flex flex-col relative">
-              <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 px-3 py-1 bg-emerald-400 text-black text-[10px] font-semibold tracking-widest uppercase rounded-full">
-                {c.starter.badge}
-              </div>
-              <div className="flex items-center justify-between mb-1 mt-2">
-                <h3 className="text-xl font-semibold text-white">{c.starter.name}</h3>
-                <span className="text-[10px] font-mono uppercase tracking-widest text-neutral-600">MD</span>
-              </div>
-              <p className="text-sm text-neutral-500 italic mb-5">{c.starter.tagline}</p>
-              <p className="text-sm text-neutral-400 leading-relaxed mb-6 flex-grow">{c.starter.desc}</p>
-              <ul className="space-y-2.5 mb-8">
-                {c.starter.features.map((f, i) => (
-                  <li key={i} className="flex items-start gap-2.5 text-sm text-neutral-400">
-                    <span className="text-neutral-600 mt-0.5 text-[10px]">●</span>
-                    <span>{f}</span>
-                  </li>
-                ))}
-              </ul>
-              <div className="border-t border-white/[0.06] pt-6">
-                <div className="flex items-baseline justify-between mb-5">
-                  <div className="flex items-baseline gap-2">
-                    <span className="text-3xl font-bold text-white">{c.starter.price}</span>
-                    <span className="text-sm text-neutral-600 line-through">{c.starter.oldPrice}</span>
-                  </div>
-                  <span className="text-[11px] text-neutral-600">{lang === 'en' ? 'One-time' : 'دفعة واحدة'}</span>
-                </div>
-                <button
-                  onClick={() => handleBuy('starter')}
-                  disabled={loading === 'starter'}
-                  className="w-full py-3 text-sm font-medium border border-emerald-400/40 text-emerald-400 rounded-xl hover:bg-emerald-400/10 transition-colors disabled:opacity-50"
-                >
-                  {loading === 'starter' ? c.loading : c.starter.cta}
-                </button>
-              </div>
-            </div>
-
+          <div className="grid md:grid-cols-3 gap-5 items-stretch">
             {/* Blueprint */}
             <div className="rounded-2xl border border-white/[0.08] bg-white/[0.02] p-8 flex flex-col">
               <div className="flex items-center justify-between mb-1">
-                <h3 className="text-xl font-semibold text-white">{c.blueprint.name}</h3>
+                <h3 style={{ fontFamily: 'var(--font-serif), ui-serif, Georgia, serif' }} className="text-xl font-semibold text-white">{c.blueprint.name}</h3>
                 <span className="text-[10px] font-mono uppercase tracking-widest text-neutral-600">PDF</span>
               </div>
               <p className="text-sm text-neutral-500 italic mb-5">{c.blueprint.tagline}</p>
@@ -309,37 +324,37 @@ export default function StoreView({ defaultLang = 'en' }: { defaultLang?: Lang }
               </div>
             </div>
 
-            {/* Kit */}
-            <div className="rounded-2xl border border-white/[0.12] bg-white/[0.03] p-8 flex flex-col relative">
-              <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 px-3 py-1 bg-white text-black text-[10px] font-semibold tracking-widest uppercase rounded-full">
+            {/* Kit — FEATURED: gold accent, scaled up */}
+            <div className="rounded-2xl border border-[#c4a35a]/40 bg-gradient-to-b from-[#c4a35a]/[0.07] to-[#c4a35a]/[0.02] p-8 md:py-10 flex flex-col relative shadow-[0_0_80px_-20px_#c4a35a33] md:-my-4">
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 px-3 py-1 bg-[#c4a35a] text-[#0a0a0a] text-[10px] font-bold tracking-widest uppercase rounded-full">
                 {c.kit.badge}
               </div>
               <div className="flex items-center justify-between mb-1 mt-2">
-                <h3 className="text-xl font-semibold text-white">{c.kit.name}</h3>
-                <span className="text-[10px] font-mono uppercase tracking-widest text-neutral-600">SKILL</span>
+                <h3 style={{ fontFamily: 'var(--font-serif), ui-serif, Georgia, serif' }} className="text-2xl font-semibold text-white">{c.kit.name}</h3>
+                <span className="text-[10px] font-mono uppercase tracking-widest text-[#c4a35a]">SKILL</span>
               </div>
-              <p className="text-sm text-neutral-500 italic mb-5">{c.kit.tagline}</p>
-              <p className="text-sm text-neutral-400 leading-relaxed mb-6 flex-grow">{c.kit.desc}</p>
+              <p className="text-sm text-[#c4a35a]/80 italic mb-5">{c.kit.tagline}</p>
+              <p className="text-sm text-neutral-300 leading-relaxed mb-6 flex-grow">{c.kit.desc}</p>
               <ul className="space-y-2.5 mb-8">
                 {c.kit.features.map((f, i) => (
-                  <li key={i} className="flex items-start gap-2.5 text-sm text-neutral-300">
-                    <span className="text-neutral-600 mt-0.5 text-[10px]">●</span>
+                  <li key={i} className="flex items-start gap-2.5 text-sm text-neutral-200">
+                    <span className="text-[#c4a35a] mt-0.5 text-[10px]">●</span>
                     <span>{f}</span>
                   </li>
                 ))}
               </ul>
-              <div className="border-t border-white/[0.06] pt-6">
+              <div className="border-t border-[#c4a35a]/15 pt-6">
                 <div className="flex items-baseline justify-between mb-5">
                   <div className="flex items-baseline gap-2">
-                    <span className="text-3xl font-bold text-white">{c.kit.price}</span>
+                    <span className="text-4xl font-bold text-white">{c.kit.price}</span>
                     <span className="text-sm text-neutral-600 line-through">{c.kit.oldPrice}</span>
                   </div>
-                  <span className="text-[11px] text-neutral-600">{lang === 'en' ? 'One-time' : 'دفعة واحدة'}</span>
+                  <span className="text-[11px] text-neutral-500">{lang === 'en' ? 'One-time' : 'دفعة واحدة'}</span>
                 </div>
                 <button
                   onClick={() => handleBuy('kit')}
                   disabled={loading === 'kit'}
-                  className="w-full py-3 text-sm font-medium bg-white text-black rounded-xl hover:bg-neutral-200 transition-colors disabled:opacity-50"
+                  className="w-full py-3.5 text-sm font-semibold bg-[#c4a35a] text-[#0a0a0a] rounded-xl hover:bg-[#d4b46a] transition-colors disabled:opacity-50 shadow-[0_0_40px_-10px_#c4a35a88]"
                 >
                   {loading === 'kit' ? c.loading : c.kit.cta}
                 </button>
@@ -348,11 +363,11 @@ export default function StoreView({ defaultLang = 'en' }: { defaultLang?: Lang }
 
             {/* Toolbox */}
             <div className="rounded-2xl border border-white/[0.08] bg-white/[0.02] p-8 flex flex-col relative">
-              <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 px-3 py-1 bg-amber-400 text-black text-[10px] font-semibold tracking-widest uppercase rounded-full">
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 px-3 py-1 bg-white text-black text-[10px] font-semibold tracking-widest uppercase rounded-full">
                 {c.toolbox.badge}
               </div>
               <div className="flex items-center justify-between mb-1 mt-2">
-                <h3 className="text-xl font-semibold text-white">{c.toolbox.name}</h3>
+                <h3 style={{ fontFamily: 'var(--font-serif), ui-serif, Georgia, serif' }} className="text-xl font-semibold text-white">{c.toolbox.name}</h3>
                 <span className="text-[10px] font-mono uppercase tracking-widest text-neutral-600">BUNDLE</span>
               </div>
               <p className="text-sm text-neutral-500 italic mb-5">{c.toolbox.tagline}</p>
@@ -376,24 +391,61 @@ export default function StoreView({ defaultLang = 'en' }: { defaultLang?: Lang }
                 <button
                   onClick={() => handleBuy('toolbox')}
                   disabled={loading === 'toolbox'}
-                  className="w-full py-3 text-sm font-medium border border-amber-400/40 text-amber-400 rounded-xl hover:bg-amber-400/10 transition-colors disabled:opacity-50"
+                  className="w-full py-3 text-sm font-medium border border-white/[0.15] rounded-xl text-white hover:bg-white/[0.05] transition-colors disabled:opacity-50"
                 >
                   {loading === 'toolbox' ? c.loading : c.toolbox.cta}
                 </button>
               </div>
             </div>
           </div>
+
+          {/* Level-up tier: Bundle + Premium */}
+          <div className="mt-8 grid md:grid-cols-2 gap-5">
+            <button
+              onClick={() => handleBuy('bundle')}
+              disabled={loading === 'bundle'}
+              className="group rounded-xl border border-white/[0.08] hover:border-[#c4a35a]/40 bg-white/[0.015] p-6 flex items-center justify-between text-left transition-colors disabled:opacity-60"
+            >
+              <div>
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-[10px] font-mono uppercase tracking-widest text-[#c4a35a]">{lang === 'en' ? 'EVERYTHING BUNDLE' : 'الحزمة الكاملة'}</span>
+                </div>
+                <div className="text-sm text-neutral-300">{lang === 'en' ? 'Blueprint + Kit + 3 skill files — save $52' : 'الدليل + المجموعة + 3 مهارات — وفّر $52'}</div>
+              </div>
+              <div className="flex items-baseline gap-2">
+                <span className="text-2xl font-bold text-white">$97</span>
+                <span className="text-xs text-neutral-600 line-through">$149</span>
+                <span className="text-[#c4a35a] ms-2 group-hover:translate-x-1 transition-transform">→</span>
+              </div>
+            </button>
+            <button
+              onClick={() => handleBuy('premium')}
+              disabled={loading === 'premium'}
+              className="group rounded-xl border border-white/[0.08] hover:border-[#c4a35a]/40 bg-white/[0.015] p-6 flex items-center justify-between text-left transition-colors disabled:opacity-60"
+            >
+              <div>
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-[10px] font-mono uppercase tracking-widest text-[#c4a35a]">{lang === 'en' ? 'AI COMPANY IN A BOX' : 'شركة AI متكاملة'}</span>
+                </div>
+                <div className="text-sm text-neutral-300">{lang === 'en' ? 'Everything Bundle + priority support from TalonForge' : 'الحزمة الكاملة + دعم فوري من TalonForge'}</div>
+              </div>
+              <div className="flex items-baseline gap-2">
+                <span className="text-2xl font-bold text-white">$147</span>
+                <span className="text-[#c4a35a] ms-2 group-hover:translate-x-1 transition-transform">→</span>
+              </div>
+            </button>
+          </div>
         </div>
       </section>
 
       {/* How it works */}
-      <section className="py-32 px-6 border-t border-white/[0.05]">
+      <section id="howto" className="py-32 px-6 border-t border-white/[0.05]">
         <div className="max-w-5xl mx-auto">
-          <h2 className="text-3xl md:text-4xl font-semibold tracking-tight text-white text-center mb-20">{c.howTitle}</h2>
+          <h2 style={{ fontFamily: 'var(--font-serif), ui-serif, Georgia, serif' }} className="text-3xl md:text-4xl font-semibold tracking-tight text-white text-center mb-20">{c.howTitle}</h2>
           <div className="grid md:grid-cols-4 gap-8">
             {c.steps.map((s, i) => (
               <div key={i} className="text-center">
-                <span className="block text-xs font-mono text-neutral-600 mb-4">0{i + 1}</span>
+                <span className="inline-block mb-4 w-7 h-7 leading-7 rounded-full text-[11px] font-mono text-[#c4a35a] border border-[#c4a35a]/30">0{i + 1}</span>
                 <h3 className="text-base font-semibold text-white mb-2">{s.t}</h3>
                 <p className="text-sm text-neutral-500 leading-relaxed">{s.d}</p>
               </div>
@@ -403,12 +455,12 @@ export default function StoreView({ defaultLang = 'en' }: { defaultLang?: Lang }
       </section>
 
       {/* Proof */}
-      <section className="py-32 px-6 border-t border-white/[0.05]">
+      <section className="py-24 px-6 border-t border-white/[0.05]">
         <div className="max-w-5xl mx-auto">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {c.proof.map((p, i) => (
               <div key={i} className="text-center">
-                <div className="text-3xl md:text-4xl font-bold text-white mb-2">{p.val}</div>
+                <div style={{ fontFamily: 'var(--font-serif), ui-serif, Georgia, serif' }} className="text-3xl md:text-4xl font-semibold text-[#c4a35a] mb-2">{p.val}</div>
                 <div className="text-xs text-neutral-500">{p.label}</div>
               </div>
             ))}
@@ -419,7 +471,7 @@ export default function StoreView({ defaultLang = 'en' }: { defaultLang?: Lang }
       {/* FAQ */}
       <section className="py-32 px-6 border-t border-white/[0.05]">
         <div className="max-w-2xl mx-auto">
-          <h2 className="text-3xl md:text-4xl font-semibold tracking-tight text-white text-center mb-16">{c.faqTitle}</h2>
+          <h2 style={{ fontFamily: 'var(--font-serif), ui-serif, Georgia, serif' }} className="text-3xl md:text-4xl font-semibold tracking-tight text-white text-center mb-16">{c.faqTitle}</h2>
           <div>
             {c.faqs.map((f, i) => (
               <div key={i} className="border-b border-white/[0.06]">

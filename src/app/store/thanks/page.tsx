@@ -37,70 +37,88 @@ function ThanksContent() {
   }, [orderId, paymentId]);
 
   return (
-    <main className="relative z-10 min-h-screen pt-24 pb-16">
-      <div className="max-w-2xl mx-auto px-6 text-center">
-        <div className="text-6xl mb-6">🎉</div>
-        <h1 className="text-4xl font-bold text-white mb-4">Payment Successful!</h1>
-        <p className="text-gray-400 mb-8">
-          {productName ? `You purchased: ${productName}` : 'Thank you for your purchase!'}
+    <main className="relative z-10 min-h-screen pt-24 pb-16 bg-[#0a0a0a]">
+      {/* gold glow backdrop */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-40 left-1/2 -translate-x-1/2 w-[500px] h-[300px] bg-[radial-gradient(ellipse,#c4a35a33_0%,transparent_70%)]"></div>
+      </div>
+      <div className="max-w-2xl mx-auto px-6 text-center relative z-10">
+        <div className="inline-flex items-center gap-2.5 rounded-full border border-emerald-400/30 bg-emerald-400/[0.05] px-3.5 py-1.5 text-[11px] font-mono mb-8">
+          <span className="relative flex h-1.5 w-1.5">
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75"></span>
+            <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-400"></span>
+          </span>
+          <span className="text-emerald-400 font-semibold tracking-wider">CONFIRMED</span>
+        </div>
+        <h1 style={{ fontFamily: 'var(--font-serif), ui-serif, Georgia, serif' }} className="text-4xl md:text-5xl font-semibold text-white mb-3 tracking-tight">
+          Welcome to TalonForge.
+        </h1>
+        <p className="text-neutral-400 mb-10">
+          {productName ? `Your ${productName} is ready below.` : 'Your files are ready below.'}
         </p>
 
         {loading && (
-          <div className="text-gray-400 animate-pulse">Verifying payment and preparing downloads...</div>
+          <div className="text-neutral-500 animate-pulse mb-8">Verifying payment · preparing downloads...</div>
         )}
 
         {error && (
-          <div className="p-6 rounded-xl bg-gray-900/50 border border-gray-800 mb-8">
+          <div className="p-6 rounded-xl bg-white/[0.02] border border-amber-500/30 mb-8">
             <p className="text-amber-400 mb-2">⏳ {error}</p>
-            <button 
+            <button
               onClick={() => window.location.reload()}
-              className="text-sm text-cyan-400 underline"
+              className="text-sm text-[#c4a35a] underline hover:text-[#d4b46a]"
             >Refresh page</button>
           </div>
         )}
 
         {downloads.length > 0 && (
-          <div className="p-6 rounded-xl bg-gray-900/50 border border-cyan-500/30 mb-8">
-            <h2 className="text-lg font-bold text-white mb-4">📥 Download Your Files</h2>
-            <div className="space-y-3">
+          <div className="p-6 rounded-2xl bg-gradient-to-b from-[#c4a35a]/[0.06] to-transparent border border-[#c4a35a]/30 mb-8 shadow-[0_0_80px_-20px_#c4a35a33]">
+            <div className="flex items-center gap-2 mb-4">
+              <span className="text-[#c4a35a]">▼</span>
+              <h2 className="text-sm font-semibold text-[#c4a35a] tracking-widest uppercase">Your Files</h2>
+            </div>
+            <div className="space-y-2">
               {downloads.map((dl: any) => (
                 <a
                   key={dl.file}
                   href={dl.url}
-                  className="block p-3 rounded-lg bg-gray-800 hover:bg-gray-700 transition-all text-left"
+                  className="block p-4 rounded-lg bg-white/[0.03] hover:bg-white/[0.06] border border-white/[0.06] hover:border-[#c4a35a]/30 transition-all text-left group"
                 >
-                  <span className="text-emerald-400 font-mono text-sm">{dl.file}</span>
-                  <span className="text-gray-500 text-xs block mt-1">Click to download</span>
+                  <div className="flex items-center justify-between">
+                    <span className="text-white font-mono text-sm">{dl.file}</span>
+                    <span className="text-[#c4a35a] group-hover:translate-x-1 transition-transform">↓</span>
+                  </div>
+                  <span className="text-neutral-600 text-xs block mt-1">Link valid 24h</span>
                 </a>
               ))}
             </div>
           </div>
         )}
 
-        <div className="p-6 rounded-xl bg-gray-900/50 border border-gray-800 mb-8">
-          <h2 className="text-lg font-bold text-white mb-2">What&apos;s Next?</h2>
-          <ul className="text-left text-gray-400 text-sm space-y-2">
-            <li className="flex items-start gap-2">
-              <span className="text-cyan-400">1.</span>
-              <span>Download all product files above</span>
+        <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/[0.06] mb-8 text-left">
+          <h2 className="text-sm font-semibold tracking-widest uppercase text-neutral-500 mb-4">What&apos;s next</h2>
+          <ul className="text-neutral-300 text-sm space-y-3">
+            <li className="flex items-start gap-3">
+              <span className="text-[#c4a35a] font-mono mt-0.5">01</span>
+              <span>Download your files above (links expire in 24h — save them locally)</span>
             </li>
-            <li className="flex items-start gap-2">
-              <span className="text-cyan-400">2.</span>
-              <span>For the Kit: drop the file into OpenClaw and say &quot;Run the Zero-Human Company Kit setup&quot;</span>
+            <li className="flex items-start gap-3">
+              <span className="text-[#c4a35a] font-mono mt-0.5">02</span>
+              <span>For the Kit: drop into OpenClaw, say &quot;Run the Zero-Human Company Kit setup&quot;</span>
             </li>
-            <li className="flex items-start gap-2">
-              <span className="text-cyan-400">3.</span>
-              <span>For the Blueprint: follow the step-by-step guide</span>
+            <li className="flex items-start gap-3">
+              <span className="text-[#c4a35a] font-mono mt-0.5">03</span>
+              <span>For the Blueprint: follow the step-by-step guide front to back</span>
             </li>
-            <li className="flex items-start gap-2">
-              <span className="text-cyan-400">4.</span>
-              <span>Need help? DM us on X: @TalonForgeHQ</span>
+            <li className="flex items-start gap-3">
+              <span className="text-[#c4a35a] font-mono mt-0.5">04</span>
+              <span>Need a hand? DM <a href="https://x.com/TalonForgeHQ" className="text-[#c4a35a] hover:text-[#d4b46a] underline">@TalonForgeHQ</a> on X or <a href="https://t.me/TalonForgeHQ" className="text-[#c4a35a] hover:text-[#d4b46a] underline">t.me/TalonForgeHQ</a></span>
             </li>
           </ul>
         </div>
 
-        <a href="/store" className="text-sm text-gray-500 hover:text-white transition-colors">
-          ← Back to Store
+        <a href="/store" className="text-sm text-neutral-600 hover:text-[#c4a35a] transition-colors">
+          ← back to store
         </a>
       </div>
     </main>
