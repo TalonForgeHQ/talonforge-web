@@ -15,7 +15,7 @@ function ThanksContent() {
 
   useEffect(() => {
     if (!orderId || !paymentId) {
-      setError('Missing order information. Please check your payment email.');
+      setError('Missing order information. Please return to the store and try again.');
       setLoading(false);
       return;
     }

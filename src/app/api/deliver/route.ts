@@ -8,7 +8,11 @@ import { rateLimit, getClientIp, tooManyRequests } from "@/lib/rate-limit";
 
 export const dynamic = "force-dynamic";
 
-const PRODUCTS: Record<"blueprint" | "kit", { files: string[]; name: string }> = {
+const PRODUCTS: Record<"blueprint" | "kit" | "toolbox" | "bundle" | "premium" | "starter", { files: string[]; name: string }> = {
+  starter: {
+    name: "AI Founder Starter Pack",
+    files: ["starter-en.md", "starter-ar.md"],
+  },
   blueprint: {
     name: "Zero-Human Company Blueprint",
     files: ["blueprint-en.md", "blueprint-ar.md"],
@@ -17,12 +21,41 @@ const PRODUCTS: Record<"blueprint" | "kit", { files: string[]; name: string }> =
     name: "Zero-Human Company Kit",
     files: ["blueprint-en.md", "blueprint-ar.md", "kit-en.md", "kit-ar.md"],
   },
+  toolbox: {
+    name: "AI Company Starter Toolbox",
+    files: ["toolbox-en.md", "toolbox-ar.md", "toolbox-ja.md"],
+  },
+  bundle: {
+    name: "Everything Bundle — 5 Products",
+    files: [
+      "blueprint-en.md",
+      "blueprint-ar.md",
+      "kit-en.md",
+      "kit-ar.md",
+      "skill-memory-system.md",
+      "skill-safety-rails.md",
+      "skill-launch-blitz.md",
+    ],
+  },
+  premium: {
+    name: "AI Company in a Box — Bundle + Priority Support",
+    files: [
+      "blueprint-en.md",
+      "blueprint-ar.md",
+      "kit-en.md",
+      "kit-ar.md",
+      "skill-memory-system.md",
+      "skill-safety-rails.md",
+      "skill-launch-blitz.md",
+      "premium-support-welcome.md",
+    ],
+  },
 };
 
 type ProductId = keyof typeof PRODUCTS;
 
 function isProductId(x: string): x is ProductId {
-  return x === "blueprint" || x === "kit";
+  return x === "blueprint" || x === "kit" || x === "toolbox" || x === "bundle" || x === "premium" || x === "starter";
 }
 
 export async function GET(request: NextRequest) {

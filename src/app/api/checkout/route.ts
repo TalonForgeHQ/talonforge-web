@@ -8,10 +8,15 @@ import { rateLimit, getClientIp, tooManyRequests, rateLimitHeaders } from "@/lib
 
 export const dynamic = "force-dynamic";
 
-type ProductId = "blueprint" | "kit";
+type ProductId = "blueprint" | "kit" | "toolbox" | "bundle" | "premium" | "starter";
 type Product = { name: string; price: number; desc: string };
 
 const PRODUCTS: Record<ProductId, Product> = {
+  starter: {
+    name: "AI Founder Starter Pack — 100 X-Post Templates (EN + AR)",
+    price: 9,
+    desc: "100 plug-and-play X post templates across 10 categories. English + Gulf-native Arabic. Impulse-price entry into the TalonForge stack.",
+  },
   blueprint: {
     name: "Zero-Human Company Blueprint (EN + AR)",
     price: 29,
@@ -22,10 +27,32 @@ const PRODUCTS: Record<ProductId, Product> = {
     price: 97,
     desc: "Auto-setup kit — give to your AI and it builds your company",
   },
+  toolbox: {
+    name: "AI Company Starter Toolbox (EN + AR + JA)",
+    price: 49,
+    desc: "13 pre-wired free AI tools + Apify pipeline + 7-day launch plan",
+  },
+  bundle: {
+    name: "Everything Bundle — Blueprint + Kit + 3 Skills (EN + AR)",
+    price: 97,
+    desc: "All 5 products: Blueprint, Kit, Memory / Safety / Launch skills. $149 value.",
+  },
+  premium: {
+    name: "AI Company in a Box — Bundle + Priority Support (EN + AR)",
+    price: 147,
+    desc: "Everything in the Bundle plus priority email/Telegram support from TalonForge.",
+  },
 };
 
 function isProductId(x: unknown): x is ProductId {
-  return x === "blueprint" || x === "kit";
+  return (
+    x === "blueprint" ||
+    x === "kit" ||
+    x === "toolbox" ||
+    x === "bundle" ||
+    x === "premium" ||
+    x === "starter"
+  );
 }
 
 // Accept requests only from our own origin (or direct curl with no origin —

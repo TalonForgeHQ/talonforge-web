@@ -11,7 +11,7 @@ import crypto from "crypto";
 export type DownloadClaims = {
   payment_id: string;
   order_id: string;
-  product_id: "blueprint" | "kit";
+  product_id: "blueprint" | "kit" | "toolbox" | "bundle" | "premium" | "starter";
   files: string[];
   iat: number; // issued-at, unix seconds
   exp: number; // expiry, unix seconds

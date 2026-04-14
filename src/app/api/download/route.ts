@@ -12,10 +12,19 @@ import { rateLimit, getClientIp } from "@/lib/rate-limit";
 export const dynamic = "force-dynamic";
 
 const VALID_FILES = new Set([
+  "starter-en.md",
+  "starter-ar.md",
   "blueprint-en.md",
   "blueprint-ar.md",
   "kit-en.md",
   "kit-ar.md",
+  "toolbox-en.md",
+  "toolbox-ar.md",
+  "toolbox-ja.md",
+  "skill-memory-system.md",
+  "skill-safety-rails.md",
+  "skill-launch-blitz.md",
+  "premium-support-welcome.md",
 ]);
 
 export async function GET(request: NextRequest) {

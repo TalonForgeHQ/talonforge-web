@@ -47,7 +47,16 @@ async function fetchPaymentsPage(apiKey: string, limit: number, offset: number) 
   return body.data ?? [];
 }
 
-export async function GET(): Promise<Response> {
+export async function GET(request: Request): Promise<Response> {
+  // API key authentication — require X-Revenue-Key header matching REVENUE_API_KEY env var
+  const revenueApiKey = process.env.REVENUE_API_KEY;
+  if (revenueApiKey) {
+    const providedKey = request.headers.get("X-Revenue-Key");
+    if (providedKey !== revenueApiKey) {
+      return Response.json({ error: "Unauthorized" }, { status: 401 });
+    }
+  }
+
   const apiKey = process.env.NOWPAYMENTS_API_KEY;
   const now = new Date().toISOString();
 
