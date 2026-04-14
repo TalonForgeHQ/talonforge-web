@@ -3,6 +3,10 @@ import { NextResponse } from 'next/server';
 // Fetches recent commits across the TalonForgeHQ org and renders them as the
 // dashboard activity feed. Replaces the previous VPS-file-reading
 // implementation, which was invisible to Vercel's serverless functions.
+//
+// INTENTIONALLY UNAUTHENTICATED. The REPOS list below is a hard allowlist of
+// PUBLIC repos (anyone can already browse them on github.com). If we ever add
+// a private repo to this file, the endpoint has to move behind auth first.
 
 export const revalidate = 60;
 
