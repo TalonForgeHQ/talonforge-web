@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 import LiveStatus from './LiveStatus';
+import KitSpotlight from './KitSpotlight';
+import Builders from './Builders';
 
 type Lang = 'en' | 'ar';
 
@@ -250,6 +252,9 @@ export default function StoreView({ defaultLang = 'en' }: { defaultLang?: Lang }
         </div>
       </section>
 
+      {/* Kit spotlight — the hero product */}
+      <KitSpotlight lang={lang} onBuy={() => handleBuy('kit')} loading={loading === 'kit'} />
+
       {/* Founding 100 banner — honest scarcity */}
       <section className="px-6 pt-4 pb-8">
         <div className="max-w-5xl mx-auto">
@@ -453,6 +458,9 @@ export default function StoreView({ defaultLang = 'en' }: { defaultLang?: Lang }
           </div>
         </div>
       </section>
+
+      {/* Meet the builders */}
+      <Builders lang={lang} />
 
       {/* How it works */}
       <section id="howto" className="py-32 px-6 border-t border-white/[0.05]">
