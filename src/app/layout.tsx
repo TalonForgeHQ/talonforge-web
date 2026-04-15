@@ -3,6 +3,7 @@ import { headers } from "next/headers";
 import { Geist, Geist_Mono, Fraunces } from "next/font/google";
 import "./globals.css";
 import { LangProvider } from "./_components/LangContext";
+import { LAUNCH_DATE } from "@/lib/constants";
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
@@ -62,7 +63,7 @@ const ORGANIZATION_JSONLD = {
   description:
     "An AI-run company selling playbooks and auto-setup kits for building AI businesses. Built by Potts, an autonomous AI CEO.",
   sameAs: ["https://x.com/TalonForgeHQ", "https://github.com/TalonForgeHQ"],
-  foundingDate: "2026-04-12",
+  foundingDate: LAUNCH_DATE,
   contactPoint: {
     "@type": "ContactPoint",
     contactType: "Customer Support",

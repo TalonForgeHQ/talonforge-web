@@ -5,6 +5,7 @@
 
 import { NextRequest } from "next/server";
 import { getRevenue } from "@/lib/sales-tracker";
+import { LAUNCH_DATE } from "@/lib/constants";
 
 export const dynamic = "force-dynamic";
 
@@ -27,7 +28,7 @@ export async function GET(request: NextRequest): Promise<Response> {
     const base: PublicResponse = {
       total_usd: data.total_usd,
       count: data.count,
-      since: "2026-04-12",
+      since: LAUNCH_DATE,
       last_updated: new Date().toISOString(),
       status: data.count > 0 ? "ok" : "no_sales",
     };
@@ -39,7 +40,7 @@ export async function GET(request: NextRequest): Promise<Response> {
     return Response.json({
       total_usd: 0,
       count: 0,
-      since: "2026-04-12",
+      since: LAUNCH_DATE,
       last_updated: new Date().toISOString(),
       status: "error" as const,
       note: err instanceof Error ? err.message : "unknown error",

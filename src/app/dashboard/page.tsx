@@ -102,7 +102,7 @@ const COPY = {
   },
 };
 
-const LAUNCH = '2026-04-12';
+import { LAUNCH_DATE as LAUNCH } from '@/lib/constants';
 
 function formatUsd(n: number) {
   return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(n);
