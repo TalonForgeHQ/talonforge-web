@@ -29,7 +29,7 @@ const VALID_FILES = new Set([
 
 export async function GET(request: NextRequest) {
   const ip = getClientIp(request);
-  const rl = rateLimit({ key: `download:${ip}`, limit: 30, windowSec: 60 });
+  const rl = await rateLimit({ key: `download:${ip}`, limit: 30, windowSec: 60 });
   if (!rl.allowed) {
     return new Response("Too many requests", {
       status: 429,

@@ -1,5 +1,30 @@
 import crypto from 'crypto';
+import { kv } from '@vercel/kv';
 import { recordSale } from '@/lib/sales-tracker';
+
+const kvEnabled = Boolean(process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN);
+
+// Returns true if this payment_id has already been processed. When KV is
+// configured we use it as a distributed idempotency store; otherwise we
+// degrade to a process-local Set (better than nothing, not bulletproof).
+const seenLocal = new Set<string>();
+async function isDuplicate(paymentId: string): Promise<boolean> {
+  if (!kvEnabled) {
+    if (seenLocal.has(paymentId)) return true;
+    seenLocal.add(paymentId);
+    return false;
+  }
+  try {
+    // `set` with `nx: true` + `ex: 7 days` = "set if not exists, expire in 7d"
+    const set = await kv.set(`pay:idempotent:${paymentId}`, '1', { nx: true, ex: 60 * 60 * 24 * 7 });
+    // @vercel/kv returns "OK" on success, null when the key already exists
+    return set === null;
+  } catch {
+    // KV unreachable — fail open (process the callback). Better to double-fire
+    // than to drop a legitimate sale. Dedupe upstream in recordSale anyway.
+    return false;
+  }
+}
 
 export const dynamic = 'force-dynamic';
 
@@ -68,6 +93,11 @@ export async function POST(request: Request) {
   console.log(`[PAYMENT] ${body.payment_id}: ${body.payment_status} — $${body.price_amount} ${body.price_currency}`);
 
   if (body.payment_status === 'finished' || body.payment_status === 'confirmed') {
+    if (await isDuplicate(String(body.payment_id))) {
+      console.log(`[PAYMENT] ${body.payment_id}: duplicate callback, skipping side effects`);
+      return Response.json({ status: 'ok', duplicate: true });
+    }
+
     const orderId = typeof body.order_id === 'string' ? body.order_id : '';
     const productSlug = orderId.split('-')[0]; // blueprint / kit / toolbox / bundle / premium
     const productName: Record<string, string> = {
@@ -124,7 +154,6 @@ export async function POST(request: Request) {
       });
     }
 
-    // TODO: idempotent KV store of processed payment_id (prevents duplicate fire on IPN retries)
   }
 
   return Response.json({ status: 'ok' });

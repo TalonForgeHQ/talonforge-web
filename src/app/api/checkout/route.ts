@@ -78,7 +78,7 @@ function validOrigin(request: Request): boolean {
 export async function POST(request: Request) {
   // --- Rate limit ---
   const ip = getClientIp(request);
-  const rl = rateLimit({ key: `checkout:${ip}`, limit: 10, windowSec: 60 });
+  const rl = await rateLimit({ key: `checkout:${ip}`, limit: 10, windowSec: 60 });
   if (!rl.allowed) return tooManyRequests(rl);
 
   // --- CSRF guards ---

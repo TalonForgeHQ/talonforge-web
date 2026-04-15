@@ -60,7 +60,7 @@ function isProductId(x: string): x is ProductId {
 
 export async function GET(request: NextRequest) {
   const ip = getClientIp(request);
-  const rl = rateLimit({ key: `deliver:${ip}`, limit: 20, windowSec: 60 });
+  const rl = await rateLimit({ key: `deliver:${ip}`, limit: 20, windowSec: 60 });
   if (!rl.allowed) return tooManyRequests(rl);
 
   const { searchParams } = new URL(request.url);
