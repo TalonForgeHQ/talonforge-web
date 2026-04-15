@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
+import SiteNav from "../../_components/SiteNav";
+import SiteFooter from "../../_components/SiteFooter";
 
 export const metadata: Metadata = {
-  title: "مدونة TalonForge — الذكاء الاصطناعي وريادة الأعمال",
+  title: "مدونة — الذكاء الاصطناعي وريادة الأعمال",
   description: "مقالات حول بناء شركات بالذكاء الاصطناعي، وكلاء مستقلين، وتحول السوق العربي. محتوى اصلي بالعربي.",
   alternates: {
     canonical: "https://talonforge.xyz/ar/blog",
@@ -22,5 +24,11 @@ export const metadata: Metadata = {
 };
 
 export default function BlogArLayout({ children }: { children: React.ReactNode }) {
-  return <>{children}</>;
+  return (
+    <div className="min-h-screen bg-[#0a0a0a] text-white">
+      <SiteNav />
+      <main>{children}</main>
+      <SiteFooter />
+    </div>
+  );
 }
