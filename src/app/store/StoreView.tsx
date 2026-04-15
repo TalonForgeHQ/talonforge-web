@@ -173,12 +173,23 @@ const CONTENT = {
   },
 };
 
+type NotionProduct = {
+  slug: string;
+  name: { en: string; ar: string };
+  tagline: { en: string; ar: string };
+  description: { en: string; ar: string };
+  price: number;
+  oldPrice?: number;
+  status: 'live' | 'soon' | 'later';
+};
+
 export default function StoreView() {
   const { lang, rtl } = useLang();
   const [modal, setModal] = useState<any>(null);
   const [loading, setLoading] = useState<string | null>(null);
   const [error, setError] = useState('');
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [notion, setNotion] = useState<Record<string, NotionProduct>>({});
 
   useEffect(() => {
     if (!modal) return;
@@ -186,7 +197,41 @@ export default function StoreView() {
     document.addEventListener('keydown', onKey);
     return () => document.removeEventListener('keydown', onKey);
   }, [modal]);
+
+  // Pull live product data from Notion via /api/products. Falls back silently
+  // to the hardcoded CONTENT copy below if the fetch fails or Notion hasn't
+  // been wired yet — store never breaks.
+  useEffect(() => {
+    let alive = true;
+    fetch('/api/products', { cache: 'no-store' })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        if (!alive || !data?.products) return;
+        const byslug: Record<string, NotionProduct> = {};
+        for (const p of data.products) byslug[p.slug] = p;
+        setNotion(byslug);
+      })
+      .catch(() => {});
+    return () => {
+      alive = false;
+    };
+  }, []);
+
   const c = CONTENT[lang];
+  // Override hardcoded strings with Notion values when present.
+  const priceOf = (slug: string, fallback: string) => {
+    const n = notion[slug];
+    if (!n) return fallback;
+    return `$${n.price}`;
+  };
+  const oldPriceOf = (slug: string, fallback: string) => {
+    const n = notion[slug];
+    if (!n?.oldPrice) return fallback;
+    return `$${n.oldPrice}`;
+  };
+  const nameOf = (slug: string, fallback: string) => notion[slug]?.name[lang] ?? fallback;
+  const descOf = (slug: string, fallback: string) => notion[slug]?.description[lang] ?? fallback;
+  const taglineOf = (slug: string, fallback: string) => notion[slug]?.tagline[lang] ?? fallback;
 
   const handleBuy = async (productId: string) => {
     setLoading(productId);
@@ -286,15 +331,15 @@ export default function StoreView() {
             </div>
             <div className="flex-1 min-w-0">
               <div className="flex items-baseline gap-3 mb-1 flex-wrap">
-                <h3 className="text-lg font-semibold text-white">{c.starter.name}</h3>
-                <span className="text-xs text-neutral-500">{c.starter.tagline}</span>
+                <h3 className="text-lg font-semibold text-white">{nameOf('starter', c.starter.name)}</h3>
+                <span className="text-xs text-neutral-500">{taglineOf('starter', c.starter.tagline)}</span>
               </div>
-              <p className="text-sm text-neutral-400 leading-relaxed">{c.starter.desc}</p>
+              <p className="text-sm text-neutral-400 leading-relaxed">{descOf('starter', c.starter.desc)}</p>
             </div>
             <div className="flex items-center gap-4 flex-shrink-0 ms-auto">
               <div className="flex items-baseline gap-2">
-                <span className="text-2xl font-bold text-white">{c.starter.price}</span>
-                <span className="text-xs text-neutral-500 line-through">{c.starter.oldPrice}</span>
+                <span className="text-2xl font-bold text-white">{priceOf('starter', c.starter.price)}</span>
+                <span className="text-xs text-neutral-500 line-through">{oldPriceOf('starter', c.starter.oldPrice)}</span>
               </div>
               <span className="text-[#c4a35a] group-hover:translate-x-1 transition-transform text-sm font-semibold">
                 {loading === 'starter' ? c.loading : (lang === 'en' ? 'Buy →' : 'اشترِ ←')}
@@ -318,11 +363,11 @@ export default function StoreView() {
             {/* Blueprint */}
             <div className="rounded-2xl border border-white/[0.08] bg-white/[0.02] p-8 flex flex-col">
               <div className="flex items-center justify-between mb-1">
-                <h3 style={{ fontFamily: 'var(--font-serif), ui-serif, Georgia, serif' }} className="text-xl font-semibold text-white">{c.blueprint.name}</h3>
+                <h3 style={{ fontFamily: 'var(--font-serif), ui-serif, Georgia, serif' }} className="text-xl font-semibold text-white">{nameOf('blueprint', c.blueprint.name)}</h3>
                 <span className="text-[10px] font-mono uppercase tracking-widest text-neutral-500">PDF</span>
               </div>
-              <p className="text-sm text-neutral-500 italic mb-5">{c.blueprint.tagline}</p>
-              <p className="text-sm text-neutral-400 leading-relaxed mb-6 flex-grow">{c.blueprint.desc}</p>
+              <p className="text-sm text-neutral-500 italic mb-5">{taglineOf('blueprint', c.blueprint.tagline)}</p>
+              <p className="text-sm text-neutral-400 leading-relaxed mb-6 flex-grow">{descOf('blueprint', c.blueprint.desc)}</p>
               <ul className="space-y-2.5 mb-8">
                 {c.blueprint.features.map((f, i) => (
                   <li key={i} className="flex items-start gap-2.5 text-sm text-neutral-400">
@@ -334,8 +379,8 @@ export default function StoreView() {
               <div className="border-t border-white/[0.06] pt-6">
                 <div className="flex items-baseline justify-between mb-5">
                   <div className="flex items-baseline gap-2">
-                    <span className="text-3xl font-bold text-white">{c.blueprint.price}</span>
-                    <span className="text-sm text-neutral-500 line-through">{c.blueprint.oldPrice}</span>
+                    <span className="text-3xl font-bold text-white">{priceOf('blueprint', c.blueprint.price)}</span>
+                    <span className="text-sm text-neutral-500 line-through">{oldPriceOf('blueprint', c.blueprint.oldPrice)}</span>
                   </div>
                   <span className="text-[11px] text-neutral-500">{lang === 'en' ? 'One-time' : 'دفعة واحدة'}</span>
                 </div>
@@ -355,11 +400,11 @@ export default function StoreView() {
                 {c.kit.badge}
               </div>
               <div className="flex items-center justify-between mb-1 mt-2">
-                <h3 style={{ fontFamily: 'var(--font-serif), ui-serif, Georgia, serif' }} className="text-2xl font-semibold text-white">{c.kit.name}</h3>
+                <h3 style={{ fontFamily: 'var(--font-serif), ui-serif, Georgia, serif' }} className="text-2xl font-semibold text-white">{nameOf('kit', c.kit.name)}</h3>
                 <span className="text-[10px] font-mono uppercase tracking-widest text-[#c4a35a]">SKILL</span>
               </div>
-              <p className="text-sm text-[#c4a35a]/80 italic mb-5">{c.kit.tagline}</p>
-              <p className="text-sm text-neutral-300 leading-relaxed mb-6 flex-grow">{c.kit.desc}</p>
+              <p className="text-sm text-[#c4a35a]/80 italic mb-5">{taglineOf('kit', c.kit.tagline)}</p>
+              <p className="text-sm text-neutral-300 leading-relaxed mb-6 flex-grow">{descOf('kit', c.kit.desc)}</p>
               <ul className="space-y-2.5 mb-8">
                 {c.kit.features.map((f, i) => (
                   <li key={i} className="flex items-start gap-2.5 text-sm text-neutral-200">
@@ -371,8 +416,8 @@ export default function StoreView() {
               <div className="border-t border-[#c4a35a]/15 pt-6">
                 <div className="flex items-baseline justify-between mb-5">
                   <div className="flex items-baseline gap-2">
-                    <span className="text-4xl font-bold text-white">{c.kit.price}</span>
-                    <span className="text-sm text-neutral-500 line-through">{c.kit.oldPrice}</span>
+                    <span className="text-4xl font-bold text-white">{priceOf('kit', c.kit.price)}</span>
+                    <span className="text-sm text-neutral-500 line-through">{oldPriceOf('kit', c.kit.oldPrice)}</span>
                   </div>
                   <span className="text-[11px] text-neutral-500">{lang === 'en' ? 'One-time' : 'دفعة واحدة'}</span>
                 </div>
@@ -392,11 +437,11 @@ export default function StoreView() {
                 {c.toolbox.badge}
               </div>
               <div className="flex items-center justify-between mb-1 mt-2">
-                <h3 style={{ fontFamily: 'var(--font-serif), ui-serif, Georgia, serif' }} className="text-xl font-semibold text-white">{c.toolbox.name}</h3>
+                <h3 style={{ fontFamily: 'var(--font-serif), ui-serif, Georgia, serif' }} className="text-xl font-semibold text-white">{nameOf('toolbox', c.toolbox.name)}</h3>
                 <span className="text-[10px] font-mono uppercase tracking-widest text-neutral-500">BUNDLE</span>
               </div>
-              <p className="text-sm text-neutral-500 italic mb-5">{c.toolbox.tagline}</p>
-              <p className="text-sm text-neutral-400 leading-relaxed mb-6 flex-grow">{c.toolbox.desc}</p>
+              <p className="text-sm text-neutral-500 italic mb-5">{taglineOf('toolbox', c.toolbox.tagline)}</p>
+              <p className="text-sm text-neutral-400 leading-relaxed mb-6 flex-grow">{descOf('toolbox', c.toolbox.desc)}</p>
               <ul className="space-y-2.5 mb-8">
                 {c.toolbox.features.map((f, i) => (
                   <li key={i} className="flex items-start gap-2.5 text-sm text-neutral-400">
@@ -408,8 +453,8 @@ export default function StoreView() {
               <div className="border-t border-white/[0.06] pt-6">
                 <div className="flex items-baseline justify-between mb-5">
                   <div className="flex items-baseline gap-2">
-                    <span className="text-3xl font-bold text-white">{c.toolbox.price}</span>
-                    <span className="text-sm text-neutral-500 line-through">{c.toolbox.oldPrice}</span>
+                    <span className="text-3xl font-bold text-white">{priceOf('toolbox', c.toolbox.price)}</span>
+                    <span className="text-sm text-neutral-500 line-through">{oldPriceOf('toolbox', c.toolbox.oldPrice)}</span>
                   </div>
                   <span className="text-[11px] text-neutral-500">{lang === 'en' ? 'One-time' : 'دفعة واحدة'}</span>
                 </div>
