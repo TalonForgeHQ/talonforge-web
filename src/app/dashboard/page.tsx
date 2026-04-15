@@ -5,6 +5,7 @@ import SiteNav from '../_components/SiteNav';
 import SiteFooter from '../_components/SiteFooter';
 import { useLang } from '../_components/LangContext';
 import { useAnimatedNumber } from '../_components/useAnimatedNumber';
+import { useRevenue } from '../_components/useRevenue';
 
 type Rev = { total_usd: number; count: number; status?: string };
 type Commit = {
@@ -111,24 +112,20 @@ function formatUsd(n: number) {
 export default function Dashboard() {
   const { lang, rtl } = useLang();
   const c = COPY[lang];
-  const [rev, setRev] = useState<Rev | null>(null);
+  const rev = useRevenue();
   const [activity, setActivity] = useState<Activity | null>(null);
 
   useEffect(() => {
     let alive = true;
     const tick = () => {
-      fetch('/api/revenue', { cache: 'no-store' })
-        .then((r) => (r.ok ? r.json() : null))
-        .then((d) => {
-          if (alive && d) setRev(d);
-        })
-        .catch(() => {});
       fetch('/api/activity', { cache: 'no-store' })
         .then((r) => (r.ok ? r.json() : null))
         .then((d) => {
           if (alive && d) setActivity(d);
         })
-        .catch(() => {});
+        .catch((e) => {
+          if (alive) console.error('[dashboard] activity fetch failed:', e);
+        });
     };
     tick();
     const id = setInterval(tick, 30_000);
@@ -140,11 +137,10 @@ export default function Dashboard() {
 
   const commits = activity?.commits ?? [];
 
-  const amount = rev?.total_usd ?? 0;
-  const count = rev?.count ?? 0;
-  const animatedAmount = useAnimatedNumber(amount, 1400);
-  const animatedCount = useAnimatedNumber(count, 1000);
-  const pctToTarget = Math.min(100, (amount / 1_000_000) * 100);
+  const animatedAmount = useAnimatedNumber(rev.total_usd, 1400);
+  const animatedCount = useAnimatedNumber(rev.count, 1000);
+  const pctToTarget = Math.min(100, (rev.total_usd / 1_000_000) * 100);
+  const isError = rev.status === 'error';
 
   return (
     <main dir={rtl ? 'rtl' : 'ltr'} className="min-h-screen bg-[#0a0a0a] text-white">
@@ -176,10 +172,17 @@ export default function Dashboard() {
             </div>
             <div
               style={{ fontFamily: 'var(--font-serif), ui-serif, Georgia, serif' }}
-              className="text-7xl md:text-[10rem] font-semibold text-[#c4a35a] leading-none tabular-nums tracking-[-0.04em]"
+              className={`text-7xl md:text-[10rem] font-semibold leading-none tabular-nums tracking-[-0.04em] ${
+                isError ? 'text-amber-400/80' : 'text-[#c4a35a]'
+              }`}
             >
-              {formatUsd(Math.round(animatedAmount))}
+              {isError ? '—' : formatUsd(Math.round(animatedAmount))}
             </div>
+            {isError && (
+              <div className="mt-3 text-[11px] font-mono uppercase tracking-[0.22em] text-amber-400/80">
+                {lang === 'en' ? 'SALES API UNREACHABLE · RETRYING' : 'خدمة البيع غير متاحة · إعادة محاولة'}
+              </div>
+            )}
             <div className="mt-5 flex items-center justify-center gap-5 text-[11px] font-mono uppercase tracking-[0.22em] text-neutral-500">
               <span>
                 {Math.round(animatedCount)} {c.ordersLabel}
@@ -207,7 +210,7 @@ export default function Dashboard() {
             </div>
           </div>
 
-          {amount === 0 && (
+          {!isError && rev.total_usd === 0 && (
             <p className="mt-10 text-sm text-neutral-500 italic">
               {c.firstSalePending}
             </p>

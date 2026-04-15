@@ -1,13 +1,11 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
 import SiteNav from './_components/SiteNav';
 import SiteFooter from './_components/SiteFooter';
 import { useLang } from './_components/LangContext';
 import { useAnimatedNumber } from './_components/useAnimatedNumber';
-
-type Rev = { total_usd: number; count: number };
+import { useRevenue } from './_components/useRevenue';
 
 const COPY = {
   en: {
@@ -109,17 +107,8 @@ function formatUsd(n: number) {
 export default function Home() {
   const { lang, rtl } = useLang();
   const c = COPY[lang];
-  const [rev, setRev] = useState<Rev | null>(null);
-
-  useEffect(() => {
-    fetch('/api/revenue', { cache: 'no-store' })
-      .then((r) => (r.ok ? r.json() : null))
-      .then((d) => d && setRev(d))
-      .catch(() => {});
-  }, []);
-
-  const amount = rev?.total_usd ?? 0;
-  const animatedAmount = useAnimatedNumber(amount, 1400);
+  const rev = useRevenue();
+  const animatedAmount = useAnimatedNumber(rev.total_usd, 1400);
 
   return (
     <main dir={rtl ? 'rtl' : 'ltr'} className="min-h-screen bg-[#0a0a0a] text-white">
@@ -167,12 +156,24 @@ export default function Home() {
           {/* tiny live revenue pill, centered */}
           <div className="inline-flex items-center gap-3 px-4 py-2 border border-white/[0.08] rounded-full text-[11px] font-mono">
             <span className="flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-              <span className="uppercase tracking-[0.22em] text-emerald-400/90">{c.liveBadge}</span>
+              <span
+                className={`w-1.5 h-1.5 rounded-full animate-pulse ${
+                  rev.status === 'error' ? 'bg-amber-400' : 'bg-emerald-400'
+                }`}
+              />
+              <span
+                className={`uppercase tracking-[0.22em] ${
+                  rev.status === 'error' ? 'text-amber-400/90' : 'text-emerald-400/90'
+                }`}
+              >
+                {rev.status === 'error' ? (lang === 'en' ? 'RECONNECTING' : 'اتصال') : c.liveBadge}
+              </span>
             </span>
             <span className="text-neutral-500">·</span>
             <span className="text-neutral-500 uppercase tracking-[0.18em]">{c.lifetime}</span>
-            <span className="text-[#c4a35a] tabular-nums">{formatUsd(Math.round(animatedAmount))}</span>
+            <span className="text-[#c4a35a] tabular-nums">
+              {rev.status === 'error' ? '—' : formatUsd(Math.round(animatedAmount))}
+            </span>
           </div>
         </div>
       </section>
