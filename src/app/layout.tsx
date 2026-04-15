@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { headers } from "next/headers";
 import { Geist, Geist_Mono, Fraunces } from "next/font/google";
 import "./globals.css";
 import { LangProvider } from "./_components/LangContext";
@@ -78,9 +79,18 @@ const WEBSITE_JSONLD = {
   publisher: { "@type": "Organization", name: "TalonForge" },
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  // Middleware forwards x-pathname so we can set lang + dir at SSR based on route.
+  // /ar/* routes ship with lang="ar" dir="rtl" on the root html element so
+  // Google, screen readers, and browsers see the correct language on first paint.
+  const h = await headers();
+  const pathname = h.get("x-pathname") || "";
+  const isArabic = pathname === "/ar" || pathname.startsWith("/ar/");
+  const lang = isArabic ? "ar" : "en";
+  const dir = isArabic ? "rtl" : "ltr";
+
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable} ${fraunces.variable} h-full antialiased`}>
+    <html lang={lang} dir={dir} className={`${geistSans.variable} ${geistMono.variable} ${fraunces.variable} h-full antialiased`}>
       <head>
         <link rel="icon" href="/favicon.ico" />
         <link rel="dns-prefetch" href="https://api.fontshare.com" />
