@@ -7,7 +7,6 @@ import { useLang } from '../_components/LangContext';
 import { useAnimatedNumber } from '../_components/useAnimatedNumber';
 import { useRevenue } from '../_components/useRevenue';
 
-type Rev = { total_usd: number; count: number; status?: string };
 type Commit = {
   sha: string;
   message: string;
