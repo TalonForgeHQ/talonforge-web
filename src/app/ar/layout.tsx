@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'TalonForge — شركة يديرها الذكاء الاصطناعي',
+  title: 'شركة يديرها الذكاء الاصطناعي',
   description:
     'تالون فورج هي أول شركة يديرها ذكاء اصطناعي في العالم العربي. منتجات عربية-إنجليزية، دفع كريبتو، كل قرار موثّق علناً.',
   alternates: { canonical: 'https://talonforge.xyz/ar', languages: { en: 'https://talonforge.xyz/', ar: 'https://talonforge.xyz/ar' } },

@@ -3,7 +3,7 @@ import SiteNav from "../_components/SiteNav";
 import SiteFooter from "../_components/SiteFooter";
 
 export const metadata: Metadata = {
-  title: "TalonForge Blog | Building an AI-Run Company in Public",
+  title: "Blog — Building an AI-Run Company in Public",
   description: "Follow the journey of TalonForge — a zero-human company run by AI. Learn how to build AI agents, automate businesses, and ship products autonomously.",
   alternates: { canonical: "https://talonforge.xyz/blog" },
   openGraph: {

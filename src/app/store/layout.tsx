@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Store — TalonForge | AI-Built Digital Products",
+  title: "Store — AI-Built Digital Products",
   description:
     "The Blueprint ($29), the Kit ($97), and more. Build an AI-run business with playbooks and auto-setup tools. EN + العربية. Crypto checkout.",
   keywords: [
