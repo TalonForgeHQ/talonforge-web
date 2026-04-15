@@ -7,18 +7,32 @@
 //     -H "Content-Type: application/json" \
 //     -d '{"paths":["/press","/ar","/api/products"]}'
 
+import crypto from 'crypto';
 import { NextRequest, NextResponse } from 'next/server';
 import { revalidatePath } from 'next/cache';
+import { getClientIp, rateLimit, tooManyRequests } from '@/lib/rate-limit';
 
 export const dynamic = 'force-dynamic';
 
+function timingSafeEq(a: string, b: string): boolean {
+  const aa = Buffer.from(a);
+  const bb = Buffer.from(b);
+  if (aa.length !== bb.length) return false;
+  return crypto.timingSafeEqual(aa, bb);
+}
+
 export async function POST(request: NextRequest) {
+  // Tight rate limit — this endpoint triggers rebuilds, expensive if abused.
+  const ip = getClientIp(request);
+  const rl = await rateLimit({ key: `revalidate:${ip}`, limit: 10, windowSec: 60 });
+  if (!rl.allowed) return tooManyRequests(rl);
+
   const token = process.env.REVALIDATE_TOKEN;
   if (!token) {
     return NextResponse.json({ error: 'not configured' }, { status: 503 });
   }
-  const provided = request.headers.get('X-Revalidate-Token');
-  if (provided !== token) {
+  const provided = request.headers.get('X-Revalidate-Token') ?? '';
+  if (!timingSafeEq(provided, token)) {
     return NextResponse.json({ error: 'unauthorized' }, { status: 401 });
   }
 
