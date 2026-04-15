@@ -1,27 +1,33 @@
 import crypto from 'crypto';
-import { kv } from '@vercel/kv';
+import { getRedis, redisEnabled } from '@/lib/redis';
 import { recordSale } from '@/lib/sales-tracker';
 
-const kvEnabled = Boolean(process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN);
-
-// Returns true if this payment_id has already been processed. When KV is
+// Returns true if this payment_id has already been processed. When Redis is
 // configured we use it as a distributed idempotency store; otherwise we
 // degrade to a process-local Set (better than nothing, not bulletproof).
 const seenLocal = new Set<string>();
+const WEEK_SEC = 60 * 60 * 24 * 7;
+
 async function isDuplicate(paymentId: string): Promise<boolean> {
-  if (!kvEnabled) {
+  if (!redisEnabled) {
+    if (seenLocal.has(paymentId)) return true;
+    seenLocal.add(paymentId);
+    return false;
+  }
+  const redis = getRedis();
+  if (!redis) {
     if (seenLocal.has(paymentId)) return true;
     seenLocal.add(paymentId);
     return false;
   }
   try {
-    // `set` with `nx: true` + `ex: 7 days` = "set if not exists, expire in 7d"
-    const set = await kv.set(`pay:idempotent:${paymentId}`, '1', { nx: true, ex: 60 * 60 * 24 * 7 });
-    // @vercel/kv returns "OK" on success, null when the key already exists
-    return set === null;
+    // SET NX EX — atomic "set if not exists, expire in 7d"
+    const result = await redis.set(`pay:idempotent:${paymentId}`, '1', 'EX', WEEK_SEC, 'NX');
+    // ioredis returns 'OK' on success, null when the key already exists
+    return result === null;
   } catch {
-    // KV unreachable — fail open (process the callback). Better to double-fire
-    // than to drop a legitimate sale. Dedupe upstream in recordSale anyway.
+    // Redis unreachable — fail open (process the callback). Better to double-
+    // fire than to drop a legitimate sale. Dedupe upstream in recordSale anyway.
     return false;
   }
 }
