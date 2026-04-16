@@ -127,39 +127,48 @@ export async function POST(request: Request) {
 
     console.log(`[REVENUE] 💰 Sale confirmed: ${product} — $${price} USD — Payment: ${body.payment_id}`);
 
-    // Record sale in local tracker (fire-and-forget)
-    void recordSale({
-      order_id: orderId,
-      payment_id: String(body.payment_id),
-      product_id: productSlug,
-      product_name: product,
-      amount_usd: price,
-      pay_currency: String(body.price_currency || 'USD'),
-      status: String(body.payment_status),
-      timestamp: new Date().toISOString(),
-    });
-
-    // Fire-and-forget Telegram alert to the ops channel so Potts hears the sale
-    // within seconds, not at his next heartbeat cycle.
-    void notifyTelegramSale({
-      product,
-      price,
-      paymentId: String(body.payment_id),
-      currency: String(body.price_currency || 'USD'),
-      orderId,
-    });
-
-    // Fire-and-forget email delivery (if RESEND_API_KEY + customer email present)
+    // Run every downstream side effect in parallel and capture rejections.
+    // If ANY of them fail silently we lose visibility into real sales — Potts
+    // doesn't hear the Telegram alert, customer doesn't get email, etc.
     const customerEmail = typeof body.customer_email === 'string' ? body.customer_email : '';
-    if (customerEmail) {
-      void sendDeliveryEmail({
-        to: customerEmail,
+    const tasks: Array<Promise<unknown>> = [
+      recordSale({
+        order_id: orderId,
+        payment_id: String(body.payment_id),
+        product_id: productSlug,
+        product_name: product,
+        amount_usd: price,
+        pay_currency: String(body.price_currency || 'USD'),
+        status: String(body.payment_status),
+        timestamp: new Date().toISOString(),
+      }),
+      notifyTelegramSale({
         product,
+        price,
         paymentId: String(body.payment_id),
+        currency: String(body.price_currency || 'USD'),
         orderId,
-      });
+      }),
+    ];
+    const taskNames = ['recordSale', 'notifyTelegramSale'];
+    if (customerEmail) {
+      tasks.push(
+        sendDeliveryEmail({
+          to: customerEmail,
+          product,
+          paymentId: String(body.payment_id),
+          orderId,
+        }),
+      );
+      taskNames.push('sendDeliveryEmail');
     }
-
+    const results = await Promise.allSettled(tasks);
+    const failures = results
+      .map((r, i) => (r.status === 'rejected' ? `${taskNames[i]}: ${r.reason instanceof Error ? r.reason.message : String(r.reason)}` : null))
+      .filter((x): x is string => x !== null);
+    if (failures.length > 0) {
+      console.error(`[PAYMENT] ${body.payment_id}: ${failures.length}/${tasks.length} side effects failed:`, failures);
+    }
   }
 
   return Response.json({ status: 'ok' });

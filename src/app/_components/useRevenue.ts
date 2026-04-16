@@ -20,10 +20,11 @@ export function useRevenue(intervalMs = 30_000): RevenueState {
 
   useEffect(() => {
     let alive = true;
+    const controller = new AbortController();
 
     const tick = async () => {
       try {
-        const res = await fetch('/api/revenue', { cache: 'no-store' });
+        const res = await fetch('/api/revenue', { cache: 'no-store', signal: controller.signal });
         if (!res.ok) {
           if (alive) setState((prev) => ({ ...prev, status: 'error', error: `HTTP ${res.status}` }));
           return;
@@ -37,7 +38,6 @@ export function useRevenue(intervalMs = 30_000): RevenueState {
         };
         if (!alive) return;
 
-        // Trust server's explicit status field. If it reports error, propagate.
         if (data.status === 'error') {
           setState({
             total_usd: data.total_usd ?? 0,
@@ -56,6 +56,8 @@ export function useRevenue(intervalMs = 30_000): RevenueState {
           last_updated: data.last_updated,
         });
       } catch (e) {
+        // AbortError fires on cleanup — that's expected, not a real failure.
+        if (e instanceof Error && e.name === 'AbortError') return;
         if (alive) {
           setState((prev) => ({
             ...prev,
@@ -70,6 +72,7 @@ export function useRevenue(intervalMs = 30_000): RevenueState {
     const id = setInterval(tick, intervalMs);
     return () => {
       alive = false;
+      controller.abort();
       clearInterval(id);
     };
   }, [intervalMs]);

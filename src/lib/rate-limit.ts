@@ -57,13 +57,21 @@ function rateLimitLocal(opts: { key: string; limit: number; windowSec: number })
 }
 
 // --- Redis-backed limiter (distributed) ---
+// Atomic INCR + EXPIRE via pipeline. Without this, if the connection drops
+// between the two commands, a key can be incremented but never expired —
+// leaving a user locked out indefinitely.
 async function rateLimitRedis(opts: { key: string; limit: number; windowSec: number }): Promise<RateLimitResult> {
   const redis = getRedis();
   if (!redis) return rateLimitLocal(opts);
   const redisKey = `rl:${opts.key}`;
   try {
-    const count = await redis.incr(redisKey);
-    if (count === 1) await redis.expire(redisKey, opts.windowSec);
+    // Pipeline runs both commands in one round trip. If the network drops,
+    // neither command reaches Redis, so we'll retry cleanly next request.
+    const results = await redis.multi().incr(redisKey).expire(redisKey, opts.windowSec).exec();
+    if (!results || results.length < 1) {
+      throw new Error('redis pipeline returned no results');
+    }
+    const count = Number(results[0]?.[1] ?? 0);
     if (count <= opts.limit) {
       return { allowed: true, remaining: Math.max(0, opts.limit - count), retryAfter: 0, limit: opts.limit };
     }
