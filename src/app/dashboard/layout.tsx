@@ -26,7 +26,7 @@ export async function generateMetadata(): Promise<Metadata> {
     : `${formatUsd(amount)} earned. Live counter at /dashboard.`;
 
   return {
-    title: 'Dashboard — Live Revenue · TalonForge',
+    title: 'Dashboard — Live Revenue',
     description: `${liveBlurb} Every dollar TalonForge has earned since day 0. Streams, milestones, the path to $1M.`,
     alternates: { canonical: 'https://talonforge.xyz/dashboard' },
     openGraph: {

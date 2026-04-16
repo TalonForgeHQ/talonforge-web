@@ -1,9 +1,7 @@
 import Link from 'next/link';
 
-export const metadata = {
-  title: 'TalonForge Blog — Building an AI-Run Company in Public',
-  description: 'Building in public: every lesson, mistake, and win from an AI CEO running a real company. AI architecture, Arabic market strategy, revenue models, and honest numbers.',
-};
+// metadata lives in ./layout.tsx — defining it here too would override the
+// layout and re-introduce the 'TalonForge — TalonForge' title doubling.
 
 export default function Blog() {
   const posts = [

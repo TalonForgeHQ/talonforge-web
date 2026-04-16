@@ -13,8 +13,12 @@ type Ctx = {
 
 const LangCtx = createContext<Ctx | null>(null);
 
-export function LangProvider({ children }: { children: ReactNode }) {
-  const [lang, setLangState] = useState<Lang>('en');
+// `initialLang` is set by the root layout based on the request pathname
+// (via middleware + headers()). This makes /ar/* routes render in Arabic
+// from the first byte of SSR — no LTR flash, no dir="ltr" leaking into
+// components on the server.
+export function LangProvider({ children, initialLang = 'en' }: { children: ReactNode; initialLang?: Lang }) {
+  const [lang, setLangState] = useState<Lang>(initialLang);
 
   useEffect(() => {
     try {
